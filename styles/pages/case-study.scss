@@ -1,0 +1,306 @@
+/* ===========================================================================
+   Case-study page
+   - cream page background; a dark content block in the middle
+   - faint page-title word at the top (drops in from the top on load) and a
+     faint "next case" word at the bottom (rises from the bottom on scroll),
+     both built from letter SVGs like WELCOME / CONTACT on the landing page
+   ========================================================================= */
+.page-case {
+    position: relative;
+    /* the header is fixed (out of flow); pad the top by its height so the
+       first content clears it (--header-h is set by script/header-nav.js) */
+    padding-top: var(--header-h, 68px);
+    background: var(--Shiny-Pearl);
+    color: var(--Ink);
+}
+
+/* ---- faint words (BEIERSDORF / NEXT CASE) -------------------------------- */
+.cs-word {
+    display: flex;
+    align-items: flex-end;
+    padding: 0 var(--page-margin);
+
+    color: var(--Off-White); /* the letters (fill=currentColor) — faint on the cream page */
+
+    svg {
+        display: block;
+        min-width: 0;         /* let flex shrink letters below intrinsic width */
+        height: auto;
+        transform: scaleY(0);
+        transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+}
+.cs-word.is-revealed svg { transform: scaleY(1); }
+
+/* top word: nudged down and overlapping the top of the hero image (sits over
+   it via z-index); each letter drops from the top, flex-grow = natural width */
+.cs-word--top {
+    margin-top: 76px;
+    margin-bottom: -80px; /* overlaps under the hero, which paints on top */
+}
+.cs-word--top svg { transform-origin: top; }
+.cs-word--top svg:nth-child(1)  { flex: 194; transition-delay: 0s;    } /* B */
+.cs-word--top svg:nth-child(2)  { flex: 174; transition-delay: 0.04s; } /* E */
+.cs-word--top svg:nth-child(3)  { flex: 94;  transition-delay: 0.08s; } /* I */
+.cs-word--top svg:nth-child(4)  { flex: 178; transition-delay: 0.12s; } /* E */
+.cs-word--top svg:nth-child(5)  { flex: 200; transition-delay: 0.16s; } /* R */
+.cs-word--top svg:nth-child(6)  { flex: 194; transition-delay: 0.20s; } /* S */
+.cs-word--top svg:nth-child(7)  { flex: 205; transition-delay: 0.24s; } /* D */
+.cs-word--top svg:nth-child(8)  { flex: 207; transition-delay: 0.28s; } /* O */
+.cs-word--top svg:nth-child(9)  { flex: 205; transition-delay: 0.32s; } /* R */
+.cs-word--top svg:nth-child(10) { flex: 155; transition-delay: 0.36s; } /* F */
+
+/* next word: each letter rises from the bottom; sits at the page bottom */
+.cs-word--next {
+    margin-top: 120px;
+}
+.cs-word--next svg { transform-origin: bottom; }
+.cs-word--next svg:nth-child(1) { flex: 238; transition-delay: 0s;    } /* N */
+.cs-word--next svg:nth-child(2) { flex: 198; transition-delay: 0.05s; } /* E */
+.cs-word--next svg:nth-child(3) { flex: 231; transition-delay: 0.10s; } /* X */
+.cs-word--next svg:nth-child(4) { flex: 254; transition-delay: 0.15s; } /* T */
+.cs-word--next svg:nth-child(5) { flex: 287; transition-delay: 0.20s; } /* C */
+.cs-word--next svg:nth-child(6) { flex: 237; transition-delay: 0.25s; } /* A */
+.cs-word--next svg:nth-child(7) { flex: 237; transition-delay: 0.30s; } /* S */
+.cs-word--next svg:nth-child(8) { flex: 175; transition-delay: 0.35s; } /* E */
+
+@media (prefers-reduced-motion: reduce) {
+    .cs-word svg { transform: none; transition: none; }
+}
+
+/* ---- dark content block -------------------------------------------------- */
+.cs {
+    position: relative;
+    z-index: 1;
+    background: var(--BlackDenim);
+    color: var(--Shiny-Pearl);
+    padding: 0 var(--page-margin) 140px;
+}
+
+/* black image placeholders */
+.cs-media {
+    background: #0b0b0f;
+    aspect-ratio: 1048 / 753;
+    width: 100%;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.cs-media--wide { aspect-ratio: 16 / 9; }
+.cs-media--hero {
+    aspect-ratio: 1920 / 1080;
+    width: 100%;         /* full-bleed as a direct page child (on the cream bg) */
+    margin: 0;
+    border-radius: 0;
+    position: relative;  /* paints above the overlapping title word (later in DOM) */
+}
+
+/* ---- intro (title + challenge/solution + meta) --------------------------- */
+.cs-intro, .cs-description { 
+    padding: 128px 0;
+
+    @media (min-width: 768px) {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--grid-gap);
+    }
+}
+
+.cs-intro__text { 
+    
+    @media (min-width: 768px) {
+        grid-column: 2 / span 6;
+
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: var(--grid-gap);
+    }
+}
+
+.cs-title, .cs-heading {
+    @include type-scale(lg);
+    margin-bottom: 48px;
+
+    @media (min-width: 768px) {
+        grid-column: span 6;
+    }
+}
+
+.cs-text {
+     @media (min-width: 768px) {
+        grid-column: span 5;
+    }
+}
+
+
+.cs-intro__text p:not(.cs-label) { @include type-scale(body); margin-bottom: 24px; }
+
+.cs-intro__text p:last-of-type {
+  margin-bottom: 0px;
+}
+
+.cs-meta { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 28px; 
+    
+    grid-column: 9 / span 3;
+
+    display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.cs-meta__row p:not(.cs-label) { @include type-scale(xs); }
+
+.cs-label {
+    @include type-scale(xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 8px;
+}
+
+.cs-link {
+    display: block;
+    @include type-scale(xs);
+    margin-bottom: 4px;
+}
+
+/* ---- image grid ---------------------------------------------------------- */
+
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.cs-grid-wrapper { overflow: hidden; }
+
+.cs-grid {
+    width: 100%;   
+}
+
+.cs-grid-row {
+  display: grid;
+  gap: var(--grid-gap);
+
+  grid-template-columns: repeat(16, 1fr);
+  width: calc(16 / 12 * 100%);
+
+  margin-bottom: var(--grid-gap);
+}
+
+.cs-media { grid-column: span 5; }
+
+
+.cs-grid-row--top { 
+    padding-left: var(--page-margin); 
+    .cs-media:first-child { grid-column: 2 / span 5; }
+}
+
+
+
+.cs-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---- content blocks (Storytelling / Motion) ----------------------------- */
+.cs-block { margin-top: 160px; }
+
+.cs-figure {
+    @media (min-width: 768px) {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--grid-gap);
+        align-items: start;
+        margin: 128px 0;
+
+        .cs-media { grid-column: 2 / span 7; }
+        figcaption { @include type-scale(body);  grid-column: 9 / span 3; margin-top: var(--radius); }
+    }
+}
+
+.cs-figure--right { 
+   
+
+    @media (max-width: 768px) {
+         display: flex;
+    flex-direction: column;
+        .cs-media {
+            order: 1;
+        }
+
+        figcaption {
+            order: 2;
+        }
+    }
+
+     @media (min-width: 768px) {
+        .cs-media { grid-column: 5 / span 7; }
+        figcaption { @include type-scale(body); grid-column: 2 / span 3; text-align: right;}
+     }
+}
+
+.cs-media--wide {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--grid-gap);
+
+    img {
+        grid-column: 2 / span 10;
+    }
+}
+
+/* ---- Motion video (autoplay loop with a pause/play toggle) --------------- */
+.cs-media--video {
+    position: relative;
+    aspect-ratio: auto; /* let each video's native aspect set the height (no crop) */
+
+    video {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+.video-toggle {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    border: none;
+    background: var(--Shiny-Pearl);
+    color: var(--Ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 2;
+
+    svg { width: 18px; height: 18px; }
+
+    &:hover { background: var(--SlateBlue); color: var(--White); }
+    &:active { transform: scale(0.92); }
+
+    .icon-play { display: none; }
+
+    &.paused {
+        .icon-play { display: block; }
+        .icon-pause { display: none; }
+    }
+}
+
+@media (max-width: 700px) {
+    .cs-intro__cols { flex-direction: column; }
+    .cs-grid { grid-template-columns: 1fr; }
+    .cs-grid .cs-media,
+    .cs-grid .cs-media--wide { grid-column: auto; }
+    .cs-figure,
+    .cs-figure--right { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Editor / OS
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# Unused letter SVGs — inlined into the HTML, no longer loaded as files
+assets/letter-*.svg
+assets/**/*-letter-*.svg
+
+# Other currently-unused assets (superseded by inline SVGs, .webp/.jpg
+# versions, or removed features). Un-ignore any of these if you wire it up.
+assets/bdf/beiersdorf-highights.jpg
+assets/hero-base.jpg
+assets/hero-martina.jpg
+assets/icon-arrow-left.svg
+assets/icon-arrow-right.svg
+assets/icon-copy.svg
+assets/link-underline.svg
+assets/text-contact.svg
+assets/teaser-beiersdorf.png
+assets/teaser-break4you.png
+assets/teaser-hugoboss.png
+assets/teaser-voestalpine.png

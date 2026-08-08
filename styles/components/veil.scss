@@ -1,0 +1,25 @@
+// components/veil.scss
+/* veil: page-transition curtain. A solid panel swipes up from the bottom to
+   cover the screen, the page navigates, then continues up and off the top to
+   reveal the new page. Driven by script/veil.js (Web Animations API on
+   clip-path). */
+.veil {
+    position: fixed;
+    inset: 0;
+    z-index: 10000; /* above everything, incl. the fixed header + preloader */
+    background-color: var(--Moss-Bronze);
+    /* idle: collapsed to an invisible line at the bottom */
+    clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+    pointer-events: none;
+    will-change: clip-path;
+}
+
+/* pre-paint covered state — added by the inline script when arriving
+   mid-transition (?pt=1) */
+.veil.is-covered {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .veil { display: none; }
+}

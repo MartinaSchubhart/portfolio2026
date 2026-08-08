@@ -1,0 +1,361 @@
+/* first viewport: the hero, on the purple (base page bg is Shiny-Pearl).
+   The header is fixed (out of flow), so pad the top by its height (set as
+   --header-h by script/header-nav.js) to keep WELCOME clear of it. */
+.screen {
+    min-height: 100vh;
+    padding-top: var(--header-h, 68px);
+    display: flex;
+    flex-direction: column;
+    background: var(--SlateBlue);
+}
+
+/* hero fills the viewport below the header; WELCOME sits at the top,
+   the portrait floats on the right at an angle, the intro sits bottom-left.
+   Flex column so the intro pins to the bottom (>=50px) while keeping at
+   least 136px clearance from WELCOME (whichever needs more space wins). */
+.hero {
+    /* portrait size, reused to size the hero tall enough to contain it */
+    --img-w: min(40vw, 730px);
+    --img-h: calc(var(--img-w) * 938 / 831);
+
+    position: relative;
+    flex: 1 0 auto;
+    /* grow past 100vh when the tilted portrait would otherwise overflow the
+       screen: portrait top (24vh) + its height + room below for the intro */
+    min-height: calc(var(--img-h) + 35vh);
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 50px;
+}
+
+/* container carries the position + tilt so the WebGL canvas (injected by
+   script/work-distort.js) rotates with the portrait; the <img> is the
+   texture source and the fallback when the effect can't run */
+.hero__image {
+    position: absolute;
+    top: 24vh;
+    right: 8%;
+    width: var(--img-w);
+    transform: rotate(3.38deg);
+    z-index: 1; /* over the WELCOME letters */
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        pointer-events: none;
+        max-width: none; /* allow the oversized (bleed) canvas past the reset's max-width:100% */
+    }
+}
+
+.hero__intro {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;               /* pin to the bottom of the hero */
+    margin-left: var(--page-margin);
+    max-width: 740px;
+
+    color: var(--White);
+    @include type-scale(md);
+}
+
+/* "WELCOME" built from the 7 letter SVGs. Each letter's flex-grow is its
+   natural width, so the word fills the line edge-to-edge while every letter
+   keeps the same height (they share a 597px artwork height). Scales fluidly
+   with the viewport.
+
+   On load each letter grows from 0 to its full height (scaleY, from the
+   baseline) with a left-to-right stagger. The reveal is triggered by adding
+   `is-loaded` to <html> once the preloader finishes (script/preloader.js). */
+.welcome {
+    display: flex;
+    align-items: flex-start;
+    padding: 8px var(--page-margin) 0;
+    margin-bottom: 136px; /* minimum clearance to the intro text */
+
+    svg {
+        display: block;
+        height: auto;
+        min-width: 0; /* let flex shrink the letters below their intrinsic width */
+        --grow: 1;    /* final scaleY; >1 overshoots downward past the top edge */
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* flex-grow = natural width (fills the line); transition-delay = stagger;
+       --grow overshoot forms an arch (peak at C). The percentages are the
+       20/40/60px overshoots expressed as a share of the letter height at the
+       reference width (~1920), so the arch scales proportionally with the type. */
+    svg:nth-child(1) { flex: 406; transition-delay: 0s;    }                 /* W  ×1      */
+    svg:nth-child(2) { flex: 211; transition-delay: 0.05s; --grow: 1.034; }  /* E  ≈+20px  */
+    svg:nth-child(3) { flex: 197; transition-delay: 0.10s; --grow: 1.068; }  /* L  ≈+40px  */
+    svg:nth-child(4) { flex: 244; transition-delay: 0.15s; --grow: 1.102; }  /* C  ≈+60px  */
+    svg:nth-child(5) { flex: 257; transition-delay: 0.20s; --grow: 1.068; }  /* O  ≈+40px  */
+    svg:nth-child(6) { flex: 345; transition-delay: 0.25s; --grow: 1.034; }  /* M  ≈+20px  */
+    svg:nth-child(7) { flex: 197; transition-delay: 0.30s; }                 /* E  ×1      */
+}
+
+@media (max-width: 700px) {
+    .welcome { padding: 8px 8px 0; } 
+}
+
+
+html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
+
+@media (prefers-reduced-motion: reduce) {
+    .welcome svg { transform: none; transition: none; }
+}
+
+/* ---- Work: sticky centered intro, teasers scroll past over it -------------
+   .work is a tall scroll track; .work__sticky (100vh) pins for (height-100vh)
+   while the teaser images — positioned down the track — scroll up and off the
+   top. Height = last teaser top (280vh) + its max height (90vh) + 100vh, so the
+   section unsticks right as the last teaser (--d) clears the screen. */
+.work {
+    position: relative;
+    height: 470vh;
+    background: var(--Shiny-Pearl);
+    color: var(--Ink);
+}
+
+.work__sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    z-index: 0;
+}
+
+.work__bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(55vw, 1036px);
+    height: auto;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+}
+
+.work__intro {
+    position: relative;
+    z-index: 1;
+}
+
+.work__title { @include type-scale(lg); }
+.work__sub   { @include type-scale(md); margin-top: 8px; }
+
+/* teasers scroll up over the pinned intro (z-index above .work__sticky).
+   Container carries the position; the <img> is the texture source and the
+   WebGL canvas (script/work-distort.js) overlays it for the hover bulge. */
+.work__teaser {
+    position: absolute;
+    z-index: 2;
+
+    /* Sized by WIDTH (not height) so the left- and right-hand cards always keep
+       a gap down the middle and can never overlap horizontally as they scroll
+       past each other. Capped by height too, so a short/landscape viewport
+       can't make a card taller than the screen. */
+    width: min(38vw, 68vh, 600px);
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        /* the oversized (bleed) canvas IS the hit area, so the bulge starts as
+           soon as the cursor enters the 14% margin around the image (magnetic) */
+        pointer-events: auto;
+        max-width: none; /* allow the canvas past the reset's max-width:100% */
+    }
+}
+
+/* hover content: HTML overlay stacked above the canvas (the 70% darkening is
+   done in the shader now). Text top-left, button bottom-left. */
+.work__teaser__content {
+    position: absolute;
+    inset: 0;
+    z-index: 1; /* above the canvas */
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    color: var(--White);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none; /* let hover reach the teaser for the bulge */
+}
+
+.work__teaser:hover .work__teaser__content { opacity: 1; }
+
+.work__teaser__label {
+    @include type-scale(md);
+    max-width: 80%;
+}
+
+.work__teaser__btn {
+    pointer-events: auto; /* clickable */
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: var(--White);
+    color: var(--Ink);
+    @include type-scale(xs);
+}
+.work__teaser--a { top: 90vh;  left: 4vw; }
+.work__teaser--b { top: 154vh; right: 6vw; }
+.work__teaser--c { top: 210vh; left: 12vw; }
+.work__teaser--d { top: 280vh; right: 4vw; }
+
+/* Touch devices (no hover): the label + button can't be revealed on hover, so
+   show them by default, with a top/bottom scrim so the white text stays legible
+   over the (undarkened) image. */
+@media (hover: none) {
+    .work__teaser__content {
+        opacity: 1;
+        background: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 32%,
+            rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.55) 100%);
+    }
+}
+
+/* Narrow screens: stack the cards down the centre (large) instead of the
+   alternating left/right layout, spaced so they never overlap. */
+@media (max-width: 800px) {
+    .work { height: 410vh; }
+
+    .work__teaser {
+        width: min(80vw, 48vh); /* height stays under ~60vh, below the row spacing */
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+    }
+    .work__teaser--a { top: 55vh;  left: 50%; }
+    .work__teaser--b { top: 120vh; right: auto; left: 50%; }
+    .work__teaser--c { top: 185vh; left: 50%; }
+    .work__teaser--d { top: 250vh; right: auto; left: 50%; }
+}
+
+/* next section */
+
+.about-me {
+    padding: 150px var(--page-margin);   
+    background-color: var(--Moss-Bronze);
+    color: var(--White);
+}
+
+.about-me__intro {    
+    margin-bottom: 80px;
+}
+
+.about-me__title {    
+    @include type-scale(lg);   
+}
+
+.about-me__intro-text {    
+    @include type-scale(md);
+  
+}
+
+
+@media (min-width: 768px) {
+   .about-me                { padding: 300px var(--page-margin); } 
+   .about-me__intro         { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); margin-bottom: 240px; }
+   .about-me__title         { grid-column: 4 / span 6; text-align: center; }
+   .about-me__intro-text    { grid-column: 4 / span 6; text-align: center; }
+}
+
+
+.layout {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+
+    grid-template-areas:
+    ". left left left left . right right right right right .";
+}
+
+
+
+.stack-left {
+    grid-column: 2 / span 4;
+    grid-area: left;
+}
+
+.stack-right {
+    grid-column: 7 / span 5;
+    grid-area: right;
+}
+
+
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stack-left {
+  grid-column: 2 / span 4;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.card--a {
+  grid-column: 1 / span 3;
+}
+
+.card--b {
+  grid-column: 2 / span 3;
+  margin-top: 128px;
+}
+
+.card--c {
+    p {
+        padding-right: calc(25% + var(--grid-gap));
+    }
+}
+
+@media (min-width: 768px) {
+   .card--c { margin-top: 128px;}
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "right"
+      "left";
+  }
+
+  .stack-left,
+  .stack-right {
+    grid-column: auto;
+  }
+}

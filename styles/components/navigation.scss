@@ -1,0 +1,79 @@
+/* top header: name (left) · nav (centered) · email + copy (right).
+   Fixed so it stays pinned across the whole page; transparent, so the section
+   behind it shows through. Text is white by default (over the dark hero/about
+   sections) and flips to Ink over light sections via `.is-light`, toggled by
+   script/header-nav.js. */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: 24px var(--page-margin);
+
+    color: var(--White);
+    transition: color 0.4s ease;
+    @include type-scale(xs);
+
+    a {
+        position: relative;
+        display: inline-block;
+        color: inherit;
+        text-decoration: none;
+    }
+
+}
+
+/* Hand-drawn inline-SVG underline, shared by the header and footer links
+   (injected by script/link-underline.js). preserveAspectRatio="none" lets it
+   truly stretch to the link width; fill="currentColor" makes it follow the
+   link colour. Hidden, then wiped in left-to-right on hover. The host link
+   only needs position: relative (see .site-header a and the footer links). */
+.link-underline {
+    position: absolute;
+    left: 0;
+    bottom: -0.3em;
+    width: 100%;
+    height: 2.5px;
+    display: block;
+    overflow: visible;
+    pointer-events: none;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+a:hover .link-underline { clip-path: inset(0 0 0 0); }
+
+/* case-study page opens over a light (cream) background, so the header's base
+   colour there is Ink; the per-section overrides below still win over it. */
+.page-case .site-header { color: var(--Ink); }
+
+/* per-section overrides toggled by script/header-nav.js: `.is-light` over a
+   light background (-> Ink), `.is-dark` over a dark one (-> white). */
+.site-header.is-light { color: var(--Ink); }
+.site-header.is-dark  { color: var(--White); }
+
+.site-header__left  { justify-self: start; }
+.site-header__nav   { justify-self: center; display: flex; gap: 28px; }
+.site-header__right { justify-self: end; display: flex; align-items: center; gap: 10px; }
+
+.site-header__copy-email {
+    cursor: pointer;
+    position: relative;
+
+    /* the copy icon only — not the injected .link-underline svg, which must keep
+       its own absolute bottom positioning */
+    svg:not(.link-underline) { width: 16px; height: 16px; display: inline-block; margin-left: 5px; top: 2px; position: relative;}
+}
+
+
+@media (max-width: 700px) {
+    .site-header__right { display: none; }
+    .site-header__nav   { justify-self: right; }
+    .site-header { grid-template-columns: 1fr 1fr; }
+}

@@ -1,0 +1,132 @@
+// components/footer.scss
+/* Closing / contact section: title top-left, contact links below, and a big
+   faint CONTACT lettering across the bottom (letter SVGs like WELCOME) with the
+   footer row (links + meta) over it. */
+.closing {
+    position: relative;
+    min-height: 100vh;
+    padding: 22vh var(--page-margin) 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--Shiny-Pearl);
+    color: var(--Ink);
+    overflow: hidden;
+}
+
+.closing__title {
+    @include type-scale(lg);
+    max-width: 900px;
+}
+
+.closing__links {
+    @include type-scale(md);
+    margin-top: 24px;
+    margin-bottom: 128px;
+}
+
+/* host the hand-drawn hover underline (.link-underline injected by
+   script/link-underline.js) — needs position: relative + inline-block */
+.closing__email,
+.closing__linkedin {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+
+    /* footer underline: thicker and nearer the text than the header's */
+    .link-underline {
+        height: 5px;
+        bottom: -0.08em;
+    }
+}
+
+.closing__divider { margin: 0 0.4em; }
+
+/* footer sits at the bottom of the section and reserves at least the CONTACT
+   text height (contentWidth * 525/1834), so the lettering can never overlap
+   the title/links above it. Full-bleed to the section edges. */
+.site-footer {
+    position: relative;
+    margin: auto calc(-1 * var(--page-margin)) 0;
+    min-height: calc((100vw - 2 * var(--page-margin)) * 525 / 1834);
+}
+
+/* CONTACT lettering — fills the width (flex-grow = each letter's natural
+   width); on scroll into view each letter rises from the bottom to full
+   height (scaleY from the bottom edge), staggered left-to-right, no overshoot.
+   Reveal is toggled by script/contact-reveal.js adding `.is-revealed`. */
+.site-footer__contact {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 var(--page-margin);
+
+    color: var(--Off-White); /* the letters (fill=currentColor) — faint on the cream footer */
+
+    svg {
+        display: block;
+        min-width: 0;
+        height: auto;
+        transform: scaleY(0);
+        transform-origin: bottom;
+        transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    svg:nth-child(1) { flex: 258; transition-delay: 0s;    } /* C */
+    svg:nth-child(2) { flex: 285; transition-delay: 0.05s; } /* O */
+    svg:nth-child(3) { flex: 287; transition-delay: 0.10s; } /* N */
+    svg:nth-child(4) { flex: 242; transition-delay: 0.15s; } /* T */
+    svg:nth-child(5) { flex: 257; transition-delay: 0.20s; } /* A */
+    svg:nth-child(6) { flex: 266; transition-delay: 0.25s; } /* C */
+    svg:nth-child(7) { flex: 239; transition-delay: 0.30s; } /* T */
+}
+
+.site-footer__contact.is-revealed svg { transform: scaleY(1); }
+
+@media (prefers-reduced-motion: reduce) {
+    .site-footer__contact svg { transform: none; transition: none; }
+}
+
+/* footer row, over the CONTACT lettering */
+.site-footer__links,
+.site-footer__meta {
+    position: absolute;
+    bottom: var(--page-margin);
+    z-index: 1;
+    display: flex;
+    gap: 24px;
+    @include type-scale(xs);
+}
+.site-footer__links { left: var(--page-margin); }
+.site-footer__meta  { right: var(--page-margin); }
+
+/* Mobile: the two bottom-anchored rows can't sit side by side, so drop the
+   absolute overlay and stack everything vertically in flow — the CONTACT
+   lettering, then the links, then the meta. */
+@media (max-width: 767px) {
+    .site-footer {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: var(--page-margin);
+    }
+
+    .site-footer__contact { position: static; }
+
+    .site-footer__links,
+    .site-footer__meta {
+        position: static;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        padding: 0 var(--page-margin);
+    }
+
+    .site-footer__links { flex-wrap: wrap; row-gap: 8px; }
+    .site-footer__meta  { flex-direction: column; gap: 4px; }
+}
