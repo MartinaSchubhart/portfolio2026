@@ -86,3 +86,29 @@ h6 {
 p {
   text-wrap: balanced;
 }
+
+/* Visible keyboard-focus ring (only for keyboard/AT users, not mouse clicks) */
+:focus-visible {
+  outline: 2px solid var(--SlateBlue);
+  outline-offset: 2px;
+}
+
+/* Skip-to-content link: off-screen until focused, then slides in.
+   z-index sits above the veil (10000) so it stays reachable. */
+.skip-link {
+  position: fixed;
+  top: -80px;
+  left: 8px;
+  z-index: 10001;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--Ink);
+  color: var(--Shiny-Pearl);
+  font-family: 'Acid Grotesk Regular', Arial, sans-serif;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 8px; }
+
+/* the skip target shouldn't show a focus ring when jumped to programmatically */
+[tabindex="-1"]:focus { outline: none; }

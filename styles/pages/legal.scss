@@ -41,3 +41,27 @@
         &:hover { color: var(--Ink); }
     }
 }
+
+/* ---- 404 page ---------------------------------------------------------- */
+.notfound {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding: var(--header-h, 68px) var(--page-margin) 80px;
+    color: var(--Ink);
+}
+
+.notfound__code { @include type-scale(xl); line-height: 1; }
+.notfound__text { @include type-scale(md); max-width: 40ch; }
+
+.notfound__link {
+    @include type-scale(sm);
+    color: var(--SlateBlue);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+
+    &:hover { color: var(--Ink); }
+}

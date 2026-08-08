@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Page not found — Martina Schubhart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="description" content="Portfolio of Martina Schubhart, a UI/UX designer based in Vienna, working across branding, editorial and digital design." />
+<meta name="author" content="Martina Schubhart" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="styles/index-min.css">
+</head>
+<body class="page-legal">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- veil: page-transition curtain; covered pre-paint when arriving
+       mid-transition (?pt=1) so there is no flash -->
+  <div class="veil" aria-hidden="true"></div>
+  <script>
+    if (/[?&]pt=1(?:&|$)/.test(location.search)) {
+      document.querySelector(".veil").classList.add("is-covered");
+    }
+  </script>
+  <noscript><style>.veil{ display:none !important; }</style></noscript>
+  <script src="script/veil.js" defer></script>
+
+  <header class="site-header">
+    <div class="site-header__left">
+      <a href="index.html">Martina Schubhart</a>
+    </div>
+    <nav class="site-header__nav">
+      <a href="index.html#about">About</a>
+      <a href="index.html#work">Work</a>
+    </nav>
+    <div class="site-header__right">
+      <a href="#" class="site-header__copy-email" data-email="martina.schubhart@gmail.com">
+          <span>martina.schubhart@gmail.com</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 8C6 7.45 6.19583 6.97917 6.5875 6.5875C6.97917 6.19583 7.45 6 8 6L20 6C20.55 6 21.0208 6.19583 21.4125 6.5875C21.8042 6.97917 22 7.45 22 8L22 20C22 20.55 21.8042 21.0208 21.4125 21.4125C21.0208 21.8042 20.55 22 20 22L8 22C7.45 22 6.97917 21.8042 6.5875 21.4125C6.19583 21.0208 6 20.55 6 20L6 8ZM8 8L8 20L20 20L20 8L8 8ZM2 4C2 3.45 2.19583 2.97917 2.5875 2.5875C2.97917 2.19583 3.45 2 4 2L18 2L18 4L4 4L4 18L2 18L2 4Z" fill="currentColor"/>
+          </svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="notfound" id="main" tabindex="-1">
+    <h1 class="notfound__code">404</h1>
+    <p class="notfound__text">This page couldn't be found. It may have moved, or never existed.</p>
+    <a class="notfound__link" href="index.html">Back to home &rarr;</a>
+  </main>
+
+  <!-- copy email to clipboard -->
+  <script>
+    document.querySelector(".site-header__copy-email").addEventListener("click", async (e) => {
+      e.preventDefault();
+      const email = e.currentTarget.dataset.email;
+      try {
+        await navigator.clipboard.writeText(email);
+        alert("Email address copied!");
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  </script>
+
+  <script src="script/header-nav.js" defer></script>
+  <script src="script/link-underline.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js" defer></script>
+  <script src="script/smooth-scroll.js" defer></script>
+
+</body>
+</html>

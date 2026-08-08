@@ -205,7 +205,8 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
     pointer-events: none; /* let hover reach the teaser for the bulge */
 }
 
-.work__teaser:hover .work__teaser__content { opacity: 1; }
+.work__teaser:hover .work__teaser__content,
+.work__teaser:focus-within .work__teaser__content { opacity: 1; } /* reveal on keyboard focus too */
 
 .work__teaser__label {
     @include type-scale(md);
