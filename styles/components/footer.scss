@@ -104,23 +104,25 @@
 .site-footer__links { left: var(--page-margin); }
 .site-footer__meta  { right: var(--page-margin); }
 
-/* Mobile: the two bottom-anchored rows can't sit side by side, so drop the
-   absolute overlay and stack everything vertically in flow — the CONTACT
-   lettering, then the links, then the meta. */
+/* Mobile: the two rows can't sit side by side, so stack them in flow at the
+   bottom of the footer. The CONTACT lettering stays as an absolute background
+   pinned to the bottom (behind the text), exactly like desktop. */
 @media (max-width: 767px) {
     .site-footer {
-        min-height: 0;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        justify-content: flex-end; /* links + meta sit at the bottom, over the lettering */
+        gap: 12px;
         padding-bottom: var(--page-margin);
+        isolation: isolate;        /* own stacking context: lettering behind, text in front */
     }
 
-    .site-footer__contact { position: static; }
+    /* .site-footer__contact keeps its absolute bottom position (behind) */
 
     .site-footer__links,
     .site-footer__meta {
-        position: static;
+        position: relative; /* in the flex flow, but positioned so z-index applies */
+        z-index: 1;         /* above the CONTACT lettering (z-index 0) */
         left: auto;
         right: auto;
         bottom: auto;

@@ -49,9 +49,11 @@
 
 a:hover .link-underline { clip-path: inset(0 0 0 0); }
 
-/* case-study page opens over a light (cream) background, so the header's base
-   colour there is Ink; the per-section overrides below still win over it. */
-.page-case .site-header { color: var(--Ink); }
+/* case-study & legal pages open over a light (cream) background, so the
+   header's base colour there is Ink; the per-section overrides below still
+   win over it. */
+.page-case .site-header,
+.page-legal .site-header { color: var(--Ink); }
 
 /* per-section overrides toggled by script/header-nav.js: `.is-light` over a
    light background (-> Ink), `.is-dark` over a dark one (-> white). */

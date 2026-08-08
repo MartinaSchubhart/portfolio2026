@@ -1,1 +1,43 @@
 // pages/legal.scss
+/* Imprint / Privacy pages — plain reading layout on the cream page background,
+   below the fixed header. */
+.legal {
+    max-width: 820px;
+    padding: calc(var(--header-h, 68px) + 72px) var(--page-margin) 120px;
+    color: var(--Ink);
+}
+
+.legal__title {
+    @include type-scale(lg);
+    margin-bottom: 32px;
+}
+
+.legal__intro {
+    @include type-scale(sm);
+    max-width: 65ch;
+    margin-bottom: 48px;
+}
+
+.legal__body {
+    max-width: 70ch;
+
+    h2 {
+        @include type-scale(sm);
+        margin: 40px 0 12px;
+    }
+
+    p {
+        font-family: 'Inter Regular', sans-serif;
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 14px;
+    }
+
+    a {
+        color: var(--SlateBlue);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+
+        &:hover { color: var(--Ink); }
+    }
+}
