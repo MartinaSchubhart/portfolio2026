@@ -49,6 +49,15 @@
     position: relative;
     margin: auto calc(-1 * var(--page-margin)) 0;
     min-height: calc((100vw - 2 * var(--page-margin)) * 525 / 1834);
+
+    /* mobile: the two rows can't sit side by side, so stack them in flow at the
+       bottom, over the CONTACT lettering (which stays pinned behind, below) */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-bottom: var(--page-margin);
+    isolation: isolate; /* own stacking context: lettering behind, text in front */
 }
 
 /* CONTACT lettering — fills the width (flex-grow = each letter's natural
@@ -91,44 +100,32 @@
     .site-footer__contact svg { transform: none; transition: none; }
 }
 
-/* footer row, over the CONTACT lettering */
+/* footer row over the CONTACT lettering.
+   Mobile (base): stacked in flow, positioned (relative) so z-index puts them in
+   front of the lettering. */
 .site-footer__links,
 .site-footer__meta {
-    position: absolute;
-    bottom: var(--page-margin);
+    position: relative;
     z-index: 1;
     display: flex;
-    gap: 24px;
+    padding: 0 var(--page-margin);
     @include type-scale(xs);
 }
-.site-footer__links { left: var(--page-margin); }
-.site-footer__meta  { right: var(--page-margin); }
+.site-footer__links { flex-wrap: wrap; gap: 8px 24px; }
+.site-footer__meta  { flex-direction: column; gap: 4px; }
 
-/* Mobile: the two rows can't sit side by side, so stack them in flow at the
-   bottom of the footer. The CONTACT lettering stays as an absolute background
-   pinned to the bottom (behind the text), exactly like desktop. */
-@media (max-width: 767px) {
-    .site-footer {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end; /* links + meta sit at the bottom, over the lettering */
-        gap: 12px;
-        padding-bottom: var(--page-margin);
-        isolation: isolate;        /* own stacking context: lettering behind, text in front */
-    }
-
-    /* .site-footer__contact keeps its absolute bottom position (behind) */
+/* Desktop: the lettering is tall enough to place the two rows side by side,
+   absolutely pinned to the bottom-left and bottom-right corners. */
+@media (min-width: 700px) {
+    .site-footer { padding-bottom: 0; }
 
     .site-footer__links,
     .site-footer__meta {
-        position: relative; /* in the flex flow, but positioned so z-index applies */
-        z-index: 1;         /* above the CONTACT lettering (z-index 0) */
-        left: auto;
-        right: auto;
-        bottom: auto;
-        padding: 0 var(--page-margin);
+        position: absolute;
+        bottom: var(--page-margin);
+        padding: 0;
+        gap: 24px;
     }
-
-    .site-footer__links { flex-wrap: wrap; row-gap: 8px; }
-    .site-footer__meta  { flex-direction: column; gap: 4px; }
+    .site-footer__links { left: var(--page-margin); flex-wrap: nowrap; }
+    .site-footer__meta  { right: var(--page-margin); flex-direction: row; }
 }

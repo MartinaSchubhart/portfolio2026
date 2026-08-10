@@ -50,9 +50,14 @@
 .cs-word--top svg:nth-child(9)  { flex: 205; transition-delay: 0.32s; } /* R */
 .cs-word--top svg:nth-child(10) { flex: 155; transition-delay: 0.36s; } /* F */
 
-/* next word: each letter rises from the bottom; sits at the page bottom */
+/* next word: now a faint decorative backdrop pinned to the bottom of the
+   .cs-next footer, behind the two case-study cards */
 .cs-word--next {
-    margin-top: 120px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
 }
 .cs-word--next svg { transform-origin: bottom; }
 .cs-word--next svg:nth-child(1) { flex: 238; transition-delay: 0s;    } /* N */
@@ -68,11 +73,78 @@
     .cs-word svg { transform: none; transition: none; }
 }
 
+/* ---- next-case footer: two case-study cards over the faint NEXT CASE word -- */
+.cs-next {
+    position: relative;
+    padding: 100px var(--page-margin) 140px;
+}
+
+.cs-next__cards {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;       /* mobile: stacked */
+    gap: var(--grid-gap);
+
+    @media (min-width: 700px) {
+        grid-template-columns: 1fr 1fr; /* desktop: side by side */
+    }
+}
+
+.cs-next__card {
+    position: relative;
+    display: block;
+    aspect-ratio: 7 / 5;
+    border-radius: var(--radius);
+    overflow: hidden;
+    color: var(--White);
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+/* label (top) + button (bottom) overlaid on the image, with a scrim */
+.cs-next__card-body {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: linear-gradient(180deg,
+        rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.1) 38%,
+        rgba(0, 0, 0, 0) 68%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+.cs-next__card-title {
+    @include type-scale(md);
+    max-width: 24ch;
+}
+
+.cs-next__card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: var(--White);
+    color: var(--Ink);
+    @include type-scale(xs);
+
+    svg { width: 18px; height: 18px; }
+}
+
 /* ---- dark content block -------------------------------------------------- */
 .cs {
     position: relative;
     z-index: 1;
-    background: var(--BlackDenim);
+    background: var(--Moss-Bronze);
     color: var(--Shiny-Pearl);
     padding: 0 var(--page-margin) 140px;
 }
@@ -98,7 +170,7 @@
 .cs-intro, .cs-description { 
     padding: 128px 0;
 
-    @media (min-width: 768px) {
+    @media (min-width: 700px) {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         gap: var(--grid-gap);
@@ -107,7 +179,7 @@
 
 .cs-intro__text { 
     
-    @media (min-width: 768px) {
+    @media (min-width: 700px) {
         grid-column: 2 / span 6;
 
         display: grid;
@@ -120,13 +192,13 @@
     @include type-scale(lg);
     margin-bottom: 48px;
 
-    @media (min-width: 768px) {
+    @media (min-width: 700px) {
         grid-column: span 6;
     }
 }
 
 .cs-text {
-     @media (min-width: 768px) {
+     @media (min-width: 700px) {
         grid-column: span 5;
     }
 }
@@ -209,7 +281,7 @@
 .cs-block { margin-top: 160px; }
 
 .cs-figure {
-    @media (min-width: 768px) {
+    @media (min-width: 700px) {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         gap: var(--grid-gap);
@@ -221,25 +293,18 @@
     }
 }
 
-.cs-figure--right { 
-   
-
-    @media (max-width: 768px) {
-         display: flex;
+.cs-figure--right {
+    /* mobile: image above its caption (reverses the source order) */
+    display: flex;
     flex-direction: column;
-        .cs-media {
-            order: 1;
-        }
+    .cs-media  { order: 1; }
+    figcaption { order: 2; }
 
-        figcaption {
-            order: 2;
-        }
+    @media (min-width: 700px) {
+        display: grid; /* re-assert the grid over the mobile flex */
+        .cs-media  { grid-column: 5 / span 7; }
+        figcaption { @include type-scale(body); grid-column: 2 / span 3; text-align: right; }
     }
-
-     @media (min-width: 768px) {
-        .cs-media { grid-column: 5 / span 7; }
-        figcaption { @include type-scale(body); grid-column: 2 / span 3; text-align: right;}
-     }
 }
 
 .cs-media--wide {
@@ -296,11 +361,3 @@
     }
 }
 
-@media (max-width: 700px) {
-    .cs-intro__cols { flex-direction: column; }
-    .cs-grid { grid-template-columns: 1fr; }
-    .cs-grid .cs-media,
-    .cs-grid .cs-media--wide { grid-column: auto; }
-    .cs-figure,
-    .cs-figure--right { grid-template-columns: 1fr; }
-}

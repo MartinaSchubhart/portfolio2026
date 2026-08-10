@@ -7,13 +7,13 @@
   --Moss-Bronze: #515449;
   --BlackDenim: #181C24;
 
-  --page-margin: 40px;
+  --page-margin: 20px;
   --grid-gap: 48px;
   --radius: 16px;
 }
- 
-@media (max-width: 767px) {
+
+@media (min-width: 700px) {
   :root {
-    --page-margin: 20px;
+    --page-margin: 40px;
   }
 }

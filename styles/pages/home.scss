@@ -9,35 +9,36 @@
     background: var(--SlateBlue);
 }
 
-/* hero fills the viewport below the header; WELCOME sits at the top,
-   the portrait floats on the right at an angle, the intro sits bottom-left.
-   Flex column so the intro pins to the bottom (>=50px) while keeping at
-   least 136px clearance from WELCOME (whichever needs more space wins). */
+/* Hero. Mobile (base): WELCOME, a centred intro, then the portrait centred
+   below — all on the purple. Desktop (>=700): the portrait floats at an angle
+   on the right and the intro pins bottom-left over a cream lower area. */
 .hero {
     /* portrait size, reused to size the hero tall enough to contain it */
-    --img-w: min(40vw, 730px);
+    --img-w: min(40vw, 597px);
     --img-h: calc(var(--img-w) * 938 / 831);
 
     position: relative;
     flex: 1 0 auto;
-    /* grow past 100vh when the tilted portrait would otherwise overflow the
-       screen: portrait top (24vh) + its height + room below for the intro */
-    min-height: calc(var(--img-h) + 35vh);
     display: flex;
     flex-direction: column;
-    padding-bottom: 50px;
+    background: transparent; /* mobile: the purple .screen shows behind the portrait */
+}
+
+.hero-viewport {
+    background-color: var(--SlateBlue);
+    position: relative;
 }
 
 /* container carries the position + tilt so the WebGL canvas (injected by
    script/work-distort.js) rotates with the portrait; the <img> is the
-   texture source and the fallback when the effect can't run */
+   texture source and the fallback when the effect can't run.
+   Mobile: centred + straight on the purple. */
 .hero__image {
-    position: absolute;
-    top: 24vh;
-    right: 8%;
-    width: var(--img-w);
-    transform: rotate(3.38deg);
-    z-index: 1; /* over the WELCOME letters */
+    position: relative;
+    width: min(70vw, 380px);
+    margin: 40px auto;
+    transform: rotate(3.38deg); /* keep the slight angle on mobile too */
+    z-index: 1;
 
     img {
         display: block;
@@ -55,15 +56,49 @@
     }
 }
 
+/* mobile: intro centred under WELCOME */
 .hero__intro {
-    position: relative;
-    z-index: 2;
-    margin-top: auto;               /* pin to the bottom of the hero */
-    margin-left: var(--page-margin);
-    max-width: 740px;
-
+    text-align: center;
+    margin: 24px var(--page-margin) 0;
     color: var(--White);
     @include type-scale(md);
+}
+
+@media (min-width: 700px) {
+    .hero {
+        min-height: calc(var(--img-h) + 35vh);
+        padding-bottom: 50px;
+        background: var(--Shiny-Pearl); /* cream lower area below the purple viewport */
+    }
+
+    /* flex column so the intro pins to the bottom of the viewport, but keeps at
+       least WELCOME's margin-bottom (136px) of clearance from it. min-height (not
+       height) lets the viewport grow past the fold on short screens, pushing the
+       intro below the fold rather than letting it overlap WELCOME. */
+    .hero-viewport {
+        min-height: calc(100vh - 68px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hero__image {
+        position: absolute;
+        top: 24vh;
+        right: 8%;
+        width: var(--img-w);
+        margin: 0;
+        transform: rotate(3.38deg);
+    }
+
+    .hero__intro {
+        margin-top: auto;      /* pin to the bottom when there's room */
+        margin-bottom: 48px;
+        margin-left: var(--page-margin);
+        margin-right: var(--page-margin);
+        z-index: 2;
+        text-align: left;
+        max-width: 740px;
+    }
 }
 
 /* "WELCOME" built from the 7 letter SVGs. Each letter's flex-grow is its
@@ -77,8 +112,8 @@
 .welcome {
     display: flex;
     align-items: flex-start;
-    padding: 8px var(--page-margin) 0;
-    margin-bottom: 136px; /* minimum clearance to the intro text */
+    padding: 8px 8px 0; /* mobile; widened to the page margin on desktop below */
+    margin-bottom: 24px; /* clearance to the intro; larger on desktop below */
 
     svg {
         display: block;
@@ -103,8 +138,8 @@
     svg:nth-child(7) { flex: 197; transition-delay: 0.30s; }                 /* E  ×1      */
 }
 
-@media (max-width: 700px) {
-    .welcome { padding: 8px 8px 0; } 
+@media (min-width: 700px) {
+    .welcome { padding: 8px var(--page-margin) 0; margin-bottom: 136px; }
 }
 
 
@@ -114,39 +149,24 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
     .welcome svg { transform: none; transition: none; }
 }
 
-/* ---- Work: sticky centered intro, teasers scroll past over it -------------
-   .work is a tall scroll track; .work__sticky (100vh) pins for (height-100vh)
-   while the teaser images — positioned down the track — scroll up and off the
-   top. Height = last teaser top (280vh) + its max height (90vh) + 100vh, so the
-   section unsticks right as the last teaser (--d) clears the screen. */
+/* ---- Work: case studies ---------------------------------------------------
+   Mobile (base): a simple vertical list of cards — caption, image, then a
+   button. Desktop (>=700): a tall scroll track where the intro pins (sticky)
+   and the teasers scroll up past it, alternating left/right, with a WebGL
+   cursor-bulge on hover. */
 .work {
-    position: relative;
-    height: 470vh;
     background: var(--Shiny-Pearl);
     color: var(--Ink);
+    padding: 0 var(--page-margin) 80px;
 }
 
+/* mobile: a plain centred heading block (becomes the pinned intro on desktop) */
 .work__sticky {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    display: grid;
-    place-items: center;
+    padding: 64px 0 40px;
     text-align: center;
-    z-index: 0;
 }
 
-.work__bg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(55vw, 1036px);
-    height: auto;
-    z-index: 0;
-    pointer-events: none;
-    user-select: none;
-}
+.work__bg { display: none; } /* faint WORK backdrop — desktop only */
 
 .work__intro {
     position: relative;
@@ -154,59 +174,48 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
 }
 
 .work__title { @include type-scale(lg); }
-.work__sub   { @include type-scale(md); margin-top: 8px; }
+.work__sub   { @include type-scale(md); margin-top: 8px; display: none; } /* desktop only */
 
-/* teasers scroll up over the pinned intro (z-index above .work__sticky).
-   Container carries the position; the <img> is the texture source and the
-   WebGL canvas (script/work-distort.js) overlays it for the hover bulge. */
+/* mobile card: the image with the caption + button overlaid on top of it */
 .work__teaser {
-    position: absolute;
-    z-index: 2;
-
-    /* Sized by WIDTH (not height) so the left- and right-hand cards always keep
-       a gap down the middle and can never overlap horizontally as they scroll
-       past each other. Capped by height too, so a short/landscape viewport
-       can't make a card taller than the screen. */
-    width: min(38vw, 68vh, 600px);
+    position: relative; /* the overlay + canvas position within the card */
+    margin-bottom: 40px;
 
     img {
         display: block;
         width: 100%;
         height: auto;
+        border-radius: var(--radius);
     }
 
-    canvas {
+    canvas { /* WebGL bulge surface (desktop) */
         position: absolute;
         top: 0;
         left: 0;
         display: block;
-        /* the oversized (bleed) canvas IS the hit area, so the bulge starts as
-           soon as the cursor enters the 14% margin around the image (magnetic) */
         pointer-events: auto;
-        max-width: none; /* allow the canvas past the reset's max-width:100% */
+        max-width: none; /* allow the oversized (bleed) canvas past the reset's max-width:100% */
     }
 }
 
-/* hover content: HTML overlay stacked above the canvas (the 70% darkening is
-   done in the shader now). Text top-left, button bottom-left. */
+/* label (top) + button (bottom) overlaid on the image. On mobile it's shown by
+   default with a top/bottom scrim so the white text stays legible. */
 .work__teaser__content {
     position: absolute;
     inset: 0;
-    z-index: 1; /* above the canvas */
+    z-index: 1;
     padding: 28px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-
     color: var(--White);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none; /* let hover reach the teaser for the bulge */
+    border-radius: var(--radius);
+    background: linear-gradient(180deg,
+        rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 32%,
+        rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.55) 100%);
+    pointer-events: none; /* let taps/hover reach the card */
 }
-
-.work__teaser:hover .work__teaser__content,
-.work__teaser:focus-within .work__teaser__content { opacity: 1; } /* reveal on keyboard focus too */
 
 .work__teaser__label {
     @include type-scale(md);
@@ -221,38 +230,73 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
     color: var(--Ink);
     @include type-scale(xs);
 }
-.work__teaser--a { top: 90vh;  left: 4vw; }
-.work__teaser--b { top: 154vh; right: 6vw; }
-.work__teaser--c { top: 210vh; left: 12vw; }
-.work__teaser--d { top: 280vh; right: 4vw; }
 
-/* Touch devices (no hover): the label + button can't be revealed on hover, so
-   show them by default, with a top/bottom scrim so the white text stays legible
-   over the (undarkened) image. */
-@media (hover: none) {
+/* Desktop: the pinned-intro scroll track; the overlay hides until hover (the
+   shader darkens the image instead of the scrim). */
+@media (min-width: 700px) {
+    .work {
+        position: relative;
+        height: 470vh;
+        padding: 0;
+    }
+
+    .work__sticky {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: grid;
+        place-items: center;
+        z-index: 0;
+        padding: 0;
+    }
+
+    .work__bg {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(55vw, 1036px);
+        height: auto;
+        z-index: 0;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .work__sub { display: block; }
+
+    .work__teaser {
+        position: absolute;
+        z-index: 2;
+        width: min(38vw, 68vh, 600px);
+        margin-bottom: 0;
+
+        img { border-radius: 0; }
+    }
+
+    .work__teaser__content {
+        border-radius: 0;
+        background: none;   /* the shader darkens the image on hover instead */
+        opacity: 0;         /* hidden until hover */
+        transition: opacity 0.4s ease;
+    }
+    .work__teaser:hover .work__teaser__content,
+    .work__teaser:focus-within .work__teaser__content { opacity: 1; }
+
+    .work__teaser--a { top: 90vh;  left: 4vw; }
+    .work__teaser--b { top: 154vh; right: 6vw; }
+    .work__teaser--c { top: 210vh; left: 12vw; }
+    .work__teaser--d { top: 280vh; right: 4vw; }
+}
+
+/* Touch tablets (>=700, no hover): keep the overlay shown with its scrim. */
+@media (min-width: 700px) and (hover: none) {
     .work__teaser__content {
         opacity: 1;
         background: linear-gradient(180deg,
             rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 32%,
             rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.55) 100%);
     }
-}
-
-/* Narrow screens: stack the cards down the centre (large) instead of the
-   alternating left/right layout, spaced so they never overlap. */
-@media (max-width: 800px) {
-    .work { height: 410vh; }
-
-    .work__teaser {
-        width: min(80vw, 48vh); /* height stays under ~60vh, below the row spacing */
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-    }
-    .work__teaser--a { top: 55vh;  left: 50%; }
-    .work__teaser--b { top: 120vh; right: auto; left: 50%; }
-    .work__teaser--c { top: 185vh; left: 50%; }
-    .work__teaser--d { top: 250vh; right: auto; left: 50%; }
 }
 
 /* next section */
@@ -277,36 +321,26 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
 }
 
 
-@media (min-width: 768px) {
-   .about-me                { padding: 300px var(--page-margin); } 
+@media (min-width: 700px) {
+   .about-me                { padding: 300px var(--page-margin); }
    .about-me__intro         { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); margin-bottom: 240px; }
    .about-me__title         { grid-column: 4 / span 6; text-align: center; }
    .about-me__intro-text    { grid-column: 4 / span 6; text-align: center; }
 }
 
 
+/* mobile (base): single column, image stack first then the text/AI stack */
 .layout {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: 1fr;
     gap: 24px;
-
     grid-template-areas:
-    ". left left left left . right right right right right .";
+        "right"
+        "left";
 }
 
-
-
-.stack-left {
-    grid-column: 2 / span 4;
-    grid-area: left;
-}
-
-.stack-right {
-    grid-column: 7 / span 5;
-    grid-area: right;
-}
-
-
+.stack-left  { grid-area: left; }
+.stack-right { grid-area: right; }
 
 .stack {
     display: flex;
@@ -320,43 +354,26 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
     gap: 1rem;
 }
 
+/* the left stack is itself a small grid holding cards a + b */
 .stack-left {
-  grid-column: 2 / span 4;
-
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
 }
 
-.card--a {
-  grid-column: 1 / span 3;
-}
-
-.card--b {
-  grid-column: 2 / span 3;
-  margin-top: 128px;
-}
+.card--a { grid-column: 1 / span 3; }
+.card--b { grid-column: 2 / span 3; margin-top: 128px; }
 
 .card--c {
-    p {
-        padding-right: calc(25% + var(--grid-gap));
+    p { padding-right: calc(25% + var(--grid-gap)); }
+}
+
+@media (min-width: 700px) {
+    .layout {
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-areas: ". left left left left . right right right right right .";
     }
-}
-
-@media (min-width: 768px) {
-   .card--c { margin-top: 128px;}
-}
-
-@media (max-width: 768px) {
-  .layout {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "right"
-      "left";
-  }
-
-  .stack-left,
-  .stack-right {
-    grid-column: auto;
-  }
+    .stack-left  { grid-column: 2 / span 4; }
+    .stack-right { grid-column: 7 / span 5; }
+    .card--c { margin-top: 128px; }
 }

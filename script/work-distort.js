@@ -226,7 +226,12 @@
     }
   };
 
-  document.querySelectorAll('.hero__image, .work__teaser').forEach(function (el) {
-    new Distort(el, el.classList.contains('work__teaser') ? 0.7 : 0); // teasers darken on hover
-  });
+  document.querySelectorAll('.hero__image').forEach(function (el) { new Distort(el, 0); });
+
+  // teasers get the bulge only in the desktop parallax layout; the mobile
+  // stacked cards (< 700px) have caption/button as siblings, so an overlay
+  // canvas there would sit over the caption, not the image.
+  if (window.matchMedia('(min-width: 700px)').matches) {
+    document.querySelectorAll('.work__teaser').forEach(function (el) { new Distort(el, 0.7); });
+  }
 })();

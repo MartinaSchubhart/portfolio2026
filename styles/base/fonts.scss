@@ -118,7 +118,7 @@ $type-scale-mobile: (
   line-height: map-get($mobile, line-height);
   letter-spacing: map-get($mobile, letter-spacing);
 
-  @media (min-width: 768px) {
+  @media (min-width: 700px) {
     font-family: map-get($desktop, font-family);
     font-size: map-get($desktop, size);
     line-height: map-get($desktop, line-height);
