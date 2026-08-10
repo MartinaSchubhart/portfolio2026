@@ -7,6 +7,7 @@ node_modules/
 Thumbs.db
 desktop.ini
 *.log
+*.xmp
 
 # Unused letter SVGs — inlined into the HTML, no longer loaded as files
 assets/letter-*.svg

@@ -35,8 +35,11 @@
 /* top word: nudged down and overlapping the top of the hero image (sits over
    it via z-index); each letter drops from the top, flex-grow = natural width */
 .cs-word--top {
-    margin-top: 76px;
-    margin-bottom: -80px; /* overlaps under the hero, which paints on top */
+    margin-top: 8px;
+    margin-bottom: -5px; /* overlaps under the hero, which paints on top */
+
+    @media (min-width: 700px) { margin-bottom: -60px;; }
+    @media (min-width: 1400px) { margin-bottom: -80px; }
 }
 .cs-word--top svg { transform-origin: top; }
 .cs-word--top svg:nth-child(1)  { flex: 194; transition-delay: 0s;    } /* B */
@@ -73,21 +76,32 @@
     .cs-word svg { transform: none; transition: none; }
 }
 
+/* Wide Media */
+.cs-media--wide {
+    @media (min-width: 700px) {      
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--grid-gap);
+    }
+
+    .cs-media { grid-column: 2 / span 10; }
+}
 /* ---- next-case footer: two case-study cards over the faint NEXT CASE word -- */
 .cs-next {
     position: relative;
     padding: 100px var(--page-margin) 140px;
+
+   
 }
 
 .cs-next__cards {
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr;       /* mobile: stacked */
-    gap: var(--grid-gap);
 
-    @media (min-width: 700px) {
-        grid-template-columns: 1fr 1fr; /* desktop: side by side */
+    @media (min-width: 700px) {      
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--grid-gap);
     }
 }
 
@@ -104,6 +118,18 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+    }
+}
+
+.cs-next__card--left {
+    @media (min-width: 700px) {      
+        grid-column: 2 / span 5;
+    }
+}
+
+.cs-next__card--right {
+    @media (min-width: 700px) {      
+        grid-column: 7 / span 5;
     }
 }
 
@@ -168,23 +194,36 @@
 
 /* ---- intro (title + challenge/solution + meta) --------------------------- */
 .cs-intro, .cs-description { 
-    padding: 128px 0;
+    padding: 100px 0;
 
     @media (min-width: 700px) {
+        padding: 200px 0;
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         gap: var(--grid-gap);
     }
 }
 
+.cs-block .cs-description {
+    padding: 100px 0 50px;
+
+    @media (min-width: 700px) {
+        padding: 200px 0 150px;
+    }
+}
+
 .cs-intro__text { 
     
     @media (min-width: 700px) {
-        grid-column: 2 / span 6;
+        grid-column: 2 / span 8;
 
         display: grid;
         grid-template-columns: repeat(6, 1fr);
         gap: var(--grid-gap);
+    }
+
+    @media (min-width: 1400px) {
+        grid-column: 2 / span 7;
     }
 }
 
@@ -192,19 +231,22 @@
     @include type-scale(lg);
     margin-bottom: 48px;
 
-    @media (min-width: 700px) {
-        grid-column: span 6;
-    }
+    @media (min-width: 700px) { grid-column: span 8; }
+    @media (min-width: 1400px) { grid-column: span 5; }
 }
 
 .cs-text {
-     @media (min-width: 700px) {
-        grid-column: span 5;
-    }
+    @media (min-width: 700px) { grid-column: span 8; }
+    @media (min-width: 1400px) { grid-column: span 5; }
 }
 
 
-.cs-intro__text p:not(.cs-label) { @include type-scale(body); margin-bottom: 24px; }
+.cs-intro__text p:not(.cs-label) { 
+    @include type-scale(body); 
+    margin-bottom: 24px; 
+
+    @media (min-width: 700px) { margin-bottom: 48px; }
+}
 
 .cs-intro__text p:last-of-type {
   margin-bottom: 0px;
@@ -213,13 +255,15 @@
 .cs-meta { 
     display: flex; 
     flex-direction: column; 
-    gap: 28px; 
-    
-    grid-column: 9 / span 3;
+    gap: 16px;    
 
     display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    margin-top: 48px;
+
+    @media (min-width: 700px) {  grid-column: 9 / span 3; gap: 24px;     }
 }
 
 .cs-meta__row p:not(.cs-label) { @include type-scale(xs); }
@@ -229,7 +273,7 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .cs-link {
@@ -277,28 +321,32 @@
   height: auto;
 }
 
-/* ---- content blocks (Storytelling / Motion) ----------------------------- */
-.cs-block { margin-top: 160px; }
-
 .cs-figure {
     @media (min-width: 700px) {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         gap: var(--grid-gap);
         align-items: start;
-        margin: 128px 0;
+        margin-bottom: 100px;
 
         .cs-media { grid-column: 2 / span 7; }
         figcaption { @include type-scale(body);  grid-column: 9 / span 3; margin-top: var(--radius); }
     }
 }
 
+.cs-block .cs-figure:last-of-type {
+  margin-bottom: 0px;
+}
+
 .cs-figure--right {
     /* mobile: image above its caption (reverses the source order) */
     display: flex;
     flex-direction: column;
-    .cs-media  { order: 1; }
-    figcaption { order: 2; }
+
+    @media (max-width: 699px) {
+        .cs-media  { order: 1; }
+        figcaption { order: 2; }
+    }
 
     @media (min-width: 700px) {
         display: grid; /* re-assert the grid over the mobile flex */

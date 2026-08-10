@@ -14,7 +14,7 @@
    on the right and the intro pins bottom-left over a cream lower area. */
 .hero {
     /* portrait size, reused to size the hero tall enough to contain it */
-    --img-w: min(40vw, 597px);
+    --img-w: min(35vw, 560px);
     --img-h: calc(var(--img-w) * 938 / 831);
 
     position: relative;
@@ -84,7 +84,7 @@
     .hero__image {
         position: absolute;
         top: 24vh;
-        right: 8%;
+        right: 10%;
         width: var(--img-w);
         margin: 0;
         transform: rotate(3.38deg);
@@ -174,7 +174,7 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
 }
 
 .work__title { @include type-scale(lg); }
-.work__sub   { @include type-scale(md); margin-top: 8px; display: none; } /* desktop only */
+.work__sub   { @include type-scale(sm); margin-top: 8px; display: none; } /* desktop only */
 
 /* mobile card: the image with the caption + button overlaid on top of it */
 .work__teaser {
@@ -313,15 +313,22 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
 
 .about-me__title {    
     @include type-scale(lg);   
+    margin-bottom: 32px;
 }
 
 .about-me__intro-text {    
-    @include type-scale(md);
-  
+    @include type-scale(md);  
 }
 
 
 @media (min-width: 700px) {
+   .about-me                { padding: 200px var(--page-margin); }
+   .about-me__intro         { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); margin-bottom: 240px; }
+   .about-me__title         { grid-column: 2 / span 10; text-align: center; margin-bottom: 0px; }
+   .about-me__intro-text    { grid-column: 2 / span 10; text-align: center; }
+}
+
+@media (min-width: 1400px) {
    .about-me                { padding: 300px var(--page-margin); }
    .about-me__intro         { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); margin-bottom: 240px; }
    .about-me__title         { grid-column: 4 / span 6; text-align: center; }
@@ -361,11 +368,18 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
     gap: 24px;
 }
 
-.card--a { grid-column: 1 / span 3; }
-.card--b { grid-column: 2 / span 3; margin-top: 128px; }
+.card--a { grid-column: 2 / span 3; margin-top: 48px; }
+.card--b { grid-column: 1 / span 3; margin-top: 48px; }
+
+ @media (min-width: 700px) {      
+    .card--a { grid-column: 1 / span 3; margin-top: 0px; }
+    .card--b { grid-column: 2 / span 3; margin-top: 128px; }
+ }  
 
 .card--c {
-    p { padding-right: calc(25% + var(--grid-gap)); }
+    @media (min-width: 700px) {      
+       p { padding-right: calc(25% + var(--grid-gap)); }
+    }    
 }
 
 @media (min-width: 700px) {

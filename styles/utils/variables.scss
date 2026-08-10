@@ -8,12 +8,14 @@
   --BlackDenim: #181C24;
 
   --page-margin: 20px;
-  --grid-gap: 48px;
-  --radius: 16px;
+  --grid-gap: 8px;
+  --radius: 6px;
 }
 
 @media (min-width: 700px) {
   :root {
     --page-margin: 40px;
+    --grid-gap: 48px;
+    --radius: 16px;
   }
 }
