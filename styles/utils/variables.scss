@@ -6,16 +6,18 @@
   --Off-White: #F7ECD7;
   --Moss-Bronze: #515449;
   --BlackDenim: #181C24;
+  --Grullo: #867C77;
+  --Tan: #DABFB0;
 
   --page-margin: 20px;
   --grid-gap: 8px;
-  --radius: 6px;
+  --radius: 0px;
 }
 
 @media (min-width: 700px) {
   :root {
-    --page-margin: 40px;
+    --page-margin: 72px;
     --grid-gap: 48px;
-    --radius: 16px;
+    --radius: 0px;
   }
 }

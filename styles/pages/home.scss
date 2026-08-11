@@ -1,153 +1,60 @@
-/* first viewport: the hero, on the purple (base page bg is Shiny-Pearl).
-   The header is fixed (out of flow), so pad the top by its height (set as
-   --header-h by script/header-nav.js) to keep WELCOME clear of it. */
+/* first viewport: the hero — a warm light background image (gradient + grain,
+   assets/newhero-bg.svg) holding a small eyebrow label and a large intro
+   statement pinned to the bottom-left. The fixed header sits over it in Ink
+   (see .page-home in navigation.scss). */
 .screen {
+    position: relative;
     min-height: 100vh;
     padding-top: var(--header-h, 68px);
     display: flex;
     flex-direction: column;
-    background: var(--SlateBlue);
+    overflow: hidden;
+    background: var(--Shiny-Pearl) url('../assets/newhero-bg.svg') no-repeat center / cover;
 }
 
-/* Hero. Mobile (base): WELCOME, a centred intro, then the portrait centred
-   below — all on the purple. Desktop (>=700): the portrait floats at an angle
-   on the right and the intro pins bottom-left over a cream lower area. */
+/* hero content sits at the bottom-left */
 .hero {
-    /* portrait size, reused to size the hero tall enough to contain it */
-    --img-w: min(35vw, 560px);
-    --img-h: calc(var(--img-w) * 938 / 831);
-
     position: relative;
+    z-index: 1;
     flex: 1 0 auto;
     display: flex;
     flex-direction: column;
-    background: transparent; /* mobile: the purple .screen shows behind the portrait */
+    justify-content: flex-end;
+    padding: 0 var(--page-margin) 56px;
 }
 
+/* fade the hero text up once the preloader clears (script/preloader.js adds
+   is-loaded); no-JS reveals it via the <noscript> fallback in index.html */
 .hero-viewport {
-    background-color: var(--SlateBlue);
     position: relative;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.is-loaded .hero-viewport { opacity: 1; transform: none; }
+
+.hero__eyebrow {
+    @include type-scale(eyebrow);
+    text-transform: uppercase;   
+    color: var(--Grullo);
+    margin-bottom: 20px;
 }
 
-/* container carries the position + tilt so the WebGL canvas (injected by
-   script/work-distort.js) rotates with the portrait; the <img> is the
-   texture source and the fallback when the effect can't run.
-   Mobile: centred + straight on the purple. */
-.hero__image {
-    position: relative;
-    width: min(70vw, 380px);
-    margin: 40px auto;
-    transform: rotate(3.38deg); /* keep the slight angle on mobile too */
-    z-index: 1;
-
-    img {
-        display: block;
-        width: 100%;
-        height: auto;
-    }
-
-    canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: block;
-        pointer-events: none;
-        max-width: none; /* allow the oversized (bleed) canvas past the reset's max-width:100% */
-    }
-}
-
-/* mobile: intro centred under WELCOME */
 .hero__intro {
-    text-align: center;
-    margin: 24px var(--page-margin) 0;
-    color: var(--White);
-    @include type-scale(md);
+    @include type-scale(xl);
+    color: var(--Ink);
 }
-
-@media (min-width: 700px) {
-    .hero {
-        min-height: calc(var(--img-h) + 35vh);
-        padding-bottom: 50px;
-        background: var(--Shiny-Pearl); /* cream lower area below the purple viewport */
-    }
-
-    /* flex column so the intro pins to the bottom of the viewport, but keeps at
-       least WELCOME's margin-bottom (136px) of clearance from it. min-height (not
-       height) lets the viewport grow past the fold on short screens, pushing the
-       intro below the fold rather than letting it overlap WELCOME. */
-    .hero-viewport {
-        min-height: calc(100vh - 68px);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .hero__image {
-        position: absolute;
-        top: 24vh;
-        right: 10%;
-        width: var(--img-w);
-        margin: 0;
-        transform: rotate(3.38deg);
-    }
-
-    .hero__intro {
-        margin-top: auto;      /* pin to the bottom when there's room */
-        margin-bottom: 48px;
-        margin-left: var(--page-margin);
-        margin-right: var(--page-margin);
-        z-index: 2;
-        text-align: left;
-        max-width: 740px;
-    }
-}
-
-/* "WELCOME" built from the 7 letter SVGs. Each letter's flex-grow is its
-   natural width, so the word fills the line edge-to-edge while every letter
-   keeps the same height (they share a 597px artwork height). Scales fluidly
-   with the viewport.
-
-   On load each letter grows from 0 to its full height (scaleY, from the
-   baseline) with a left-to-right stagger. The reveal is triggered by adding
-   `is-loaded` to <html> once the preloader finishes (script/preloader.js). */
-.welcome {
-    display: flex;
-    align-items: flex-start;
-    padding: 8px 8px 0; /* mobile; widened to the page margin on desktop below */
-    margin-bottom: 24px; /* clearance to the intro; larger on desktop below */
-
-    svg {
-        display: block;
-        height: auto;
-        min-width: 0; /* let flex shrink the letters below their intrinsic width */
-        --grow: 1;    /* final scaleY; >1 overshoots downward past the top edge */
-        transform: scaleY(0);
-        transform-origin: top;
-        transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    /* flex-grow = natural width (fills the line); transition-delay = stagger;
-       --grow overshoot forms an arch (peak at C). The percentages are the
-       20/40/60px overshoots expressed as a share of the letter height at the
-       reference width (~1920), so the arch scales proportionally with the type. */
-    svg:nth-child(1) { flex: 406; transition-delay: 0s;    }                 /* W  ×1      */
-    svg:nth-child(2) { flex: 211; transition-delay: 0.05s; --grow: 1.034; }  /* E  ≈+20px  */
-    svg:nth-child(3) { flex: 197; transition-delay: 0.10s; --grow: 1.068; }  /* L  ≈+40px  */
-    svg:nth-child(4) { flex: 244; transition-delay: 0.15s; --grow: 1.102; }  /* C  ≈+60px  */
-    svg:nth-child(5) { flex: 257; transition-delay: 0.20s; --grow: 1.068; }  /* O  ≈+40px  */
-    svg:nth-child(6) { flex: 345; transition-delay: 0.25s; --grow: 1.034; }  /* M  ≈+20px  */
-    svg:nth-child(7) { flex: 197; transition-delay: 0.30s; }                 /* E  ×1      */
-}
-
-@media (min-width: 700px) {
-    .welcome { padding: 8px var(--page-margin) 0; margin-bottom: 136px; }
-}
-
-
-html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
 
 @media (prefers-reduced-motion: reduce) {
-    .welcome svg { transform: none; transition: none; }
+    .hero-viewport { opacity: 1; transform: none; transition: none; }
 }
+
+@media (min-width: 700px) {
+   .hero-viewport           { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+   .hero__eyebrow           { grid-column: 1 / span 10; }
+   .hero__intro             { grid-column: 1 / span 10; }
+}
+
 
 /* ---- Work: case studies ---------------------------------------------------
    Mobile (base): a simple vertical list of cards — caption, image, then a
@@ -166,15 +73,13 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
     text-align: center;
 }
 
-.work__bg { display: none; } /* faint WORK backdrop — desktop only */
-
 .work__intro {
     position: relative;
     z-index: 1;
 }
 
 .work__title { @include type-scale(lg); }
-.work__sub   { @include type-scale(sm); margin-top: 8px; display: none; } /* desktop only */
+.work__sub   { @include type-scale(eyebrow); margin-top: 8px; display: none; color: var(--Grullo); text-transform: uppercase; } /* desktop only */
 
 /* mobile card: the image with the caption + button overlaid on top of it */
 .work__teaser {
@@ -198,46 +103,82 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
     }
 }
 
-/* label (top) + button (bottom) overlaid on the image. On mobile it's shown by
-   default with a top/bottom scrim so the white text stays legible. */
+/* card overlay: a logo (top-left) and the title (bottom-left), always visible.
+   No scrim — the source image is pre-darkened for legibility; on hover the
+   shader darkens further (with the bulge). The title lifts to reveal "Explore".
+   The WebGL bulge and whole-card click are unchanged. */
 .work__teaser__content {
     position: absolute;
     inset: 0;
     z-index: 1;
-    padding: 28px;
+    padding: 48px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; /* logo top, title/explore bottom */
     align-items: flex-start;
     color: var(--White);
-    border-radius: var(--radius);
-    background: linear-gradient(180deg,
-        rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 32%,
-        rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.55) 100%);
-    pointer-events: none; /* let taps/hover reach the card */
+    pointer-events: none; /* let taps/hover reach the card for the bulge + click */
 }
 
-.work__teaser__label {
+/* logo slot — drop an <svg> or <img> in here; the text is a placeholder */
+.work__teaser__logo {
+    @include type-scale(sm);
+    font-weight: 700;
+    line-height: 1;
+
+    svg,
+    img { display: block; width: auto; height: 20px; }
+}
+
+.work__teaser__foot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.work__teaser__title {
     @include type-scale(md);
-    max-width: 80%;
+    max-width: 90%;
 }
 
+/* Explore — hidden until hover, then grows in below the (lifted) title */
 .work__teaser__btn {
     pointer-events: auto; /* clickable */
-    padding: 12px 24px;
-    border-radius: 999px;
-    background: var(--White);
-    color: var(--Ink);
-    @include type-scale(xs);
+    align-self: flex-start;
+    @include type-scale(eyebrow);
+    text-transform: uppercase;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease, max-height 0.35s ease, margin-top 0.35s ease;
 }
 
-/* Desktop: the pinned-intro scroll track; the overlay hides until hover (the
-   shader darkens the image instead of the scrim). */
+.work__teaser:hover .work__teaser__btn,
+.work__teaser:focus-within .work__teaser__btn {
+    opacity: 1;
+    max-height: 2em;
+    margin-top: 24px;
+}
+
+/* touch devices (no hover): show Explore by default */
+@media (hover: none) {
+    .work__teaser__btn { opacity: 1; max-height: 2em; margin-top: 14px; }
+}
+
+/* Desktop: the pinned-intro scroll track. */
 @media (min-width: 700px) {
     .work {
         position: relative;
         height: 470vh;
         padding: 0;
+
+        /* 12-column grid metrics — content is inset by --page-margin on both
+           sides, with --grid-gap between columns. --col = one column's width;
+           --col-step = distance from one column's start to the next. The
+           teasers are absolutely positioned, so they snap to these columns via
+           calc() rather than being real grid items. */
+        --col: calc((100% - 2 * var(--page-margin) - 11 * var(--grid-gap)) / 12);
+        --col-step: calc(var(--col) + var(--grid-gap));
     }
 
     .work__sticky {
@@ -250,61 +191,51 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
         padding: 0;
     }
 
-    .work__bg {
-        display: block;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: min(55vw, 1036px);
-        height: auto;
-        z-index: 0;
-        pointer-events: none;
-        user-select: none;
-    }
-
     .work__sub { display: block; }
 
     .work__teaser {
         position: absolute;
         z-index: 2;
-        width: min(38vw, 68vh, 600px);
+        /* each card spans 4 of the 12 columns */
+        width: calc(var(--col) * 5 + var(--grid-gap) * 4);
         margin-bottom: 0;
 
         img { border-radius: 0; }
+
+        @media (min-width: 1400px) {
+            /* each card spans 5 of the 12 columns */
+            width: calc(var(--col) * 4 + var(--grid-gap) * 3);
+        }
     }
 
-    .work__teaser__content {
-        border-radius: 0;
-        background: none;   /* the shader darkens the image on hover instead */
-        opacity: 0;         /* hidden until hover */
-        transition: opacity 0.4s ease;
-    }
-    .work__teaser:hover .work__teaser__content,
-    .work__teaser:focus-within .work__teaser__content { opacity: 1; }
+    .work__teaser__content { border-radius: 0; } /* match the square image */
 
-    .work__teaser--a { top: 90vh;  left: 4vw; }
-    .work__teaser--b { top: 154vh; right: 6vw; }
-    .work__teaser--c { top: 210vh; left: 12vw; }
-    .work__teaser--d { top: 280vh; right: 4vw; }
-}
+    /* left edge aligned to a column start: --page-margin + --col-step * (n - 1),
+       for a card beginning at (1-indexed) column n. Cards alternate left/right
+       while staying on the grid: a → cols 1–4, b → 9–12, c → 2–5, d → 9–12. */
+    .work__teaser--a { top: 90vh;  left: var(--page-margin); }
+    .work__teaser--b { top: 154vh; left: calc(var(--page-margin) + var(--col-step) * 7); }
+    .work__teaser--c { top: 210vh; left: calc(var(--page-margin) + var(--col-step) * 1); }
+    .work__teaser--d { top: 280vh; left: calc(var(--page-margin) + var(--col-step) * 7); }
 
-/* Touch tablets (>=700, no hover): keep the overlay shown with its scrim. */
-@media (min-width: 700px) and (hover: none) {
-    .work__teaser__content {
-        opacity: 1;
-        background: linear-gradient(180deg,
-            rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 32%,
-            rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.55) 100%);
+     @media (min-width: 1400px) {
+        .work__teaser--b { top: 154vh; left: calc(var(--page-margin) + var(--col-step) * 8); }
     }
 }
 
 /* next section */
 
 .about-me {
-    padding: 150px var(--page-margin);   
-    background-color: var(--Moss-Bronze);
+    padding: 150px var(--page-margin);
+    /* full-width background image, stacked (repeated) down to fill the section */
+    background: var(--BlackDenim) url('../assets/about-me--background.png') top center / 100% auto repeat-y;
     color: var(--White);
+}
+
+.about-me__eyebrow {
+    @include type-scale(eyebrow);
+    color: var(--Tan); 
+    text-transform: uppercase;
 }
 
 .about-me__intro {    
@@ -324,6 +255,7 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
 @media (min-width: 700px) {
    .about-me                { padding: 200px var(--page-margin); }
    .about-me__intro         { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); margin-bottom: 240px; }
+   .about-me__eyebrow       { grid-column: 2 / span 10; text-align: center; }
    .about-me__title         { grid-column: 2 / span 10; text-align: center; margin-bottom: 0px; }
    .about-me__intro-text    { grid-column: 2 / span 10; text-align: center; }
 }
@@ -359,6 +291,7 @@ html.is-loaded .welcome svg { transform: scaleY(var(--grow)); }
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    color: var(--White); 
 }
 
 /* the left stack is itself a small grid holding cards a + b */

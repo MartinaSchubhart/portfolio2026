@@ -28,6 +28,12 @@
 
 // Type scale
 $type-scale-desktop-wide: (
+  eyebrow: (
+    font-family: 'Acid Grotesk Regular',
+    size: 14px,
+    line-height: 100%,
+    letter-spacing: 6px
+  ),
   xs: (
     font-family: 'Acid Grotesk Regular',
     size: 1rem,
@@ -42,8 +48,8 @@ $type-scale-desktop-wide: (
   ),
   body: (
     font-family: 'Acid Grotesk Normal',
-    size: 1.45rem,
-    line-height: 130%,
+    size: 20px,
+    line-height: 140%,
     letter-spacing: 0.5px
   ),
   md: (
@@ -68,6 +74,12 @@ $type-scale-desktop-wide: (
 
 // Type scale
 $type-scale-desktop: (
+  eyebrow: (
+    font-family: 'Acid Grotesk Regular',
+    size: 14px,
+    line-height: 100%,
+    letter-spacing: 6px
+  ),
   xs: (
     font-family: 'Acid Grotesk Regular',
     size: 1rem,
@@ -82,7 +94,7 @@ $type-scale-desktop: (
   ),
   body: (
     font-family: 'Acid Grotesk Normal',
-    size: 1.45rem,
+    size: 18px,
     line-height: 130%,
     letter-spacing: 0.5px
   ),
@@ -109,6 +121,12 @@ $type-scale-desktop: (
 
 // Type scale Mobile
 $type-scale-mobile: (
+  eyebrow: (
+    font-family: 'Acid Grotesk Regular',
+    size: 12px,
+    line-height: 100%,
+    letter-spacing: 4px
+  ),
   xs: (
     font-family: 'Acid Grotesk Regular',
     size: 0.9rem,

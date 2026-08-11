@@ -231,6 +231,8 @@
   // teasers get the bulge only in the desktop parallax layout; the mobile
   // stacked cards (< 700px) have caption/button as siblings, so an overlay
   // canvas there would sit over the caption, not the image.
+  // Darken = 0.7 on hover (moves with the bulge). There's no CSS scrim — the
+  // source image is pre-darkened so the logo/title read in the default view.
   if (window.matchMedia('(min-width: 700px)').matches) {
     document.querySelectorAll('.work__teaser').forEach(function (el) { new Distort(el, 0.7); });
   }

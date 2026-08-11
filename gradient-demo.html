@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Gradient background — demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  html { margin: 0; height: 100%; background: #050505; } /* fallback if WebGL fails */
+  body { margin: 0; min-height: 100%; background: transparent; } /* transparent so the z-index:-1 canvas shows */
+  /* full-viewport background surface */
+  #bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: -1;
+  }
+  /* tiny unobtrusive caption so the review page is self-explanatory */
+  .note {
+    position: fixed;
+    left: 16px;
+    bottom: 14px;
+    margin: 0;
+    font: 12px/1.4 -apple-system, system-ui, sans-serif;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 0.02em;
+  }
+</style>
+</head>
+<body data-bg="5,5,5 | 31,43,48 | 52,38,34">
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <p class="note">Softly moving gradient — background demo</p>
+
+  <script>
+  (function () {
+    var canvas = document.getElementById("bg");
+    var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    if (!gl) return;
+
+    /* three colours, raw 0–255 (the shader divides by 255), read from <body
+       data-bg="r,g,b | r,g,b | r,g,b"> — same three as mayerr.com */
+    function parseColors() {
+      var parts = (document.body.getAttribute("data-bg") || "").split("|");
+      var def = [[5, 5, 5], [31, 43, 48], [52, 38, 34]];
+      return [0, 1, 2].map(function (i) {
+        var c = (parts[i] || "").split(",").map(function (n) { return parseFloat(n); });
+        return (c.length === 3 && c.every(function (n) { return !isNaN(n); })) ? c : def[i];
+      });
+    }
+    var colors = parseColors();
+
+    var VERT = [
+      "attribute vec2 aPos;",
+      "attribute vec2 aUv;",
+      "varying vec2 vUv;",
+      "void main(){ vUv = aUv; gl_Position = vec4(aPos, 0.0, 1.0); }"
+    ].join("\n");
+
+    /* fragment shader — classic 3D Perlin noise (Stefan Gustavson, MIT) driving
+       the same three-colour blend mayerr.com uses for its background. */
+    var FRAG = [
+      "precision highp float;",
+      "uniform float uTime;",
+      "uniform vec3 uColorA;",
+      "uniform vec3 uColorB;",
+      "uniform vec3 uColorC;",
+      "varying vec2 vUv;",
+      "",
+      "vec4 permute(vec4 x){ return mod(((x*34.0)+1.0)*x, 289.0); }",
+      "vec4 taylorInvSqrt(vec4 r){ return 1.79284291400159 - 0.85373472095314 * r; }",
+      "vec3 fade(vec3 t){ return t*t*t*(t*(t*6.0-15.0)+10.0); }",
+      "",
+      "float cnoise(vec3 P){",
+      "  vec3 Pi0 = floor(P);",
+      "  vec3 Pi1 = Pi0 + vec3(1.0);",
+      "  Pi0 = mod(Pi0, 289.0);",
+      "  Pi1 = mod(Pi1, 289.0);",
+      "  vec3 Pf0 = fract(P);",
+      "  vec3 Pf1 = Pf0 - vec3(1.0);",
+      "  vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);",
+      "  vec4 iy = vec4(Pi0.yy, Pi1.yy);",
+      "  vec4 iz0 = Pi0.zzzz;",
+      "  vec4 iz1 = Pi1.zzzz;",
+      "  vec4 ixy = permute(permute(ix) + iy);",
+      "  vec4 ixy0 = permute(ixy + iz0);",
+      "  vec4 ixy1 = permute(ixy + iz1);",
+      "  vec4 gx0 = ixy0 / 7.0;",
+      "  vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;",
+      "  gx0 = fract(gx0);",
+      "  vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);",
+      "  vec4 sz0 = step(gz0, vec4(0.0));",
+      "  gx0 -= sz0 * (step(0.0, gx0) - 0.5);",
+      "  gy0 -= sz0 * (step(0.0, gy0) - 0.5);",
+      "  vec4 gx1 = ixy1 / 7.0;",
+      "  vec4 gy1 = fract(floor(gx1) / 7.0) - 0.5;",
+      "  gx1 = fract(gx1);",
+      "  vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);",
+      "  vec4 sz1 = step(gz1, vec4(0.0));",
+      "  gx1 -= sz1 * (step(0.0, gx1) - 0.5);",
+      "  gy1 -= sz1 * (step(0.0, gy1) - 0.5);",
+      "  vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);",
+      "  vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);",
+      "  vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);",
+      "  vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);",
+      "  vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);",
+      "  vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);",
+      "  vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);",
+      "  vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);",
+      "  vec4 norm0 = taylorInvSqrt(vec4(dot(g000,g000), dot(g010,g010), dot(g100,g100), dot(g110,g110)));",
+      "  g000 *= norm0.x; g010 *= norm0.y; g100 *= norm0.z; g110 *= norm0.w;",
+      "  vec4 norm1 = taylorInvSqrt(vec4(dot(g001,g001), dot(g011,g011), dot(g101,g101), dot(g111,g111)));",
+      "  g001 *= norm1.x; g011 *= norm1.y; g101 *= norm1.z; g111 *= norm1.w;",
+      "  float n000 = dot(g000, Pf0);",
+      "  float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));",
+      "  float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));",
+      "  float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));",
+      "  float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));",
+      "  float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));",
+      "  float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));",
+      "  float n111 = dot(g111, Pf1);",
+      "  vec3 fade_xyz = fade(Pf0);",
+      "  vec4 n_z = mix(vec4(n000,n100,n010,n110), vec4(n001,n101,n011,n111), fade_xyz.z);",
+      "  vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);",
+      "  float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);",
+      "  return 2.2 * n_xyz;",
+      "}",
+      "",
+      "vec3 rgb2color(vec3 rgb){ return rgb / 255.0; }",
+      "",
+      "void main(){",
+      "  vec3 colorA = rgb2color(uColorA);",
+      "  vec3 colorB = rgb2color(uColorB);",
+      "  vec3 colorC = rgb2color(uColorC);",
+      "",
+      "  float noiseFr = 2.0;",
+      "  float noiseAmp = 2.50;",
+      "  float n = cnoise(vec3(vUv.x * 2.0, vUv.y, uTime * 0.2) * noiseFr);",
+      "  n = clamp(n, 0.0, 1.0);",
+      "  n *= noiseAmp;",
+      "",
+      "  vec3 color = colorA;",
+      "  color = mix(color, colorB, sin(uTime * 0.3));",
+      "  color = mix(color, colorC, vUv.y);",
+      "  color = mix(color, mix(colorB, colorC, vUv.x), n);",
+      "",
+      "  gl_FragColor = vec4(color, 1.0);",
+      "}"
+    ].join("\n");
+
+    function compile(type, src) {
+      var s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.error(gl.getShaderInfoLog(s));
+        return null;
+      }
+      return s;
+    }
+    var prog = gl.createProgram();
+    gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
+    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+
+    /* full-screen quad (triangle strip): clip-space positions + 0..1 uv with
+       y pointing up, matching the plane UVs the reference blend expects */
+    var data = new Float32Array([
+      -1, -1, 0, 0,
+       1, -1, 1, 0,
+      -1,  1, 0, 1,
+       1,  1, 1, 1
+    ]);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+    var aPos = gl.getAttribLocation(prog, "aPos");
+    var aUv = gl.getAttribLocation(prog, "aUv");
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 16, 0);
+    gl.enableVertexAttribArray(aUv);
+    gl.vertexAttribPointer(aUv, 2, gl.FLOAT, false, 16, 8);
+
+    var uTime = gl.getUniformLocation(prog, "uTime");
+    gl.uniform3fv(gl.getUniformLocation(prog, "uColorA"), colors[0]);
+    gl.uniform3fv(gl.getUniformLocation(prog, "uColorB"), colors[1]);
+    gl.uniform3fv(gl.getUniformLocation(prog, "uColorC"), colors[2]);
+
+    function resize() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = Math.round((canvas.clientWidth || window.innerWidth) * dpr);
+      var h = Math.round((canvas.clientHeight || window.innerHeight) * dpr);
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        gl.viewport(0, 0, w, h);
+      }
+    }
+    window.addEventListener("resize", resize);
+
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var SPEED = 0.7; /* <1 = slower overall motion (scales the whole clock) */
+
+    /* size + paint one frame immediately so the first paint is correct even
+       before the loop starts (or if it never does, e.g. reduced motion) */
+    resize();
+    gl.uniform1f(uTime, 0);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+    /* Only animate while the tab is visible AND the canvas is on-screen, so the
+       GPU idles when nobody's looking (saves power/battery). rAF returns a
+       positive handle, so 0 doubles as the "not running" flag. */
+    var raf = 0;
+    var onScreen = true;
+    function loop(now) {
+      resize();
+      gl.uniform1f(uTime, now / 1000 * SPEED);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      raf = requestAnimationFrame(loop);
+    }
+    function play() {
+      if (reduce || raf || document.hidden || !onScreen) return;
+      raf = requestAnimationFrame(loop);
+    }
+    function pause() {
+      if (!raf) return;
+      cancelAnimationFrame(raf);
+      raf = 0;
+    }
+
+    /* tab hidden/minimised → pause */
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) pause(); else play();
+    });
+
+    /* canvas scrolled off-screen → pause (a no-op here since the demo canvas is
+       fixed to the viewport, but this is the guard that pays off once the
+       background is a scrolling section on a real page) */
+    if (typeof IntersectionObserver === "function") {
+      new IntersectionObserver(function (entries) {
+        onScreen = entries[0].isIntersecting;
+        if (onScreen) play(); else pause();
+      }).observe(canvas);
+    }
+
+    play();
+  })();
+  </script>
+</body>
+</html>

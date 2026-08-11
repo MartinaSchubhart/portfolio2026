@@ -10,8 +10,35 @@
     /* the header is fixed (out of flow); pad the top by its height so the
        first content clears it (--header-h is set by script/header-nav.js) */
     padding-top: var(--header-h, 68px);
-    background: var(--Shiny-Pearl);
+    /* a light top area (case-study-bg-top.svg) layered over a dark background
+       that stacks down behind the whole page (same image as the about-me
+       section on the landing) */
+    background:
+        url('../assets/case-study-bg-top.svg') top center / 100% auto no-repeat,
+        var(--BlackDenim) url('../assets/about-me--background.png') top center / 100% auto repeat-y;
+    color: var(--Shiny-Pearl);
+}
+
+.cs-hero-title__wrapper {
+    padding-top: 20vh; 
+
+    @media (min-width: 700px) {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--grid-gap);
+    }
+}
+
+/* big page title, sitting on the light top area */
+.cs-hero-title {
+    @include type-scale(xl);
     color: var(--Ink);
+    margin: 0;
+    padding: 48px var(--page-margin) 64px;
+
+    @media (min-width: 700px) {      
+        grid-column: 1 / span 8;
+    }
 }
 
 /* ---- faint words (BEIERSDORF / NEXT CASE) -------------------------------- */
@@ -31,27 +58,6 @@
     }
 }
 .cs-word.is-revealed svg { transform: scaleY(1); }
-
-/* top word: nudged down and overlapping the top of the hero image (sits over
-   it via z-index); each letter drops from the top, flex-grow = natural width */
-.cs-word--top {
-    margin-top: 8px;
-    margin-bottom: -5px; /* overlaps under the hero, which paints on top */
-
-    @media (min-width: 700px) { margin-bottom: -60px;; }
-    @media (min-width: 1400px) { margin-bottom: -80px; }
-}
-.cs-word--top svg { transform-origin: top; }
-.cs-word--top svg:nth-child(1)  { flex: 194; transition-delay: 0s;    } /* B */
-.cs-word--top svg:nth-child(2)  { flex: 174; transition-delay: 0.04s; } /* E */
-.cs-word--top svg:nth-child(3)  { flex: 94;  transition-delay: 0.08s; } /* I */
-.cs-word--top svg:nth-child(4)  { flex: 178; transition-delay: 0.12s; } /* E */
-.cs-word--top svg:nth-child(5)  { flex: 200; transition-delay: 0.16s; } /* R */
-.cs-word--top svg:nth-child(6)  { flex: 194; transition-delay: 0.20s; } /* S */
-.cs-word--top svg:nth-child(7)  { flex: 205; transition-delay: 0.24s; } /* D */
-.cs-word--top svg:nth-child(8)  { flex: 207; transition-delay: 0.28s; } /* O */
-.cs-word--top svg:nth-child(9)  { flex: 205; transition-delay: 0.32s; } /* R */
-.cs-word--top svg:nth-child(10) { flex: 155; transition-delay: 0.36s; } /* F */
 
 /* next word: now a faint decorative backdrop pinned to the bottom of the
    .cs-next footer, behind the two case-study cards */
@@ -123,13 +129,13 @@
 
 .cs-next__card--left {
     @media (min-width: 700px) {      
-        grid-column: 2 / span 5;
+        grid-column: 1 / span 6;
     }
 }
 
 .cs-next__card--right {
     @media (min-width: 700px) {      
-        grid-column: 7 / span 5;
+        grid-column: 7 / span 6;
     }
 }
 
@@ -170,7 +176,7 @@
 .cs {
     position: relative;
     z-index: 1;
-    background: var(--Moss-Bronze);
+    /* transparent — the dark page background (.page-case) shows through */
     color: var(--Shiny-Pearl);
     padding: 0 var(--page-margin) 140px;
 }
@@ -186,10 +192,12 @@
 .cs-media--wide { aspect-ratio: 16 / 9; }
 .cs-media--hero {
     aspect-ratio: 1920 / 1080;
-    width: 100%;         /* full-bleed as a direct page child (on the cream bg) */
-    margin: 0;
+    /* inset from the edges so the light/dark page background shows around it,
+       spanning the transition from the light top area into the dark below */
+    width: auto;
+    margin: 0 var(--page-margin);
     border-radius: 0;
-    position: relative;  /* paints above the overlapping title word (later in DOM) */
+    position: relative;
 }
 
 /* ---- intro (title + challenge/solution + meta) --------------------------- */
@@ -212,34 +220,30 @@
     }
 }
 
-.cs-intro__text { 
-    
-    @media (min-width: 700px) {
-        grid-column: 2 / span 8;
-
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: var(--grid-gap);
-    }
-
-    @media (min-width: 1400px) {
-        grid-column: 2 / span 7;
-    }
-}
-
 .cs-title, .cs-heading {
     @include type-scale(lg);
     margin-bottom: 48px;
 
-    @media (min-width: 700px) { grid-column: span 8; }
-    @media (min-width: 1400px) { grid-column: span 5; }
+    @media (min-width: 700px) { grid-column: 1 / span 6; }
+    @media (min-width: 1400px) { grid-column: 2 / span 5; }
 }
 
 .cs-text {
-    @media (min-width: 700px) { grid-column: span 8; }
-    @media (min-width: 1400px) { grid-column: span 5; }
+    p { @include type-scale(body);    } 
+
+    .cs-label {
+        @include type-scale(eyebrow);
+        color: var(--Tan);
+    }
+
+    @media (min-width: 700px) { grid-column: 7 / span 6; margin-top: 20px; }
+    @media (min-width: 1400px) { grid-column: 7 / span 5; margin-top: 20px; }
 }
 
+.cs-intro__text {
+    @media (min-width: 700px) { grid-column: 1 / span 6; }
+    @media (min-width: 1400px) { grid-column: 2 / span 5;  }
+}
 
 .cs-intro__text p:not(.cs-label) { 
     @include type-scale(body); 
@@ -263,17 +267,17 @@
 
     margin-top: 48px;
 
-    @media (min-width: 700px) {  grid-column: 9 / span 3; gap: 24px;     }
+    @media (min-width: 700px) { grid-column: 8 / span 4; gap: 24px; margin-top: 0px; }
+    @media (min-width: 1400px) { grid-column: 9 / span 3; }
 }
 
-.cs-meta__row p:not(.cs-label) { @include type-scale(xs); }
+.cs-meta__row p:not(.cs-label) { @include type-scale(body); }
 
 .cs-label {
-    @include type-scale(xs);
+    @include type-scale(eyebrow);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 12px;
+    color: var(--Tan);
+    margin-bottom: 16px;
 }
 
 .cs-link {
@@ -330,8 +334,29 @@
         margin-bottom: 100px;
 
         .cs-media { grid-column: 2 / span 7; }
-        figcaption { @include type-scale(body);  grid-column: 9 / span 3; margin-top: var(--radius); }
+
+        figcaption { 
+            @include type-scale(body);  
+            grid-column: 9 / span 3;
+            margin-top: 20px;
+
+            strong {
+                font-weight: normal;
+                @include type-scale(eyebrow);
+                color: var(--Tan);
+                display: block;
+                margin-bottom: 12px;
+                text-transform: uppercase;
+            }
+        }
     }
+}
+
+.divider {
+    height: 1px;
+    width: 100%;
+    background: var(--Moss-Bronze);
+     grid-column: 2 / span 10;
 }
 
 .cs-block .cs-figure:last-of-type {
@@ -351,7 +376,8 @@
     @media (min-width: 700px) {
         display: grid; /* re-assert the grid over the mobile flex */
         .cs-media  { grid-column: 5 / span 7; }
-        figcaption { @include type-scale(body); grid-column: 2 / span 3; text-align: right; }
+        .cs-media--wide { grid-column: 2 / span 10; }
+        figcaption { @include type-scale(body); grid-column: 2 / span 3; }
     }
 }
 
@@ -409,3 +435,27 @@
     }
 }
 
+
+.cs-next {
+    text-align: center;
+}
+
+/* next-case link: label + arrow on one line, arrow vertically centred with the
+   text so it reads in line with it */
+.next__case__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15em;
+}
+.next__link__label {
+    @include type-scale(xl);    
+}
+
+.next__link__arrow {
+    display: inline-flex;
+    /* slide right a few px on hover to signal the link */
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.next__link__arrow svg { display: block; width: auto; height: 90px; }
+
+.next__case__link:hover .next__link__arrow { transform: translateX(20px); }
