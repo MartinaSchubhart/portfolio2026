@@ -1,0 +1,163 @@
+/* ===========================================================================
+   Case-study template 3 (case-study-template.html) — scoped to .page-case3
+   Pairs with the index3 landing: a light title band at the top, then full-bleed
+   media blocks alternating with text sections (heading left / body right) on a
+   12-column grid, ending with a Next Case link and a slim footer.
+   Media blocks are colour placeholders — drop an <img>/<video> inside each.
+   ========================================================================= */
+
+.page-case3 {
+    background: var(--canvas-dark);
+    color: var(--text-light);
+}
+
+%cs3-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--grid-gap);
+}
+
+/* ---- Title band (light) -------------------------------------------------- */
+.cs3-hero {
+    /* extends to the top (behind the fixed header); its top padding clears it */
+    padding: 200px var(--page-margin) 50px;
+    @extend %cs3-grid;
+}
+.cs3-hero__title {
+    @include type-scale(xl);
+    max-width: 22ch;
+
+    @media (min-width: 700px) { grid-column: 2 / span 8; }
+}
+
+.cs-section--light {
+     background: var(--canvas-light);
+     color: var(--text-dark);
+}
+
+/* ---- media blocks (placeholders / images) -------------------------------- */
+.cs3-media {
+    height: auto;
+    background: #6b4a2e;                            /* warm placeholder */
+    overflow: hidden;
+
+    img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
+}
+.cs3-media--hero {  @media (max-width: 699px) { height: 72vh; background: #17130f; } }
+
+/* ---- intro: text (left) + meta (right) ----------------------------------- */
+.cs3-intro {
+    @extend %cs3-grid;
+    padding: 50px var(--page-margin) 200px;
+}
+.cs3-intro__text {
+    grid-column: 1 / -1;
+    @include type-scale(body);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+
+    @media (min-width: 700px) { grid-column: 2 / span 5; }
+}
+.cs3-meta {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-top: 48px;
+
+    @media (min-width: 700px) { grid-column: 9 / span 3; margin-top: 0; }
+}
+.cs3-meta__row p:not(.cs3-label) { @include type-scale(sm); }
+.cs3-label {
+    @include type-scale(xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+}
+
+/* ---- content block: heading (left) + body (right) ------------------------ */
+.cs3-block {
+    @extend %cs3-grid;
+    padding: 200px var(--page-margin);
+}
+.cs3-block__title {
+    grid-column: 1 / -1;
+    @include type-scale(lg);
+    margin-bottom: 32px;
+
+    @media (min-width: 700px) { grid-column: 2 / span 4; margin-bottom: 0; }
+}
+.cs3-block__text {
+    grid-column: 1 / -1;
+    @include type-scale(body);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    
+    @media (min-width: 700px) { grid-column: 7 / span 5; padding-top: 20px; }
+}
+
+/* text-only block (a single column of copy on the left) */
+.cs3-text {
+    @extend %cs3-grid;
+    padding: 200px var(--page-margin);
+}
+.cs3-text p {
+    grid-column: 1 / -1;
+    @include type-scale(body);
+
+    @media (min-width: 700px) { grid-column: 2 / span 5; }
+}
+
+/* ---- Next case ----------------------------------------------------------- */
+.cs3-next {
+    @extend %cs3-grid;
+    align-items: center;
+    padding: 120px var(--page-margin);
+}
+.cs3-next__link {
+    grid-column: 1 / -1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2em;
+    align-self: start;
+    @include type-scale(xl);
+    color: inherit;
+    text-decoration: none;
+
+    @media (min-width: 700px) { grid-column: 1 / span 5; }
+}
+.cs3-next__arrow { transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+.cs3-next__link:hover .cs3-next__arrow { transform: translateX(16px); }
+
+.cs3-next .cs3-media--next {
+    grid-column: 1 / -1;
+    height: 40vh;
+    margin-top: 40px;
+
+    @media (min-width: 700px) { grid-column: 7 / span 6; height: 34vh; margin-top: 0; }
+}
+
+/* ---- footer -------------------------------------------------------------- */
+.cs3-footer {
+    padding: 40px var(--page-margin);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    @include type-scale(xs);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media (min-width: 700px) { flex-direction: row; justify-content: space-between; align-items: flex-end; }
+}
+.cs3-footer__links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.cs3-footer__meta  { display: flex; flex-direction: column; gap: 4px;
+
+    @media (min-width: 700px) { flex-direction: row; gap: 24px; }
+}
+
+/* ---- shared header, in the template palette (opens over the light title) --- */
+.page-case3 .site-header          { color: var(--text-dark); }
+.page-case3 .site-header.is-light { color: var(--text-dark); }
+.page-case3 .site-header.is-dark  { color: var(--text-light); }
+

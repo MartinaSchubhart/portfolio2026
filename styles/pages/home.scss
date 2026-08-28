@@ -1,150 +1,155 @@
-/* first viewport: the hero — a warm light background image (gradient + grain,
-   assets/newhero-bg.svg) holding a small eyebrow label and a large intro
-   statement pinned to the bottom-left. The fixed header sits over it in Ink
-   (see .page-home in navigation.scss). */
-.screen {
-    position: relative;
-    min-height: 100vh;
-    padding-top: var(--header-h, 68px);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: var(--Shiny-Pearl) url('../assets/newhero-bg.svg') no-repeat center / cover;
+/* ===========================================================================
+   Landing page (index.html) — scoped to .page-home
+   - a full-bleed hero image with the intro overlaid bottom-left
+   - a dark, staggered work gallery
+   - a light about section with two staggered photos
+   - then the shared closing / footer
+   Every element sits on a 12-column grid (repeat(12, 1fr) + --grid-gap).
+   ========================================================================= */
+
+.page-home { background: var(--canvas-light); }
+
+/* headlines with a line-by-line reveal (script/text-reveal.js): disable kerning
+   so the split and reverted states keep identical letter metrics (no snap on
+   revert). Global — applies wherever [data-reveal] is used. */
+[data-reveal] { font-kerning: none; }
+
+/* shared 12-col grid for the page sections */
+%grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--grid-gap);
 }
 
-/* hero content sits at the bottom-left */
+/* ---- Hero ---------------------------------------------------------------- */
 .hero {
     position: relative;
-    z-index: 1;
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 var(--page-margin) 56px;
+    height: 130vh;                               /* 30% taller than the viewport */
+    background: transparent;                      /* the pinned image shows through */
+    color: var(--text-light);
 }
-
-/* fade the hero text up once the preloader clears (script/preloader.js adds
-   is-loaded); no-JS reveals it via the <noscript> fallback in index.html */
-.hero-viewport {
+/* the image is pinned to the viewport (position: fixed) so it appears to stay
+   in place while the page scrolls; it sits behind the content (z-index: -1) and
+   the opaque sections below scroll up over it. */
+.hero__img {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    background: var(--canvas-dark);               /* fallback if the image is missing */
+}
+/* the text wrapper is only one viewport tall, with the intro pinned to its
+   bottom; the hero's extra 30vh below it keeps the fixed image on screen a
+   little longer before the next section scrolls up over it */
+.hero__inner {
+    @extend %grid-12;
     position: relative;
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 1;                                   /* text above the image */
+    height: 100vh;
+    align-content: end;                           /* intro sits at the bottom */
+    padding: calc(var(--header-h, 80px) + 24px) var(--page-margin) 64px;
 }
-html.is-loaded .hero-viewport { opacity: 1; transform: none; }
-
-.hero__eyebrow {
-    @include type-scale(eyebrow);
-    text-transform: uppercase;   
-    color: var(--Grullo);
-    margin-bottom: 20px;
-}
-
 .hero__intro {
+    grid-column: 1 / -1;
     @include type-scale(xl);
-    color: var(--Ink);
+
+    @media (min-width: 700px) { grid-column: 1 / span 9; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .hero-viewport { opacity: 1; transform: none; transition: none; }
-}
-
-@media (min-width: 700px) {
-   .hero-viewport           { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
-   .hero__eyebrow           { grid-column: 1 / span 10; }
-   .hero__intro             { grid-column: 1 / span 10; }
-}
-
-
-/* ---- Work: case studies ---------------------------------------------------
-   Mobile (base): a simple vertical list of cards — caption, image, then a
-   button. Desktop (>=700): a tall scroll track where the intro pins (sticky)
-   and the teasers scroll up past it, alternating left/right, with a WebGL
-   cursor-bulge on hover. */
+/* ---- Work (dark, staggered gallery) --------------------------------------
+   Title + all cards live in the centre 10 columns (cols 2–11) of the 12-col
+   grid. Each case card is a fixed 700:860 box with a WebGL cursor-bulge on
+   hover (script/work-distort.js): the bleed = one grid gap, and the bulge
+   strength is tuned to stay inside it. Logo top-left; the title + Explore fade
+   in bottom-left on hover. */
 .work {
-    background: var(--Shiny-Pearl);
-    color: var(--Ink);
-    padding: 0 var(--page-margin) 80px;
+    background: var(--canvas-dark);
+    color: var(--text-light);
+    padding: 120px var(--page-margin) 140px;
+}
+.work__grid {
+    @extend %grid-12;
+    align-items: start;
+    row-gap: 40px;
 }
 
-/* mobile: a plain centred heading block (becomes the pinned intro on desktop) */
-.work__sticky {
-    padding: 64px 0 40px;
-    text-align: center;
+/* the title opens the grid; order keeps it first even when the columns dissolve
+   into the grid on mobile (below) */
+.work__title {
+    grid-column: 1 / -1;                          /* mobile: full 12 columns */
+    grid-row: 1;
+    order: -2;
+    @include type-scale(xl);
+    margin: 0;
 }
 
-.work__intro {
+/* mobile: the intro sits right under the title (order: -1). On desktop it moves
+   into the right column's top slot (see the media query). */
+.work__text {
+    grid-column: 1 / -1;                          /* mobile: full 12 columns */
+    order: -1;
+    @include type-scale(md);
+    color: var(--text-light);
+}
+
+/* mobile: dissolve the columns so their cards flow straight into the grid,
+   letting the intro sit under the title; desktop restores real columns */
+.work__left,
+.work__right { display: contents; }
+
+.work__card {
+    grid-column: 1 / -1;                          /* mobile: full 12 columns */
     position: relative;
-    z-index: 1;
-}
-
-.work__title { @include type-scale(lg); }
-.work__sub   { @include type-scale(eyebrow); margin-top: 8px; display: none; color: var(--Grullo); text-transform: uppercase; } /* desktop only */
-
-/* mobile card: the image with the caption + button overlaid on top of it */
-.work__teaser {
-    position: relative; /* the overlay + canvas position within the card */
-    margin-bottom: 40px;
+    display: block;
+    aspect-ratio: 700 / 860;
+    color: var(--text-light);
 
     img {
         display: block;
         width: 100%;
-        height: auto;
-        border-radius: var(--radius);
+        height: 100%;
+        object-fit: cover;
     }
-
-    canvas { /* WebGL bulge surface (desktop) */
+    canvas {                                       /* WebGL bulge surface (desktop) */
         position: absolute;
         top: 0;
         left: 0;
         display: block;
         pointer-events: auto;
-        max-width: none; /* allow the oversized (bleed) canvas past the reset's max-width:100% */
+        max-width: none;                           /* allow the oversized (bleed) canvas */
     }
 }
 
-/* card overlay: a logo (top-left) and the title (bottom-left), always visible.
-   No scrim — the source image is pre-darkened for legibility; on hover the
-   shader darkens further (with the bulge). The title lifts to reveal "Explore".
-   The WebGL bulge and whole-card click are unchanged. */
-.work__teaser__content {
+.work__card-logo {
     position: absolute;
-    inset: 0;
-    z-index: 1;
-    padding: 48px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* logo top, title/explore bottom */
-    align-items: flex-start;
-    color: var(--White);
-    pointer-events: none; /* let taps/hover reach the card for the bulge + click */
+    top: 24px;
+    left: 24px;
+    z-index: 2;
+
+    img, svg { display: block; width: auto; height: 20px; }
 }
 
-/* logo slot — drop an <svg> or <img> in here; the text is a placeholder */
-.work__teaser__logo {
-    @include type-scale(sm);
-    font-weight: 700;
-    line-height: 1;
-
-    svg,
-    img { display: block; width: auto; height: 20px; }
-}
-
-.work__teaser__foot {
+/* title (always visible) + Explore, bottom-left. The foot is anchored to the
+   bottom, so when Explore grows in on hover it lifts the title up a little. */
+.work__card-foot {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    padding: 28px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    color: var(--text-light);
+    pointer-events: none;
 }
+.work__card-title { @include type-scale(md); }
 
-.work__teaser__title {
-    @include type-scale(md);
-    max-width: 90%;
-}
-
-/* Explore — hidden until hover, then grows in below the (lifted) title */
-.work__teaser__btn {
-    pointer-events: auto; /* clickable */
-    align-self: flex-start;
+/* Explore hidden by default; grows in below the (lifted) title on hover */
+.work__card-explore {
+    pointer-events: auto;
     @include type-scale(eyebrow);
     text-transform: uppercase;
     opacity: 0;
@@ -152,175 +157,136 @@ html.is-loaded .hero-viewport { opacity: 1; transform: none; }
     overflow: hidden;
     transition: opacity 0.3s ease, max-height 0.35s ease, margin-top 0.35s ease;
 }
-
-.work__teaser:hover .work__teaser__btn,
-.work__teaser:focus-within .work__teaser__btn {
+.work__card:hover .work__card-explore,
+.work__card:focus-within .work__card-explore {
     opacity: 1;
     max-height: 2em;
-    margin-top: 24px;
+    margin-top: 14px;
 }
 
 /* touch devices (no hover): show Explore by default */
 @media (hover: none) {
-    .work__teaser__btn { opacity: 1; max-height: 2em; margin-top: 14px; }
+    .work__card-explore { opacity: 1; max-height: 2em; margin-top: 14px; }
 }
 
-/* Desktop: the pinned-intro scroll track. */
 @media (min-width: 700px) {
-    .work {
-        position: relative;
-        height: 470vh;
-        padding: 0;
+    /* desktop: pull the whole gallery into the centre 10 columns */
+    .work__title { grid-column: 2 / span 10; }
 
-        /* 12-column grid metrics — content is inset by --page-margin on both
-           sides, with --grid-gap between columns. --col = one column's width;
-           --col-step = distance from one column's start to the next. The
-           teasers are absolutely positioned, so they snap to these columns via
-           calc() rather than being real grid items. */
-        --col: calc((100% - 2 * var(--page-margin) - 11 * var(--grid-gap)) / 12);
-        --col-step: calc(var(--col) + var(--grid-gap));
-    }
-
-    .work__sticky {
-        position: sticky;
-        top: 0;
-        height: 100vh;
+    /* two independent masonry columns in row 2 (below the title). Each column is
+       a 5-track sub-grid whose tracks line up with the parent 12-col grid, so the
+       cards keep exact spans (a=5, b=4, c=4, d=5) and the space between a left and
+       a right card stays 1 column + 2 gaps. */
+    .work__left {
+        grid-column: 2 / span 5;
+        grid-row: 2;
         display: grid;
-        place-items: center;
-        z-index: 0;
-        padding: 0;
+        grid-template-columns: repeat(5, 1fr);
+        column-gap: var(--grid-gap);
+        row-gap: 10vh;                             /* generous gap between a and c */
+        align-content: start;
     }
+    .work__card--a { grid-column: 1 / span 5; }
+    .work__card--c { grid-column: 1 / span 4; }
 
-    .work__sub { display: block; }
-
-    .work__teaser {
-        position: absolute;
-        z-index: 2;
-        /* each card spans 4 of the 12 columns */
-        width: calc(var(--col) * 5 + var(--grid-gap) * 4);
-        margin-bottom: 0;
-
-        img { border-radius: 0; }
-
-        @media (min-width: 1400px) {
-            /* each card spans 5 of the 12 columns */
-            width: calc(var(--col) * 4 + var(--grid-gap) * 3);
-        }
+    .work__right {
+        grid-column: 7 / span 5;
+        grid-row: 2;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        column-gap: var(--grid-gap);
+        row-gap: 14vh;                             /* intro text, then b lower, then d */
+        align-content: start;
     }
-
-    .work__teaser__content { border-radius: 0; } /* match the square image */
-
-    /* left edge aligned to a column start: --page-margin + --col-step * (n - 1),
-       for a card beginning at (1-indexed) column n. Cards alternate left/right
-       while staying on the grid: a → cols 1–4, b → 9–12, c → 2–5, d → 9–12. */
-    .work__teaser--a { top: 90vh;  left: var(--page-margin); }
-    .work__teaser--b { top: 154vh; left: calc(var(--page-margin) + var(--col-step) * 7); }
-    .work__teaser--c { top: 210vh; left: calc(var(--page-margin) + var(--col-step) * 1); }
-    .work__teaser--d { top: 280vh; left: calc(var(--page-margin) + var(--col-step) * 7); }
-
-     @media (min-width: 1400px) {
-        .work__teaser--b { top: 154vh; left: calc(var(--page-margin) + var(--col-step) * 8); }
-    }
+    .work__text    { grid-column: 2 / span 4; }
+    .work__card--b { grid-column: 2 / span 4; }
+    .work__card--d { grid-column: 1 / span 5; }
 }
 
-/* next section */
-
-.about-me {
-    padding: 150px var(--page-margin);
-    /* full-width background image, stacked (repeated) down to fill the section */
-    background: var(--BlackDenim) url('../assets/about-me--background.png') top center / 100% auto repeat-y;
-    color: var(--White);
-}
-
-.about-me__eyebrow {
+/* follow cursor over the work cards (script/work-cursor.js): a soft circular
+   "Discover" label that eases toward the pointer */
+.work-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 120px;
+    aspect-ratio: 1;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: var(--text-light);
     @include type-scale(eyebrow);
-    color: var(--Tan); 
     text-transform: uppercase;
+    pointer-events: none;
+    will-change: transform;
 }
 
-.about-me__intro {    
-    margin-bottom: 80px;
+/* ---- About (light) ------------------------------------------------------- */
+.about {
+    background: var(--canvas-light);
+    color: var(--text-dark);
+    padding: 120px var(--page-margin) 140px;
 }
+.about__grid { @extend %grid-12; align-items: start; }
 
-.about-me__title {    
-    @include type-scale(lg);   
-    margin-bottom: 32px;
+.about__title {
+    grid-column: 1 / -1;
+    @include type-scale(xl);
+    margin-bottom: 40px;
+
+    @media (min-width: 700px) { grid-column: 2 / span 4; margin-bottom: 0; }
 }
-
-.about-me__intro-text {    
-    @include type-scale(md);  
-}
-
-
-@media (min-width: 700px) {
-   .about-me                { padding: 200px var(--page-margin); }
-   .about-me__intro         { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); margin-bottom: 240px; }
-   .about-me__eyebrow       { grid-column: 2 / span 10; text-align: center; }
-   .about-me__title         { grid-column: 2 / span 10; text-align: center; margin-bottom: 0px; }
-   .about-me__intro-text    { grid-column: 2 / span 10; text-align: center; }
-}
-
-@media (min-width: 1400px) {
-   .about-me                { padding: 300px var(--page-margin); }
-   .about-me__intro         { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); margin-bottom: 240px; }
-   .about-me__title         { grid-column: 4 / span 6; text-align: center; }
-   .about-me__intro-text    { grid-column: 4 / span 6; text-align: center; }
-}
-
-
-/* mobile (base): single column, image stack first then the text/AI stack */
-.layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 24px;
-    grid-template-areas:
-        "right"
-        "left";
-}
-
-.stack-left  { grid-area: left; }
-.stack-right { grid-area: right; }
-
-.stack {
+.about__text {
+    grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
-    gap: 6rem;
+    gap: 1.5em;
+    @include type-scale(md);
+
+    @media (min-width: 700px) { grid-column: 6 / span 6; }
 }
 
-.card {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    color: var(--White); 
+.about__figure {
+    grid-column: 1 / -1;
+    margin: 40px 0 0;
+
+    img { display: block; width: 100%; height: auto; object-fit: cover; border-radius: var(--radius); }
 }
-
-/* the left stack is itself a small grid holding cards a + b */
-.stack-left {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-}
-
-.card--a { grid-column: 2 / span 3; margin-top: 48px; }
-.card--b { grid-column: 1 / span 3; margin-top: 48px; }
-
- @media (min-width: 700px) {      
-    .card--a { grid-column: 1 / span 3; margin-top: 0px; }
-    .card--b { grid-column: 2 / span 3; margin-top: 128px; }
- }  
-
-.card--c {
-    @media (min-width: 700px) {      
-       p { padding-right: calc(25% + var(--grid-gap)); }
-    }    
+/* fixed ratios: the small photo is 500:630, the larger one is square */
+.about__figure--a img { aspect-ratio: 500 / 630; }
+.about__figure--b img { aspect-ratio: 1 / 1; }
+.about__caption {
+    @include type-scale(xs);
+    color: var(--text-dark);
+    margin-top: 16px;
+    max-width: 42ch;
 }
 
 @media (min-width: 700px) {
-    .layout {
-        grid-template-columns: repeat(12, 1fr);
-        grid-template-areas: ". left left left left . right right right right right .";
+    /* the square (b, 5 cols) sits higher; the smaller photo (a, 3 cols) sits
+       lower-left and overlaps b by one column (col 5), in front of it */
+    .about__figure { margin: 0; }
+    .about__figure--b { grid-column: 7 / span 5; grid-row: 2; } /* ends at col 11 */
+    .about__figure--a {
+        grid-column: 5 / span 3;                 /* overlaps b by one column (col 7) */
+        grid-row: 2;
+        margin-top: 160px;
+        position: relative;
+        z-index: 1;
     }
-    .stack-left  { grid-column: 2 / span 4; }
-    .stack-right { grid-column: 7 / span 5; }
-    .card--c { margin-top: 128px; }
+}
+
+/* ---- shared header + closing footer, in the index palette ---------------- */
+.page-home .site-header        { color: var(--text-light); }
+.page-home .site-header.is-light { color: var(--text-dark); }
+.page-home .site-header.is-dark  { color: var(--text-light); }
+
+.page-home .closing {
+    background: var(--canvas-light);
+    color: var(--text-dark);
 }

@@ -13,15 +13,7 @@
 <body class="page-home">
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- count-up preloader; hidden with no-JS / reduced-motion -->
-  <div class="preloader" aria-hidden="true">
-    <div class="preloader__num"><span class="preloader__count">0</span>%</div>
-  </div>
-  <noscript><style>.preloader{display:none!important}.hero-viewport{opacity:1!important;transform:none!important}</style></noscript>
-  <script src="script/preloader.js" defer></script>
-
-  <!-- veil: page-transition curtain; covered pre-paint when arriving
-       mid-transition (?pt=1) so there is no flash -->
+  <!-- veil: page-transition curtain -->
   <div class="veil" aria-hidden="true"></div>
   <script>
     if (/[?&]pt=1(?:&|$)/.test(location.search)) {
@@ -31,7 +23,6 @@
   <noscript><style>.veil{ display:none !important; }</style></noscript>
   <script src="script/veil.js" defer></script>
 
-  <div class="screen">
   <header class="site-header">
     <div class="site-header__left">
       <a href="index.html">Martina Schubhart</a>
@@ -50,111 +41,91 @@
     </div>
   </header>
 
-  <main class="hero" id="main" tabindex="-1">
-    <div class="hero-viewport">
-      <h1 class="hero__intro">Hi, I'm Martina Schubhart, a UI/UX Designer based in Vienna. I enjoy finding the ideas, stories and details that make communication memorable and joyful.</h1>
+  <!-- Hero: full-bleed image, intro overlaid bottom-left -->
+  <main class="hero" id="main" tabindex="-1" data-nav="dark">
+    <img class="hero__img" src="assets/hero-background.webp" alt="" />
+    <div class="hero__inner">
+      <h1 class="hero__intro" data-reveal>Welcome, I'm Martina Schubhart, a UI/UX Designer passionate about designing beautiful and functional websites.</h1>
     </div>
   </main>
-  </div>
 
-  <section class="work" id="work" data-nav="light">
-    <div class="work__sticky">
-      <div class="work__intro">
-        <h2 class="work__title">Selected Case Studies</h2>
-        <p class="work__sub">(Scroll to Explore)</p>
+  <!-- Work: dark, staggered gallery -->
+  <section class="work" id="work" data-nav="dark">
+    <div class="work__grid">
+      <h2 class="work__title">Work</h2>
+
+      <div class="work__left">
+        <a class="work__card work__card--a" href="case-study-template2.html" data-bulge-bleed="gap" data-bulge-amount="0.12">
+          <img loading="lazy" src="assets/teaser-beiersdorf.jpg" alt="Beiersdorf annual report" width="700" height="860" />
+          <span class="work__card-logo"><img src="assets/bdf/logo-beiersdorf.svg" alt="Beiersdorf" /></span>
+          <div class="work__card-foot">
+            <p class="work__card-title">Beiersdorf Annual Report</p>
+            <span class="work__card-explore">Explore</span>
+          </div>
+        </a>
+
+        <a class="work__card work__card--c" href="case-study-template.html" data-bulge-bleed="gap" data-bulge-amount="0.12">
+          <img loading="lazy" src="assets/teaser-break4you.jpg" alt="Break4You app" width="700" height="860" />
+          <span class="work__card-logo"><img src="assets/b4y/logo-Break4You.svg" alt="Break4You" /></span>
+          <div class="work__card-foot">
+            <p class="work__card-title">Break4You Online-Coach</p>
+            <span class="work__card-explore">Explore</span>
+          </div>
+        </a>
       </div>
-    </div>
-    <div class="work__teaser work__teaser--a">
-      <img loading="lazy" src="assets/teaser-beiersdorf.jpg" alt="Beiersdorf annual report" width="598" height="741" />
-      <div class="work__teaser__content">
-        <div class="work__teaser__logo"><img src="assets/bdf/logo-beiersdorf.svg" /></div>
-        <div class="work__teaser__foot">
-          <p class="work__teaser__title">Beiersdorf Annual Report</p>
-          <a class="work__teaser__btn" href="case-study-beiersdorf.html">Explore</a>
-        </div>
-      </div>
-    </div>
-    <div class="work__teaser work__teaser--b">
-      <img loading="lazy" src="assets/teaser-break4you.jpg" alt="Break4You app" width="598" height="741" />
-      <div class="work__teaser__content">
-        <div class="work__teaser__logo"><img src="assets/b4y/logo-Break4You.svg" /></div>
-        <div class="work__teaser__foot">
-          <p class="work__teaser__title">Break4You Online-Coach</p>
-          <a class="work__teaser__btn" href="case-study-break4you.html">Explore</a>
-        </div>
-      </div>
-    </div>
-    <div class="work__teaser work__teaser--c">
-      <img loading="lazy" src="assets/teaser-hugoboss.jpg" alt="Hugo Boss annual report" width="598" height="741" />
-      <div class="work__teaser__content">
-        <div class="work__teaser__logo"><img src="assets/hb/logo-hugoboss.svg" /></div>
-        <div class="work__teaser__foot">
-          <p class="work__teaser__title">Hugo Boss Annual Report</p>
-          <a class="work__teaser__btn" href="case-study-hugoboss.html">Explore</a>
-        </div>
-      </div>
-    </div>
-    <div class="work__teaser work__teaser--d">
-      <img loading="lazy" src="assets/teaser-voestalpine.jpg" alt="voestalpine annual report" width="598" height="741" />
-      <div class="work__teaser__content">
-        <div class="work__teaser__logo"><img src="assets/va/logo-voestalpine.svg" /></div>
-        <div class="work__teaser__foot">
-          <p class="work__teaser__title">voestalpine Annual Report</p>
-          <a class="work__teaser__btn" href="case-study-voestalpine.html">Explore</a>
-        </div>
+
+      <div class="work__right">
+        <p class="work__text">Highlights of selected projects across <a href="asdf">branding</a>, editorial and digital product design.</p>
+
+        <a class="work__card work__card--b" href="case-study-template.html" data-bulge-bleed="gap" data-bulge-amount="0.12">
+          <img loading="lazy" src="assets/teaser-voestalpine.jpg" alt="voestalpine annual report" width="700" height="860" />
+          <span class="work__card-logo"><img src="assets/va/logo-voestalpine.svg" alt="voestalpine" /></span>
+          <div class="work__card-foot">
+            <p class="work__card-title">voestalpine Annual Report</p>
+            <span class="work__card-explore">Explore</span>
+          </div>
+        </a>
+
+        <a class="work__card work__card--d" href="case-study-template.html" data-bulge-bleed="gap" data-bulge-amount="0.12">
+          <img loading="lazy" src="assets/teaser-hugoboss.jpg" alt="Hugo Boss annual report" width="700" height="860" />
+          <span class="work__card-logo"><img src="assets/hb/logo-hugoboss.svg" alt="Hugo Boss" /></span>
+          <div class="work__card-foot">
+            <p class="work__card-title">Hugo Boss Annual Report</p>
+            <span class="work__card-explore">Explore</span>
+          </div>
+        </a>
       </div>
     </div>
   </section>
 
-  <section class="about-me" data-nav="dark">
-    <div class="about-me__intro">
-    <h3 class="about-me__title">Hi, I'm Martina Schubhart. I enjoy finding the ideas, stories and.</h3>
-    <p class="about-me__intro-text">Hey there! I’m Havana Nguyen and I have been a User Experience Designer for 10 years across many industries: 
-      real estate, aerospace, healthcare, and ecommerce. I’ve got a torrid love affair with user-centric design thinking and deep dives into 
-      problem statements. My design philosophy is simple: Make it work. Make it easy. Make it happen.</p>
+  <!-- About: light -->
+  <section class="about" id="about" data-nav="light">
+    <div class="about__grid">
+      <h2 class="about__title">About me</h2>
+      <div class="about__text">
+        <p>Hey there! I'm Havana Nguyen and I have been a User Experience Designer for 10 years across many industries: real estate, aerospace, healthcare, and ecommerce.</p>
+        <p>Every project has something that makes it unique. That's what I enjoy finding first. Whether it's a complex annual report, a digital product or a corporate website, I like understanding what people need before thinking about how it should look. Good design isn't just about making something beautiful — it's about making it feel clear, intuitive and consistent.</p>
       </div>
-    
-    <div class="layout">
 
-    <div class="stack stack-left">
-        <article class="card card--a">
-            <p>Artificial Intelligence
-I partner with AI (I use a range of tools like ChatGPT, Claude, DeepSeek, n8n, Lovable, Figma Make, Perplexity) to scale up my productivity on my UX workflow.</p>
-            <img loading="lazy" src="assets/about-me--design.webp" alt="">
-        </article>
-
-        <article class="card card--b">
-                        <p>Artificial Intelligence
-I partner with AI (I use a range of tools like ChatGPT, Claude, DeepSeek, n8n, Lovable, Figma Make, Perplexity) to scale up my productivity on my UX workflow.</p>
-            <img loading="lazy" src="assets/about-me--placeholder.png" alt="">
-        </article>
+      <figure class="about__figure about__figure--a">
+        <img loading="lazy" src="assets/about-me--design.webp" alt="" />
+      </figure>
+      <figure class="about__figure about__figure--b">
+        <img loading="lazy" src="assets/about-me--teamwork.webp" alt="" />
+        <figcaption class="about__caption">Artificial Intelligence — I partner with AI (ChatGPT, Claude, DeepSeek, n8n, Lovable, Figma Make, Perplexity) to scale up my productivity on my UX workflow.</figcaption>
+      </figure>
     </div>
-
-    <div class="stack stack-right">
-        <article class="card card--c">
-                        <p>Artificial Intelligence
-I partner with AI (I use a range of tools like ChatGPT, Claude, DeepSeek, n8n, Lovable, Figma Make, Perplexity) to scale up my productivity on my UX workflow.</p>
-            <img loading="lazy" src="assets/about-me--teamwork.webp" alt="">
-        </article>
-    </div>
-
-</div>
-
   </section>
 
-    <section class="closing" data-nav="light">
-
-    <h2 class="closing__title">Interested in working together? Let's connect!</h2>
-    <div class="closing__links"><a class="closing__email" href="mailto:martina.schubhart@gmail.com">martina.schubhart@gmail.com</a>  <span class="closing__divider">•</span>  <a class="closing__linkedin" href="https://at.linkedin.com/in/martina-schubhart-01020b167">Linkedin</a></div>
-
-
+  <!-- Closing / footer (shared) -->
+  <section class="closing" data-nav="light">
     <footer class="site-footer">
-
       <div class="site-footer__links">
         <a href="#work">Work</a>
         <a href="#about">About</a>
         <a href="imprint.html">Imprint</a>
         <a href="privacy.html">Privacy</a>
+        <a href="mailto:martina.schubhart@gmail.com">martina.schubhart@gmail.com</a>
       </div>
       <div class="site-footer__meta">
         <span>Made with Claude Code &amp; VS Code</span>
@@ -165,42 +136,36 @@ I partner with AI (I use a range of tools like ChatGPT, Claude, DeepSeek, n8n, L
 
   <!-- copy email to clipboard -->
   <script>
-    document.querySelectorAll('[data-copy]').forEach(function (b) {
-      b.addEventListener('click', function () {
-        if (navigator.clipboard) navigator.clipboard.writeText(b.getAttribute('data-copy'));
-      });
-    });
-
     document.querySelector(".site-header__copy-email").addEventListener("click", async (e) => {
       e.preventDefault();
-
       const email = e.currentTarget.dataset.email;
-
-        try {
-            await navigator.clipboard.writeText(email);
-            alert("Email address copied!");
-        } catch (err) {
-            console.error(err);
-        }
+      try {
+        await navigator.clipboard.writeText(email);
+        alert("Email address copied!");
+      } catch (err) {
+        console.error(err);
+      }
     });
   </script>
 
-  <!-- WebGL cursor-bulge on the hero portrait -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <!-- WebGL cursor-bulge on the work cards (raw WebGL, no library) -->
   <script src="script/work-distort.js" defer></script>
-  <!-- whole teaser card clickable (image area, not the bleed) -->
-  <script src="script/teaser-link.js" defer></script>
 
-  <!-- sticky header: dark text over light sections -->
+  <!-- headline line-by-line reveal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js" defer></script>
+  <script src="script/text-reveal.js" defer></script>
+
+  <!-- follow "Discover" cursor over the work cards -->
+  <script src="script/work-cursor.js" defer></script>
+
+  <!-- sticky header: colour follows the background (light/dark) -->
   <script src="script/header-nav.js" defer></script>
+  <!-- header nav "roll" hover -->
+  <script src="script/nav-hover.js" defer></script>
 
   <!-- Lenis smooth scrolling -->
-  <script src="script/reveal.js" defer></script>
-
   <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js" defer></script>
   <script src="script/smooth-scroll.js" defer></script>
-
-
-
 </body>
 </html>

@@ -29,30 +29,49 @@
 
 }
 
-/* Simple underline, shared by the header and footer links: a thin line in the
-   current text colour that draws in from left to right on hover (scaleX from a
-   left origin) and retracts the same way on leave. The host link only needs
-   position: relative (see .site-header a and the footer links). */
-.site-header a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -0.3em;
-    width: 100%;
-    height: 2px;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+/* Header text links (name + nav) use a "roll" hover ported from Website2: the
+   label slides up out of frame while a duplicate rises from below to replace
+   it. script/nav-hover.js wraps each link's text in .nav-roll__inner > span and
+   mirrors it via data-text (progressive enhancement). The overflow clip sits on
+   .nav-roll__inner so the anchor itself stays unclipped. */
+.nav-roll {
+    position: relative;
+    display: inline-block;
+}
+.nav-roll__inner {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+
+    > span {
+        display: block;
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    &::after {
+        content: attr(data-text);
+        color: inherit; /* follows the current header colour (Ink / White) */
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+}
+.nav-roll:hover .nav-roll__inner > span { transform: translateY(-100%); }
+.nav-roll:hover .nav-roll__inner::after { transform: translateY(0); }
+
+/* no-JS fallback: links never get .nav-roll, so give them a plain underline */
+.site-header__left a:not(.nav-roll):hover,
+.site-header__nav a:not(.nav-roll):hover,
+.site-header__copy-email:not(.nav-roll):hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
-.site-header a:hover::after { transform: scaleX(1); }
-
-/* the landing (light gradient hero), case-study & legal pages all open over a
-   light background, so the header's base colour there is Ink; the per-section
-   overrides below still win over it (e.g. white over the dark about-me). */
-.page-home .site-header,
-.page-case .site-header,
+/* legal pages open over a light background, so the header's base colour there
+   is Ink (the landing + case-study templates set their own header colours). */
 .page-legal .site-header { color: var(--Ink); }
 
 /* per-section overrides toggled by script/header-nav.js: `.is-light` over a

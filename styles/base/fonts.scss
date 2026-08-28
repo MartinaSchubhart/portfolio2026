@@ -47,13 +47,13 @@ $type-scale-desktop-wide: (
     letter-spacing: 0px
   ),
   body: (
-    font-family: 'Acid Grotesk Normal',
-    size: 20px,
+    font-family: 'Inter Regular',
+    size: 24px,
     line-height: 140%,
-    letter-spacing: 0.5px
+    letter-spacing: 0
   ),
   md: (
-    font-family:  'Acid Grotesk Regular',
+    font-family:  'Inter Regular',
     size: 1.875rem,
     line-height: 130%,
     letter-spacing: 0px
@@ -93,10 +93,10 @@ $type-scale-desktop: (
     letter-spacing: 0px
   ),
   body: (
-    font-family: 'Acid Grotesk Normal',
-    size: 18px,
-    line-height: 130%,
-    letter-spacing: 0.5px
+    font-family: 'Regular',
+    size: 22px,
+    line-height: 150%,
+    letter-spacing: 0.2px
   ),
   md: (
     font-family:  'Acid Grotesk Regular',
