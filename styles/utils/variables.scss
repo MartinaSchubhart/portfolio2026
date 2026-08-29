@@ -22,7 +22,7 @@
 
 @media (min-width: 700px) {
   :root {
-    --page-margin: 72px;
+    --page-margin: 3.75%; /* = 72px at a 1920 viewport; scales fluidly with width */
     --grid-gap: 48px;
     --radius: 0px;
   }

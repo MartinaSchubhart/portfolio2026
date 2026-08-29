@@ -67,7 +67,7 @@
 .work {
     background: var(--canvas-dark);
     color: var(--text-light);
-    padding: 120px var(--page-margin) 140px;
+    padding: 30vh var(--page-margin);
 }
 .work__grid {
     @extend %grid-12;
@@ -131,8 +131,9 @@
     img, svg { display: block; width: auto; height: 20px; }
 }
 
-/* title (always visible) + Explore, bottom-left. The foot is anchored to the
-   bottom, so when Explore grows in on hover it lifts the title up a little. */
+/* description title (always visible) + Explore, bottom-left. On cursor-capable
+   desktops the "Discover" follow-cursor is the hover cue, so only the Explore
+   label is hidden there (below); the title stays, and touch devices keep both. */
 .work__card-foot {
     position: absolute;
     left: 0;
@@ -142,31 +143,22 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    gap: 14px;
     color: var(--text-light);
     pointer-events: none;
 }
 .work__card-title { @include type-scale(md); }
-
-/* Explore hidden by default; grows in below the (lifted) title on hover */
 .work__card-explore {
-    pointer-events: auto;
     @include type-scale(eyebrow);
     text-transform: uppercase;
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: opacity 0.3s ease, max-height 0.35s ease, margin-top 0.35s ease;
-}
-.work__card:hover .work__card-explore,
-.work__card:focus-within .work__card-explore {
-    opacity: 1;
-    max-height: 2em;
-    margin-top: 14px;
 }
 
-/* touch devices (no hover): show Explore by default */
-@media (hover: none) {
-    .work__card-explore { opacity: 1; max-height: 2em; margin-top: 14px; }
+/* wherever the follow-cursor runs (hover + fine pointer + motion allowed), hide
+   only the Explore label so the cursor is the hover cue — the description title
+   stays visible; keyboard focus reveals Explore so links still show it */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .work__card-explore { display: none; }
+    .work__card:focus-within .work__card-explore { display: block; }
 }
 
 @media (min-width: 700px) {
@@ -230,7 +222,7 @@
 .about {
     background: var(--canvas-light);
     color: var(--text-dark);
-    padding: 120px var(--page-margin) 140px;
+    padding: 30vh var(--page-margin);
 }
 .about__grid { @extend %grid-12; align-items: start; }
 

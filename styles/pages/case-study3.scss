@@ -37,13 +37,21 @@
 
 /* ---- media blocks (placeholders / images) -------------------------------- */
 .cs3-media {
-    height: auto;
     background: #6b4a2e;                            /* warm placeholder */
     overflow: hidden;
 
-    img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
+    /* each block shows the loaded source at its own aspect — so a mobile
+       <source> with a different crop simply displays at its own shape */
+    img, video { display: block; width: 100%; height: auto; }
 }
-.cs3-media--hero {  @media (max-width: 699px) { height: 72vh; background: #17130f; } }
+/* hero on mobile: a fixed-height banner — crop the (mobile) image to fill it */
+.cs3-media--hero {
+    @media (max-width: 699px) {
+        height: 72vh;
+        background: #17130f;
+        img { height: 100%; object-fit: cover; }
+    }
+}
 
 /* ---- intro: text (left) + meta (right) ----------------------------------- */
 .cs3-intro {
@@ -135,6 +143,8 @@
     grid-column: 1 / -1;
     height: 40vh;
     margin-top: 40px;
+
+    img { height: 100%; object-fit: cover; } /* fixed-height box: cover any image dropped in */
 
     @media (min-width: 700px) { grid-column: 7 / span 6; height: 34vh; margin-top: 0; }
 }
