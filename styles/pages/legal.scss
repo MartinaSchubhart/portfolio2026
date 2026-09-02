@@ -13,7 +13,7 @@
 }
 
 .legal__intro {
-    @include type-scale(sm);
+    @include type-scale(xs);
     max-width: 65ch;
     margin-bottom: 48px;
 }
@@ -22,7 +22,7 @@
     max-width: 70ch;
 
     h2 {
-        @include type-scale(sm);
+        @include type-scale(xs);
         margin: 40px 0 12px;
     }
 
@@ -58,7 +58,7 @@
 .notfound__text { @include type-scale(md); max-width: 40ch; }
 
 .notfound__link {
-    @include type-scale(sm);
+    @include type-scale(xs);
     color: var(--SlateBlue);
     text-decoration: underline;
     text-underline-offset: 4px;

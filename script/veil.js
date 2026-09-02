@@ -1,18 +1,14 @@
-/* veil: black page-transition curtain.
+/* veil: page-transition curtain.
  *
- * A solid dark panel animates via clip-path (Web Animations API):
- *   - cover  : swipes up from the bottom to fill the screen, then navigates
- *   - reveal : continues up and off the top to uncover the new page
+ * A solid --canvas-light panel fades via opacity (Web Animations API):
+ *   - cover  : fades in to fill the screen, then navigates
+ *   - reveal : fades back out on the new page to uncover it
  *
  * The next page is told to open already covered via a `?pt=1` query param;
  * an inline <head> script on each page adds `.is-covered` pre-paint so there
  * is no flash before this (deferred) script runs. The handoff travels via
  * URL param, not sessionStorage, so it also works under file:// where every
- * document is its own storage origin. The landing page starts `.is-covered`
- * in its markup so it plays a short intro on cold load.
- *
- * On reveal we dispatch a `veil:reveal` event so the headline text-reveal
- * can start in sync as the curtain clears. */
+ * document is its own storage origin. */
 (function () {
   var veil = document.querySelector('.veil');
   if (!veil) return;
@@ -20,12 +16,8 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var PARAM = 'pt';
-  var DURATION = 650;
-  var EASE = 'cubic-bezier(0.65, 0, 0.35, 1)';
-
-  var BOTTOM = 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)'; // collapsed at bottom (hidden)
-  var FULL   = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';     // covering the screen
-  var TOP    = 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)';         // collapsed at top (hidden)
+  var DURATION = 500;
+  var EASE = 'ease';
 
   // did we arrive mid-transition? strip the param so refreshes are clean
   var params = new URLSearchParams(location.search);
@@ -36,16 +28,16 @@
     history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
   }
 
-  // pre-paint covered state comes from the .is-covered class (landing intro,
-  // or added by the inline script when ?pt=1). From here JS drives clip-path
-  // via inline styles, which override the class's clip-path. We keep the
-  // class on the element because text-reveal.js reads it to sync the headline.
+  // pre-paint covered state comes from the .is-covered class (added by the inline
+  // script when ?pt=1). From here JS drives opacity via inline styles, which
+  // override the class. We keep the class on the element because text-reveal.js
+  // reads it to sync the headline.
   var startCovered = veil.classList.contains('is-covered');
-  veil.style.clipPath = startCovered ? FULL : BOTTOM;
+  veil.style.opacity = startCovered ? '1' : '0';
 
   function hide() {
     veil.getAnimations().forEach(function (a) { a.cancel(); });
-    veil.style.clipPath = BOTTOM;
+    veil.style.opacity = '0';
     veil.style.pointerEvents = '';
   }
 
@@ -58,9 +50,8 @@
   if (startCovered) {
     var HOLD = arrived ? 60 : 350; // brief hold; a touch longer for the intro
     setTimeout(function () {
-      document.dispatchEvent(new CustomEvent('veil:reveal'));
       var anim = veil.animate(
-        [{ clipPath: FULL }, { clipPath: TOP }],
+        [{ opacity: 1 }, { opacity: 0 }],
         { duration: DURATION, easing: EASE, fill: 'forwards' }
       );
       var done = false;
@@ -97,7 +88,7 @@
     veil.style.pointerEvents = 'auto';
 
     var anim = veil.animate(
-      [{ clipPath: BOTTOM }, { clipPath: FULL }],
+      [{ opacity: 0 }, { opacity: 1 }],
       { duration: DURATION, easing: EASE, fill: 'forwards' }
     );
 

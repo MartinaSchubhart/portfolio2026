@@ -1,19 +1,14 @@
 :root {
-  --SlateBlue: #6860C9;
-  --Ink: #172532;      
-  --White: #FFFFFF;   
-  --Shiny-Pearl: #FFF6E4; 
-  --Off-White: #F7ECD7;
-  --Moss-Bronze: #515449;
-  --BlackDenim: #181C24;
-  --Grullo: #867C77;
-  --Tan: #DABFB0;
-
-  /* index3 / case-study-template palette (backgrounds + font colours) */
+  --white: #ffffff;
   --canvas-dark: #1A1C1D;
   --canvas-light: #F9F5EC;
   --text-light: #FFFFFF;
-  --text-dark: #0D0E13;
+  --text-dark: #1A1C1D;
+  --accent: #F4F496;
+  --accent-darker: #EFE880;
+  --text-medium: #696664;
+
+  --faint-on-dark: #9F9E9A;
 
   --page-margin: 20px;
   --grid-gap: 8px;

@@ -9,9 +9,15 @@
 <meta name="author" content="Martina Schubhart" />
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="styles/index-min.css">
+<!-- hide the hero nameplate/intro/nav pre-paint so preloader.js can animate them in without a flash;
+     capture ?pt=1 here (before veil.js strips it) so the preloader can skip on page-transition arrivals -->
+<script>
+  document.documentElement.classList.add('lp-loading');
+  window.__fromTransition = /[?&]pt=1(?:&|$)/.test(location.search);
+</script>
 </head>
 <body class="page-home">
-  <a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip-link" href="#work">Skip to content</a>
 
   <!-- veil: page-transition curtain -->
   <div class="veil" aria-hidden="true"></div>
@@ -23,144 +29,139 @@
   <noscript><style>.veil{ display:none !important; }</style></noscript>
   <script src="script/veil.js" defer></script>
 
-  <header class="site-header">
-    <div class="site-header__left">
-      <a href="index.html">Martina Schubhart</a>
-    </div>
-    <nav class="site-header__nav">
-      <a href="#about">About</a>
-      <a href="#work">Work</a>
-    </nav>
-    <div class="site-header__right">
-      <a href="#" class="site-header__copy-email" data-email="martina.schubhart@gmail.com">
-          <span>martina.schubhart@gmail.com</span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 8C6 7.45 6.19583 6.97917 6.5875 6.5875C6.97917 6.19583 7.45 6 8 6L20 6C20.55 6 21.0208 6.19583 21.4125 6.5875C21.8042 6.97917 22 7.45 22 8L22 20C22 20.55 21.8042 21.0208 21.4125 21.4125C21.0208 21.8042 20.55 22 20 22L8 22C7.45 22 6.97917 21.8042 6.5875 21.4125C6.19583 21.0208 6 20.55 6 20L6 8ZM8 8L8 20L20 20L20 8L8 8ZM2 4C2 3.45 2.19583 2.97917 2.5875 2.5875C2.97917 2.19583 3.45 2 4 2L18 2L18 4L4 4L4 18L2 18L2 4Z" fill="currentColor"/>
-          </svg>
-      </a>
-    </div>
-  </header>
+  <!-- Landing stage: intro (top-left), nav (top-right), photo (centre),
+       Scroll button (right), giant SVG nameplate (bottom) — all on the grid -->
+  <main class="lp" id="main" tabindex="-1" data-nav="light">
+    <img class="lp__bg" src="assets/lp/hero-background.webp" alt="" />
 
-  <!-- Hero: full-bleed image, intro overlaid bottom-left -->
-  <main class="hero" id="main" tabindex="-1" data-nav="dark">
-    <img class="hero__img" src="assets/hero-background.webp" alt="" />
-    <div class="hero__inner">
-      <h1 class="hero__intro" data-reveal>Welcome, I'm Martina Schubhart, a UI/UX Designer passionate about designing beautiful and functional websites.</h1>
+    <!-- home link, hidden until the header scrolls into the work section -->
+    <a class="lp__brand" href="index.html">Martina Schubhart</a>
+
+    <!-- the composition lives in the first viewport; the section is taller (130vh)
+         so the fixed image stays pinned a little longer as the page scrolls -->
+    <div class="lp__inner">
+    <div class="lp__top">
+      <p class="lp__intro"><span class="lp__diamond" aria-hidden="true"></span>Designer specializing in user experience in interface design. I keep things simple by crafting clean meaningful experiences. Delight, Inspire, Understand.</p>
+      <nav class="lp__nav">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+      </nav>
+      <div class="lp__rule" aria-hidden="true"></div>
+    </div>
+
+    <div class="lp__name">
+      <!-- letters set at their own tracking (gap 0); only the words are spaced -->
+      <svg class="lp__nameplate" viewBox="0 0 1752 161" role="img"
+           aria-label="Martina Schubhart" xmlns="http://www.w3.org/2000/svg"
+           xmlns:xlink="http://www.w3.org/1999/xlink">
+        <!-- Martina -->
+        <image xlink:href="assets/lp/vorname-1-m.svg" x="0"    width="151" height="161" />
+        <image xlink:href="assets/lp/vorname-2-a.svg" x="151"  width="125" height="161" />
+        <image xlink:href="assets/lp/vorname-3-r.svg" x="276"  width="70"  height="161" />
+        <image xlink:href="assets/lp/vorname-4-t.svg" x="346"  width="91"  height="161" />
+        <image xlink:href="assets/lp/vorname-5-i.svg" x="437"  width="44"  height="161" />
+        <image xlink:href="assets/lp/vorname-6-n.svg" x="481"  width="113" height="161" />
+        <image xlink:href="assets/lp/vorname-7-a.svg" x="594"  width="123" height="161" />
+        <!-- Schubhart -->
+        <image xlink:href="assets/lp/nachname-1-s.svg" x="773"  width="124" height="161" />
+        <image xlink:href="assets/lp/nachname-2-c.svg" x="897"  width="118" height="161" />
+        <image xlink:href="assets/lp/nachname-3-h.svg" x="1015" width="111" height="161" />
+        <image xlink:href="assets/lp/nachname-4-u.svg" x="1126" width="113" height="161" />
+        <image xlink:href="assets/lp/nachname-5-b.svg" x="1239" width="127" height="161" />
+        <image xlink:href="assets/lp/nachname-6-h.svg" x="1366" width="113" height="161" />
+        <image xlink:href="assets/lp/nachname-7-a.svg" x="1479" width="123" height="161" />
+        <image xlink:href="assets/lp/nachname-8-r.svg" x="1602" width="69"  height="161" />
+        <image xlink:href="assets/lp/nachname-9-t.svg" x="1671" width="81"  height="161" />
+      </svg>
+    </div>
     </div>
   </main>
 
-  <!-- Work: dark, staggered gallery -->
+  <!-- Work: dark, staggered image cards (7 cols each, alternating sides) -->
   <section class="work" id="work" data-nav="dark">
-    <div class="work__grid">
-      <h2 class="work__title">Work</h2>
-
-      <div class="work__left">
-        <a class="work__card work__card--a" href="case-study-template2.html" data-bulge-bleed="gap" data-bulge-amount="0.12">
-          <img loading="lazy" src="assets/teaser-beiersdorf.jpg" alt="Beiersdorf annual report" width="700" height="860" />
-          <span class="work__card-logo"><img src="assets/bdf/logo-beiersdorf.svg" alt="Beiersdorf" /></span>
-          <div class="work__card-foot">
-            <p class="work__card-title">Beiersdorf Annual Report</p>
-            <span class="work__card-explore">Explore</span>
-          </div>
-        </a>
-
-        <a class="work__card work__card--c" href="case-study-template.html" data-bulge-bleed="gap" data-bulge-amount="0.12">
-          <img loading="lazy" src="assets/teaser-break4you.jpg" alt="Break4You app" width="700" height="860" />
-          <span class="work__card-logo"><img src="assets/b4y/logo-Break4You.svg" alt="Break4You" /></span>
-          <div class="work__card-foot">
-            <p class="work__card-title">Break4You Online-Coach</p>
-            <span class="work__card-explore">Explore</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="work__right">
-        <p class="work__text">Highlights of selected projects across <a href="asdf">branding</a>, editorial and digital product design.</p>
-
-        <a class="work__card work__card--b" href="case-study-template.html" data-bulge-bleed="gap" data-bulge-amount="0.12">
-          <img loading="lazy" src="assets/teaser-voestalpine.jpg" alt="voestalpine annual report" width="700" height="860" />
-          <span class="work__card-logo"><img src="assets/va/logo-voestalpine.svg" alt="voestalpine" /></span>
-          <div class="work__card-foot">
-            <p class="work__card-title">voestalpine Annual Report</p>
-            <span class="work__card-explore">Explore</span>
-          </div>
-        </a>
-
-        <a class="work__card work__card--d" href="case-study-template.html" data-bulge-bleed="gap" data-bulge-amount="0.12">
-          <img loading="lazy" src="assets/teaser-hugoboss.jpg" alt="Hugo Boss annual report" width="700" height="860" />
-          <span class="work__card-logo"><img src="assets/hb/logo-hugoboss.svg" alt="Hugo Boss" /></span>
-          <div class="work__card-foot">
-            <p class="work__card-title">Hugo Boss Annual Report</p>
-            <span class="work__card-explore">Explore</span>
-          </div>
-        </a>
-      </div>
+    <div class="work__title">
+      <p class="work__eyebrow"><span class="work__diamond" aria-hidden="true"></span>Selected Case Studies</p>
+      <p class="work__lead">Discover how I <a href="#">digital-first story-wall</a>, online-coach, <a href="#">design system</a> from ambiguity for complex content, yearly changing motto design lorem ipsum dolor set amet consetetur asdflk blabla.</p>
     </div>
+
+    <a class="work__card work__card--right" href="case-study-beiersdorf.html">
+      <img class="work__card-img" loading="lazy" src="assets/bdf/case-Beiersdorf-Hero.webp" alt="Beiersdorf annual report" />
+      <div class="work__card-foot">
+        <p class="work__card-title">Beiersdorf — Turning an annual report into an engaging digital experience</p>
+        <p class="work__card-tags"><span>UI/UX Design</span><span>Interaction Design</span></p>
+      </div>
+    </a>
+
+    <a class="work__card work__card--left" href="case-study-template.html">
+      <img class="work__card-img" loading="lazy" src="assets/va/case-voestalpine-hero.webp" alt="voestalpine annual report" />
+      <div class="work__card-foot">
+        <p class="work__card-title">voestalpine — Annual report as a digital-first story</p>
+        <p class="work__card-tags"><span>UI/UX Design</span><span>Interaction Design</span></p>
+      </div>
+    </a>
+
+    <a class="work__card work__card--right" href="case-study-template.html">
+      <img class="work__card-img" loading="lazy" src="assets/b4y/case-break4you-hero.webp" alt="Break4You app" />
+      <div class="work__card-foot">
+        <p class="work__card-title">Break4You — An online coach that makes breaks stick</p>
+        <p class="work__card-tags"><span>UI/UX Design</span><span>Product Design</span></p>
+      </div>
+    </a>
+
+    <a class="work__card work__card--left" href="case-study-template.html">
+      <img class="work__card-img" loading="lazy" src="assets/hb/case-HugoBoss-hero.webp" alt="Hugo Boss annual report" />
+      <div class="work__card-foot">
+        <p class="work__card-title">Hugo Boss — A refined editorial system for the annual report</p>
+        <p class="work__card-tags"><span>Art Direction</span><span>Motion</span></p>
+      </div>
+    </a>
   </section>
 
-  <!-- About: light -->
+  <!-- About: light — same eyebrow + lead block as the work intro -->
   <section class="about" id="about" data-nav="light">
-    <div class="about__grid">
-      <h2 class="about__title">About me</h2>
-      <div class="about__text">
-        <p>Hey there! I'm Havana Nguyen and I have been a User Experience Designer for 10 years across many industries: real estate, aerospace, healthcare, and ecommerce.</p>
-        <p>Every project has something that makes it unique. That's what I enjoy finding first. Whether it's a complex annual report, a digital product or a corporate website, I like understanding what people need before thinking about how it should look. Good design isn't just about making something beautiful — it's about making it feel clear, intuitive and consistent.</p>
-      </div>
-
-      <figure class="about__figure about__figure--a">
-        <img loading="lazy" src="assets/about-me--design.webp" alt="" />
-      </figure>
-      <figure class="about__figure about__figure--b">
-        <img loading="lazy" src="assets/about-me--teamwork.webp" alt="" />
-        <figcaption class="about__caption">Artificial Intelligence — I partner with AI (ChatGPT, Claude, DeepSeek, n8n, Lovable, Figma Make, Perplexity) to scale up my productivity on my UX workflow.</figcaption>
-      </figure>
+    <div class="work__title">
+      <p class="work__eyebrow"><span class="work__diamond" aria-hidden="true"></span>About me</p>
+      <p class="work__lead">Every project has something that makes it unique. That‘s what I enjoy finding first. Good design isn‘t just about making something beautiful—it‘s about making it feel clear, intuitive and consistent.</p>
     </div>
   </section>
 
-  <!-- Closing / footer (shared) -->
+  <!-- Closing / footer -->
   <section class="closing" data-nav="light">
+    <h2 class="closing__title">Let&rsquo;s connect!</h2>
+    <div class="closing__links">
+      <a class="closing__email" href="mailto:martina.schubhart@gmail.com">martina.schubhart@gmail.com</a>
+      <span class="closing__divider" aria-hidden="true"></span>
+      <a class="closing__linkedin" href="https://at.linkedin.com/in/martina-schubhart-01020b167">Linkedin</a>
+    </div>
     <footer class="site-footer">
       <div class="site-footer__links">
         <a href="#work">Work</a>
         <a href="#about">About</a>
         <a href="imprint.html">Imprint</a>
         <a href="privacy.html">Privacy</a>
-        <a href="mailto:martina.schubhart@gmail.com">martina.schubhart@gmail.com</a>
       </div>
       <div class="site-footer__meta">
         <span>Made with Claude Code &amp; VS Code</span>
-        <span>© Martina Schubhart</span>
+        <span>&copy; Martina Schubhart</span>
       </div>
     </footer>
   </section>
 
-  <!-- copy email to clipboard -->
-  <script>
-    document.querySelector(".site-header__copy-email").addEventListener("click", async (e) => {
-      e.preventDefault();
-      const email = e.currentTarget.dataset.email;
-      try {
-        await navigator.clipboard.writeText(email);
-        alert("Email address copied!");
-      } catch (err) {
-        console.error(err);
-      }
-    });
-  </script>
-
-  <!-- WebGL cursor-bulge on the work cards (raw WebGL, no library) -->
-  <script src="script/work-distort.js" defer></script>
-
-  <!-- headline line-by-line reveal -->
+  <!-- GSAP powers the preloader + follow-cursors below -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js" defer></script>
-  <script src="script/text-reveal.js" defer></script>
 
-  <!-- follow "Discover" cursor over the work cards -->
+  <!-- intro preloader: image scales up from a pill, then nameplate + hero reveal -->
+  <script src="script/preloader.js" defer></script>
+
+  <!-- reveal the home link once the header reaches the work section -->
+  <script src="script/brand-reveal.js" defer></script>
+
+  <!-- work cards scale + fade in on scroll -->
+  <script src="script/work-reveal.js" defer></script>
+
+  <!-- "Explore" follow-cursor over the work cards -->
   <script src="script/work-cursor.js" defer></script>
 
-  <!-- sticky header: colour follows the background (light/dark) -->
-  <script src="script/header-nav.js" defer></script>
   <!-- header nav "roll" hover -->
   <script src="script/nav-hover.js" defer></script>
 

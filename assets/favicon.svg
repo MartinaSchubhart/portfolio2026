@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#6860C9"/>
-  <text x="16" y="22" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#FFF6E4" text-anchor="middle">M</text>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_716_281)">
+<path d="M25 0H7C3.13401 0 0 3.13401 0 7V25C0 28.866 3.13401 32 7 32H25C28.866 32 32 28.866 32 25V7C32 3.13401 28.866 0 25 0Z" fill="#F4F496"/>
+</g>
+<defs>
+<clipPath id="clip0_716_281">
+<rect width="32" height="32" fill="white"/>
+</clipPath>
+</defs>
 </svg>
