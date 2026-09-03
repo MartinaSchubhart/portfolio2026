@@ -326,12 +326,19 @@
         object-fit: cover;
         display: block;
     }
-    /* gradient overlay: dark at the bottom, fading out by ~55% up */
+    /* gradient overlay: dark at the bottom, fading out higher on smaller cards
+       so the title stays legible. The fade point scales with the card height
+       (7-col card, fixed aspect): 90% at 700 (~283px) → 54.99% at 1920 (~492px).
+       The clamp pins the two exact percentages at/beyond the ends. */
     &::after {
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(0deg, rgba(0, 0, 0, 0.80) 0.08%, rgba(0, 0, 0, 0.00) 54.99%);
+        background: linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.80) 0.08%,
+            rgba(0, 0, 0, 0.00) clamp(54.99%, 164px + 17.1vw, 90%)
+        );
         z-index: 1;
         pointer-events: none;
     }
