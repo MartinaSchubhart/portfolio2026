@@ -1,35 +1,36 @@
-/* Sticky header behaviour (landing + case-study pages).
-   1. Publishes the header's height as --header-h so the hero can pad below it.
-   2. Recolours the header to match the background behind it.
+/* Sticky header behaviour.
+   1. If there's a .site-header (legal pages), publishes its height as --header-h
+      and recolours it (.is-light / .is-dark) to match the section behind it.
+   2. Always toggles .is-header-light / .is-header-dark on <html>, so pages
+      without a .site-header (the case study, whose nav is .lp__nav / .lp__brand)
+      can recolour their header from CSS.
 
-   The header has a per-page base colour (white on dark-topped pages, Ink on the
-   light-topped case study). Sections that differ from that base are tagged
-   `data-nav="light"` or `data-nav="dark"`; whichever tagged section crosses a
-   line at the header's vertical midpoint sets the header to `.is-light`
-   (-> Ink) or `.is-dark` (-> white). Over untagged regions the header falls
-   back to its base colour.
-
-   Lenis smooths the native scroll position (no transform), so plain scroll +
-   getBoundingClientRect track correctly. */
+   Sections that differ from the base are tagged data-nav="light" / "dark";
+   whichever tagged section crosses the header line sets the theme. Lenis smooths
+   the native scroll position, so getBoundingClientRect tracks correctly. */
 (function () {
   var header = document.querySelector('.site-header');
-  if (!header) return;
+  var html = document.documentElement;
+  var sections = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
+  if (!header && !sections.length) return;
 
   function setHeaderH() {
-    document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+    if (header) html.style.setProperty('--header-h', header.offsetHeight + 'px');
   }
 
-  var sections = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
-
   function update() {
-    var line = header.offsetHeight / 2; // detection line, viewport px from top
+    var line = header ? header.offsetHeight / 2 : 44; // detection line, viewport px from top
     var theme = null;
     for (var i = 0; i < sections.length; i++) {
       var r = sections[i].getBoundingClientRect();
       if (r.top <= line && r.bottom > line) { theme = sections[i].getAttribute('data-nav'); break; }
     }
-    header.classList.toggle('is-light', theme === 'light');
-    header.classList.toggle('is-dark', theme === 'dark');
+    if (header) {
+      header.classList.toggle('is-light', theme === 'light');
+      header.classList.toggle('is-dark', theme === 'dark');
+    }
+    html.classList.toggle('is-header-light', theme === 'light');
+    html.classList.toggle('is-header-dark', theme === 'dark');
   }
 
   function refresh() { setHeaderH(); update(); }

@@ -1,46 +1,62 @@
 // components/footer.scss
-/* Closing / contact section: title top-left, contact links below, and a big
-   faint CONTACT lettering across the bottom (letter SVGs like WELCOME) with the
-   footer row (links + meta) over it. */
+/* Closing / contact "Let's connect!" section — shared by the landing and the
+   legal pages: title top-left, contact links (email · diamond · linkedin), and
+   the footer row (nav links + meta) pinned to the bottom, over a soft decoration.
+   The whole footer is in the medium tone on the cream canvas. */
 .closing {
     position: relative;
-    /* only as tall as its content (no forced viewport height) */
-    padding: 140px var(--page-margin) 48px;
+    /* generous top rhythm gives the footer its height (no vh) */
+    padding: var(--space-4xl) var(--page-margin) var(--space-lg);
     display: flex;
     flex-direction: column;
-    background: var(--Shiny-Pearl) url('../assets/newfooter-bg.svg') no-repeat bottom center / cover;
-    color: var(--Ink);
+    background: var(--canvas-light) url('../assets/lp-soft-bg-bottom.svg') no-repeat bottom center / 100% auto;
+    color: var(--text-medium);
     overflow: hidden;
 }
 
 .closing__title {
-    @include type-scale(lg);
+    @include type-scale(xxl);
     max-width: 900px;
 }
 
 .closing__links {
-    @include type-scale(md);
-    margin-top: 24px;
-    margin-bottom: 128px;
+    @include type-scale(body);
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-3xl);   /* space down to the bottom bar */
 }
 
-/* "roll" hover to match the header links (the .nav-roll structure is injected by
-   script/nav-hover.js; the roll styling itself lives in navigation.scss) */
+/* footer links (contact + the nav row): an underline that draws in from left to
+   right on hover — a background gradient sized 0 → full width */
 .closing__email,
-.closing__linkedin {
-    position: relative;
+.closing__linkedin,
+.site-footer__links a {
     display: inline-block;
-    text-decoration: none;
     color: inherit;
-
-    /* no-JS fallback: without .nav-roll, show a plain underline on hover */
-    &:not(.nav-roll):hover {
-        text-decoration: underline;
-        text-underline-offset: 3px;
-    }
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 1px;
+    transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
+.closing__email:hover,
+.closing__email:focus-visible,
+.closing__linkedin:hover,
+.closing__linkedin:focus-visible,
+.site-footer__links a:hover,
+.site-footer__links a:focus-visible { background-size: 100% 1px; }
 
-.closing__divider { margin: 0 0.4em; }
+/* the email · linkedin separator: a 14px accent-darker diamond */
+.closing__divider {
+    display: inline-block;
+    vertical-align: middle;
+    width: 10px;
+    height: 10px;
+    margin: 0 0.5em;
+    background: var(--accent-darker);
+    border-radius: 3px;
+    transform: rotate(45deg);
+}
 
 /* footer row (nav links + meta) at the bottom of the closing section.
    Mobile (base): stacked; desktop: links left, meta right. */
@@ -50,6 +66,9 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    /* divider line above the bottom bar — 50% of the text colour */
+    border-top: 1px solid color-mix(in srgb, var(--text-medium) 50%, transparent);
+    padding-top: 20px;
 }
 
 .site-footer__links,

@@ -1,0 +1,26 @@
+// utils/space.scss
+/* Fluid vertical-spacing scale — the sibling of the type scale in base/fonts.scss.
+   One set of named steps, each a clamp() calibrated between a 375px (mobile) min
+   and a 1920px (desktop) max, so vertical rhythm scales with the viewport WIDTH
+   (never its height). This replaces the old vh-based section spacing, which
+   coupled the rhythm to viewport height and made gaps inconsistent — huge on
+   short laptops, cramped on tall phones.
+
+   Use for block/section rhythm (section padding, gaps between blocks). Small
+   in-component gaps (≤ ~16px: icon↔label, list rows) stay fixed px.
+   Horizontal spacing is untouched — that's the 12-col grid (--page-margin,
+   --grid-gap). Values are min → max at the two ends of the clamp. */
+:root {
+  --space-xs:  clamp(0.75rem, 0.689rem + 0.259vw, 1rem);      /* 12 → 16 */
+  --space-sm:  clamp(1rem,    0.879rem + 0.518vw, 1.5rem);    /* 16 → 24 */
+  --space-md:  clamp(1.5rem,  1.257rem + 1.036vw, 2.5rem);    /* 24 → 40 */
+  --space-lg:  clamp(2rem,    1.636rem + 1.553vw, 3.5rem);    /* 32 → 56 */
+  --space-xl:  clamp(2.5rem,  2.015rem + 2.071vw, 4.5rem);    /* 40 → 72 */
+  --space-2xl: clamp(3.5rem,  2.833rem + 2.848vw, 6.25rem);   /* 56 → 100 */
+  --space-3xl: clamp(4.5rem,  3.317rem + 5.049vw, 9.375rem);  /* 72 → 150 */
+  --space-4xl: clamp(6rem,    4.423rem + 6.731vw, 12.5rem);   /* 96 → 200 */
+
+  /* bespoke: the matched gap the hero image extends below the composition AND
+     the space before .work__lead — kept generous on desktop, tamed on mobile */
+  --space-hero-gap: clamp(6.875rem, 3.993rem + 12.298vw, 18.75rem); /* 110 → 300 */
+}

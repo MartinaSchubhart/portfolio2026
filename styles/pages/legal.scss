@@ -1,29 +1,50 @@
 // pages/legal.scss
-/* Imprint / Privacy pages — plain reading layout on the cream page background,
-   below the fixed header. */
+/* Imprint / Privacy / 404 — reading layout in the landing palette, on the cream
+   canvas, below the fixed .lp__nav / .lp__brand header. Shares the landing
+   "Let's connect!" footer (see the closing block in pages/home.scss). */
+.page-legal { background: var(--canvas-light); }
+
 .legal {
     max-width: 820px;
-    padding: calc(var(--header-h, 68px) + 72px) var(--page-margin) 120px;
-    color: var(--Ink);
+    padding: calc(var(--header-h, 68px) + var(--space-xl)) var(--page-margin) var(--space-3xl);
+    color: var(--text-dark);
 }
 
+/* eyebrow diamond + title, echoing the landing section headers */
 .legal__title {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
     @include type-scale(lg);
-    margin-bottom: 32px;
+    margin-bottom: var(--space-md);
+
+    &::before {
+        content: "";
+        flex: 0 0 auto;
+        align-self: center;
+        width: 14px;
+        height: 14px;
+        background: var(--accent-darker);
+        border-radius: 3px;
+        transform: rotate(45deg);
+    }
 }
 
 .legal__intro {
-    @include type-scale(xs);
-    max-width: 65ch;
-    margin-bottom: 48px;
+    @include type-scale(body);
+    color: var(--text-medium);
+    max-width: 60ch;
+    margin-bottom: var(--space-lg);
 }
 
 .legal__body {
     max-width: 70ch;
+    color: var(--text-medium);
 
     h2 {
         @include type-scale(xs);
-        margin: 40px 0 12px;
+        color: var(--text-dark);
+        margin: var(--space-md) 0 12px;
     }
 
     p {
@@ -33,35 +54,46 @@
         margin-bottom: 14px;
     }
 
+    /* body links: persistent accent-darker underline, like the landing accents */
     a {
-        color: var(--SlateBlue);
-        text-decoration: underline;
-        text-underline-offset: 3px;
+        color: var(--text-dark);
+        text-decoration: none;
+        background-image: linear-gradient(var(--accent-darker), var(--accent-darker));
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+        background-size: 100% 2px;
+        transition: background-size .4s cubic-bezier(0.22, 1, 0.36, 1);
 
-        &:hover { color: var(--Ink); }
+        &:hover,
+        &:focus-visible { background-size: 100% 100%; }
     }
 }
 
 /* ---- 404 page ---------------------------------------------------------- */
 .notfound {
-    min-height: 100vh;
+    min-height: 100dvh;   /* viewport-fill for centering (not block spacing) */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     gap: 20px;
-    padding: var(--header-h, 68px) var(--page-margin) 80px;
-    color: var(--Ink);
+    padding: var(--header-h, 68px) var(--page-margin) var(--space-xl);
+    color: var(--text-dark);
 }
 
 .notfound__code { @include type-scale(xl); line-height: 1; }
-.notfound__text { @include type-scale(md); max-width: 40ch; }
+.notfound__text { @include type-scale(md); color: var(--text-medium); max-width: 40ch; }
 
 .notfound__link {
     @include type-scale(xs);
-    color: var(--SlateBlue);
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    color: var(--text-dark);
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent-darker), var(--accent-darker));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 2px;
+    transition: background-size .4s cubic-bezier(0.22, 1, 0.36, 1);
 
-    &:hover { color: var(--Ink); }
+    &:hover,
+    &:focus-visible { background-size: 100% 100%; }
 }

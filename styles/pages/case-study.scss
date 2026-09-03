@@ -22,8 +22,8 @@
 /* ---- Intro: text (left) + meta (right) ----------------------------------- */
 .cs-intro {
     @extend %cs-grid;
-    padding: 200px var(--page-margin) 150px;
-    row-gap: 56px;
+    padding: var(--space-4xl) var(--page-margin) var(--space-3xl);
+    row-gap: var(--space-lg);
 }
 .cs-intro__text {
     grid-column: 1 / -1;
@@ -69,11 +69,11 @@
 /* ---- content block: heading (left) + body (right) ------------------------ */
 .cs-block {
     @extend %cs-grid;
-    padding: 250px var(--page-margin) 150px;
+    padding: var(--space-4xl) var(--page-margin) var(--space-3xl);
 }
 
 .cs-figure + .cs-block {
-    padding-top: 100px;
+    padding-top: var(--space-2xl);
 }
 
 .cs-block__title {
@@ -98,7 +98,7 @@
 .cs-figure {
     @extend %cs-grid;
     align-items: start;
-    padding: 0 var(--page-margin) 150px;
+    padding: 0 var(--page-margin) var(--space-3xl);
 }
 
 .cs-figure__media {
@@ -120,6 +120,8 @@
     margin: 16px 0 0;
     opacity: 0.8;
 }
+/* opt-in: add .cs-figure__media--rounded alongside .cs-figure__media to round it */
+.cs-figure__media--rounded img { border-radius: 6px; }
 
 @media (min-width: 700px) {
     /* image left (cols 2–8), caption top-right (cols 9–11) */
@@ -128,14 +130,14 @@
 
     /* image right (cols 5–11), caption top-left (cols 2–4) */
     .cs-figure--right .cs-figure__media   { grid-column: 5 / span 7; grid-row: 1; }
-    .cs-figure--right .cs-figure__caption { grid-column: 2 / span 3; grid-row: 1; margin-top: 0; text-align: right; }
+    .cs-figure--right .cs-figure__caption { grid-column: 2 / span 3; grid-row: 1; margin-top: 0; }
 }
 
 /* ---- Next case ----------------------------------------------------------- */
 .cs-next {
     @extend %cs-grid;
     align-items: center;
-    padding: 120px var(--page-margin);
+    padding: var(--space-3xl) var(--page-margin);
 }
 .cs-next__link {
     grid-column: 1 / -1;
@@ -154,19 +156,20 @@
 
 .cs-next__media {
     grid-column: 1 / -1;
-    height: 40vh;
-    margin-top: 40px;
+    /* stable box from an intrinsic ratio instead of a vh height */
+    aspect-ratio: 12 / 5;
+    margin-top: var(--space-md);
     background: #6b4a2e;                            /* warm placeholder */
     overflow: hidden;
 
     img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-    @media (min-width: 700px) { grid-column: 7 / span 6; height: 34vh; margin-top: 0; }
+    @media (min-width: 700px) { grid-column: 7 / span 6; margin-top: 0; }
 }
 
 /* ---- footer -------------------------------------------------------------- */
 .cs-footer {
-    padding: 40px var(--page-margin);
+    padding: var(--space-md) var(--page-margin);
     border-top: 1px solid rgba(255, 255, 255, 0.14);
     @include type-scale(xs);
     display: flex;
@@ -184,47 +187,45 @@
     @media (min-width: 700px) { flex-direction: row; gap: 24px; }
 }
 
-/* ---- shared header, in the case-study palette ---------------------------- */
-.page-case .site-header          { color: var(--text-light); }
-.page-case .site-header.is-light { color: var(--text-dark); }
-.page-case .site-header.is-dark  { color: var(--text-light); }
-
 /* ===========================================================================
-   Beiersdorf intro variant (.cs-bdf): a light title band ABOVE a full-bleed
-   hero image, with a "Back" pill (left) + About / Work (right) in the header.
+   Beiersdorf intro (.cs-lead): a light title band ABOVE a full-bleed hero image.
+   The header (home link + About / Work) is the shared .lp__nav / .lp__brand,
+   styled in pages/home.scss.
    ========================================================================= */
 
-/* header: just Back (left) + nav (right) */
-.cs-bdf .site-header      { grid-template-columns: 1fr auto; }
-.cs-bdf .site-header__nav { justify-self: end; }
-
-/* the green "Back" pill — always dark text on the light-green fill, whatever
-   colour the header has flipped to */
-.cs-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 100px;
-    background: #EAFFB0;
-    text-decoration: none;
-}
-.site-header .cs-back { color: var(--text-dark); }   /* beats .site-header a { color: inherit } */
-
-/* light title band, clearing the fixed header */
+/* light title band, clearing the fixed header. The soft-bg decoration sits at the
+   very top; the light colour is the fill below it + fallback. */
 .cs-lead {
-    background: var(--canvas-light);
+    background: var(--canvas-light) url('../assets/lp-soft-bg-top.svg') no-repeat top center / 100% auto;
     color: var(--text-dark);
     @extend %cs-grid;
-    padding: calc(var(--header-h, 88px) + 88px) var(--page-margin) 88px;
+    padding: calc(var(--header-h, 88px) + var(--space-2xl)) var(--page-margin) var(--space-2xl);
 }
 .cs-lead__title {
     grid-column: 1 / -1;
+    position: relative;
     @include type-scale(xl);
-    max-width: 20ch;
+    color: var(--text-medium);
     margin: 0;
+    /* first line clears the diamond and starts one column in; wrapped lines
+       return to the block's left edge. (100% + gap)/9 == one column + one gap
+       when the block is 9 columns wide (desktop). */
+    text-indent: calc((100% + var(--grid-gap)) / 9);
 
-    @media (min-width: 700px) { grid-column: 2 / span 8; }
+    /* 24px diamond at the block's left edge, centred on the first line */
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.5em;                                /* first-line centre (line-height 1) */
+        width: 24px;
+        height: 24px;
+        background: var(--accent-darker);
+        border-radius: 3px;
+        transform: translateY(-50%) rotate(45deg);
+    }
+
+    @media (min-width: 700px) { grid-column: 2 / span 9; }
 }
 
 /* the hero image sits flush under the band (no placeholder tint, no gap above) */

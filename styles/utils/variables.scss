@@ -1,8 +1,8 @@
 :root {
   --white: #ffffff;
-  --canvas-dark: #1A1C1D;
+  --canvas-dark: #212121;
   --canvas-light: #F9F5EC;
-  --text-light: #FFFFFF;
+  --text-light: #ffffff;
   --text-dark: #1A1C1D;
   --accent: #F4F496;
   --accent-darker: #EFE880;
@@ -12,13 +12,11 @@
 
   --page-margin: 20px;
   --grid-gap: 8px;
-  --radius: 0px;
 }
 
 @media (min-width: 700px) {
   :root {
     --page-margin: 3.75%; /* = 72px at a 1920 viewport; scales fluidly with width */
     --grid-gap: 48px;
-    --radius: 0px;
   }
 }

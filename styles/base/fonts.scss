@@ -33,7 +33,7 @@
 // stay fixed or barely move. Line-heights/letter-spacings match the 1920 look.
 $type-scale: (
   xs: (
-    font-family: 'Acid Grotesk Regular',
+    font-family: 'Inter Regular',
     size: 16px,
     line-height: 110%,
     letter-spacing: 0.2px
@@ -46,14 +46,14 @@ $type-scale: (
   ),
   body: (
     font-family: 'Inter Regular',
-    size: clamp(20px, 19.03px + 0.26vw, 24px),
+    size: clamp(20px, 19.03px + 0.26vw, 22px),
     line-height: 140%,
-    letter-spacing: 0
+    letter-spacing: 0.1px
   ),
   md: (
     font-family: 'Acid Grotesk Regular',
     size: clamp(26px, 23.82px + 0.58vw, 35px),
-    line-height: 130%,
+    line-height: 125%,
     letter-spacing: 0.1px
   ),
   lead: (
@@ -65,13 +65,13 @@ $type-scale: (
   lg: (
     font-family: 'Acid Grotesk Regular',
     size: clamp(34px, 25.26px + 2.33vw, 70px),
-    line-height: 120%,
+    line-height: 110%,
     letter-spacing: 0px
   ),
   xl: (
     font-family: 'Acid Grotesk Regular',
     size: clamp(40px, 28.84px + 2.98vw, 86px),
-    line-height: 1,
+    line-height: 110%,
     letter-spacing: -1px
   ),
   xxl: (

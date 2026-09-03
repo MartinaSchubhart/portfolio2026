@@ -1,13 +1,13 @@
 @use "sass:map";
 
 @import './utils/variables';
+@import './utils/space';
 
 @import './base/fonts';
 @import './base/reset';
 @import './base/lenis';
 
 @import './components/veil';
-@import './components/navigation';
 @import './components/footer';
 
 @import './pages/home';

@@ -21,11 +21,11 @@ html {
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: clip; /* contain the bleed-canvas overhang; keeps vertical scroll + sticky */
   line-height: 1.3;
-  color: var(--Ink);
-  background-color: var(--Shiny-Pearl);
+  color: var(--text-dark);
+  background-color: var(--canvas-light);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -89,7 +89,7 @@ p {
 
 /* Visible keyboard-focus ring (only for keyboard/AT users, not mouse clicks) */
 :focus-visible {
-  outline: 2px solid var(--SlateBlue);
+  outline: 2px solid var(--text-dark);
   outline-offset: 2px;
 }
 
@@ -102,8 +102,8 @@ p {
   z-index: 10001;
   padding: 10px 16px;
   border-radius: 8px;
-  background: var(--Ink);
-  color: var(--Shiny-Pearl);
+  background: var(--text-dark);
+  color: var(--canvas-light);
   font-family: 'Acid Grotesk Regular', Arial, sans-serif;
   text-decoration: none;
   transition: top 0.2s ease;

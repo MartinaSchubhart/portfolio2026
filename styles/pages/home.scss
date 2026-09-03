@@ -14,8 +14,7 @@
     gap: var(--grid-gap);
 }
 
-/* follow-cursor visual, shared by the work cards (script/work-cursor.js) and the
-   case-study hero (script/scroll-cursor.js) */
+/* follow-cursor visual for the work cards (script/work-cursor.js) */
 .work-cursor {
     position: fixed;
     top: 0;
@@ -42,34 +41,11 @@
 .about {
     background: var(--canvas-light);
     color: var(--text-dark);
-    padding: 30vh var(--page-margin);
+    padding: var(--space-3xl) var(--page-margin);
 }
 
-/* ---- closing footer, in the index palette -------------------------------- */
-.page-home .closing {
-    /* soft decoration at the very bottom of the page */
-    background: var(--canvas-light) url('../assets/lp-soft-bg-bottom.svg') no-repeat bottom center / 100% auto;
-    color: var(--text-medium);                     /* whole footer in the medium tone */
-    min-height: 90vh;                              /* tall, so the bottom bar sits low */
-}
-.page-home .closing__title { @include type-scale(xxl); }
-.page-home .closing__links { @include type-scale(body); }
-/* the divider line above the bottom bar — 50% of the text colour */
-.page-home .closing .site-footer {
-    border-top: 1px solid color-mix(in srgb, var(--text-medium) 50%, transparent);
-    padding-top: 20px;
-}
-/* the email · linkedin separator: a 14px accent-darker diamond */
-.page-home .closing__divider {
-    display: inline-block;
-    vertical-align: middle;
-    width: 10px;
-    height: 10px;
-    margin: 0 0.5em;
-    background: var(--accent-darker);
-    border-radius: 3px;
-    transform: rotate(45deg);
-}
+/* The closing "Let's connect!" footer is defined in components/footer.scss and
+   shared as-is by the landing and the legal pages. */
 
 /* ===========================================================================
    Landing composition (.lp), on the 12-column grid:
@@ -83,33 +59,37 @@
 
 .lp {
     position: relative;
-    height: 130vh;                                 /* image extends 30vh below the composition */
+    /* the image tail below the composition — a fixed token (no vh), matched to
+       the space before .work__lead so the two gaps read as one rhythm */
+    padding-bottom: var(--space-hero-gap);
     background: transparent;
     color: var(--text-dark);
 }
 
-/* the photo fills the whole hero (130vh) and scrolls away with it (no parallax);
-   it sits behind the content (z-index: -1), with the sections below following */
+/* the photo fills the whole hero (composition + tail) and scrolls away with it
+   (no parallax); it sits behind the content (z-index: -1) */
 .lp__bg {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: right center;                  /* anchor to the right, not centred */
     z-index: -1;
     background: var(--canvas-dark);                 /* fallback if the image is missing */
     pointer-events: none;
 }
 
-/* the composition sits in the first viewport, with the nameplate pinned to its
-   bottom; the image continues for the extra 30vh below */
+/* the composition fills the first viewport, with the nameplate pinned to its
+   bottom; the image continues for --space-hero-gap below (see .lp padding).
+   dvh (not vh) so the mobile URL bar doesn't clip the nameplate. */
 .lp__inner {
     position: relative;
     z-index: 1;                                     /* content above the image */
-    height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    padding: 50px var(--page-margin) 72px;
+    padding: var(--space-lg) var(--page-margin) var(--space-xl);
 }
 
 /* ---- top bar: intro (left) + nav (right) --------------------------------- */
@@ -128,10 +108,14 @@
     max-width: 40ch;
 
     @media (min-width: 700px) { grid-column: 1 / span 3; }
+    /* a touch wider on the tablet range so it doesn't get too narrow */
+    @media (min-width: 700px) and (max-width: 1024px) { grid-column: 1 / span 4; }
 }
 /* accent-darker diamond at the start of the intro */
 .lp__diamond {
     display: inline-block;
+    position: relative;
+    top: -2px;                                     /* nudge up to sit on the text x-height */
     vertical-align: middle;
     width: 10px;
     height: 10px;
@@ -145,28 +129,30 @@
     margin-top: 8px;
     display: flex;
     gap: 8px;
-    margin-left: -16px;                            /* offset the links' padding so the row still aligns */
     @include type-scale(xs);
 
     /* desktop: lift the links out of the hero and pin them to the viewport so
-       they stay top-right through the whole page. mix-blend-mode keeps the white
-       labels legible over both the dark work and the light about sections */
+       they stay top-right through the whole page. */
     @media (min-width: 700px) {
         position: fixed;
         top: 24px;
-        right: calc(var(--page-margin) - 16px);
+        right: var(--page-margin);
         z-index: 50;
         margin: 0;
         justify-content: flex-end;
         mix-blend-mode: difference;
     }
 
-    /* enlarged, invisible hit area around each label */
+    /* fixed-size buttons with the label centred */
     a {
         position: relative;
-        color: inherit;                            /* stays white — no colour/opacity change on hover */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 63px;
+        color: inherit;
         text-decoration: none;
-        padding: 14px 16px;
     }
     /* thin underline that grows left → right on hover / focus */
     a::after {
@@ -193,15 +179,16 @@
     display: none;
 
     @media (min-width: 700px) {
-        display: block;
+        display: inline-flex;
+        align-items: center;                       /* centre the label like the 63px buttons */
+        height: 63px;
         position: fixed;
         top: 24px;
         left: var(--page-margin);
         z-index: 50;
         @include type-scale(xs);
-        color: #fff;
+        color: var(--text-medium);                 /* only shown over the light area */
         text-decoration: none;
-        mix-blend-mode: difference;
         opacity: 0;
         transform: translateY(-6px);
         pointer-events: none;
@@ -239,11 +226,12 @@
     /* soft decoration at the top of the light area (directly after the hero) */
     background: var(--canvas-light) url('../assets/lp-soft-bg-top.svg') no-repeat top center / 100% auto;
     color: var(--text-dark);
-    padding: 30vh var(--page-margin);
+    /* top gap matches the hero image tail; bottom + card rhythm are tighter */
+    padding: var(--space-hero-gap) var(--page-margin) var(--space-3xl);
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: var(--grid-gap);
-    row-gap: 12vh;
+    row-gap: var(--space-2xl);
 }
 /* work intro: a small "Selected Case Studies" eyebrow (with a diamond) beside the
    first line of a large lead paragraph; the lead's first line starts at column 4,
@@ -251,10 +239,13 @@
 .work__title {
     grid-column: 1 / -1;
     grid-row: 1;
-    margin: 0 0 4vh;
+    margin: 0 0 var(--space-md);
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: var(--grid-gap);
+    /* the lead's live font-size, pulled from the type scale so the eyebrow can
+       track it (see .work__eyebrow margin) — single source, no duplicated clamp */
+    --lead-fs: #{map-get(map-get($type-scale, lead), size)};
 }
 .work__eyebrow {
     grid-column: 1 / -1;                            /* mobile: own row above the lead */
@@ -263,7 +254,7 @@
     gap: 12px;
     margin: 0 0 16px;
     color: var(--text-medium);
-    @include type-scale(xs);
+    @include type-scale(sm);
 }
 .work__diamond {
     flex: 0 0 auto;
@@ -305,7 +296,10 @@
         grid-column: 1 / span 3;
         grid-row: 1;
         align-self: start;
-        margin: 28px 0 0;                          /* centre it on the 68px first line */
+        /* drop the eyebrow so its x-height meets the lead's, tracking the lead's
+           fluid size: half the lead font (its x-height sits ~mid-cap) minus the
+           eyebrow's own x-height offset. == 28px at the 68px (1920) lead. */
+        margin: calc(var(--lead-fs) * 0.5 - 6px) 0 0;
     }
     /* the lead's first line starts at column 4 (25% + a quarter-gap) */
     .work__lead {
@@ -348,7 +342,9 @@
     left: 0;
     bottom: 0;
     z-index: 2;
-    padding: 72px;
+    /* % of the card's width, so the inset scales with the card at every viewport.
+       7.087% = 72px on a 1016px-wide card (7 cols) at a 1920 viewport. */
+    padding: 7.087%;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -357,7 +353,7 @@
 .work__card-title {
     @include type-scale(md);
     max-width: 28ch;
-    
+
     @media (min-width: 700px) { margin: 0 0 32px; }
 }
 .work__card-tags {
@@ -391,10 +387,10 @@
 .lp-loading .lp__brand,
 .lp-loading .lp__rule { visibility: hidden; }
 
-/* index: header links (About / Work) in the accent colour. Drop the blend so
-   the true colour shows rather than inverting against each section. */
-.page-home .lp__nav { mix-blend-mode: normal; }
-.page-home .lp__nav a { color: var(--accent); }
+/* header links (About / Work) in the accent colour — shared by the landing and
+   the case study. Drop the blend so the true colour shows. */
+:is(.page-home, .page-case, .page-legal) .lp__nav { mix-blend-mode: normal; }
+:is(.page-home, .page-case, .page-legal) .lp__nav a { color: var(--accent); }
 
 /* index work-card cursor: a small accent-coloured circle with a plus icon
    (no text, no blur). work-cursor.js swaps the label for the icon on page-home. */
@@ -411,13 +407,13 @@
 /* index: header links get an accent rectangle on hover that animates in like the
    work-card cursor — starting small + rotated and unfolding to fill, pivoting on
    the button's bottom-right corner. The rectangle is a ::before behind the text. */
-.page-home .lp__nav a {
+:is(.page-home, .page-case, .page-legal) .lp__nav a {
     position: relative;
     z-index: 0;                                    /* own stacking context so ::before stays behind the text only */
     transition: color 0.25s ease;
 }
-.page-home .lp__nav a::after { content: none; }   /* drop the underline hover */
-.page-home .lp__nav a::before {
+:is(.page-home, .page-case, .page-legal) .lp__nav a::after { content: none; }   /* drop the underline hover */
+:is(.page-home, .page-case, .page-legal) .lp__nav a::before {
     content: "";
     position: absolute;
     right: 0;
@@ -425,7 +421,7 @@
     width: 0;
     height: 0;                                     /* starts at true zero, top-right */
     z-index: -1;
-    background: var(--accent);
+    background: var(--white);
     border-radius: 0;                              /* no radius at the start */
     transform-origin: 100% 0%;                     /* pivot on the top-right */
     transform: rotate(-45deg);                     /* rotated */
@@ -434,27 +430,128 @@
                 border-radius 0.6s cubic-bezier(0.16, 1, 0.3, 1),
                 transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.page-home .lp__nav a:hover::before,
-.page-home .lp__nav a:focus-visible::before {
+:is(.page-home, .page-case, .page-legal) .lp__nav a:hover::before,
+:is(.page-home, .page-case, .page-legal) .lp__nav a:focus-visible::before {
     width: 100%;
     height: 100%;
     border-radius: 4px;
     transform: rotate(0deg);
 }
-.page-home .lp__nav a:hover,
-.page-home .lp__nav a:focus-visible { color: var(--text-dark); }
+:is(.page-home, .page-case, .page-legal) .lp__nav a:hover,
+:is(.page-home, .page-case, .page-legal) .lp__nav a:focus-visible { color: var(--text-dark); }
+
+/* case study: the nav + brand are fixed, and the brand is shown from the start
+   (no scroll reveal). The Work button has no default background here (its href is
+   index.html#work, so the landing's [href="#work"] yellow rule doesn't apply). */
+:is(.page-case, .page-legal) .lp__nav {
+    position: fixed;
+    top: 24px;
+    right: var(--page-margin);
+    z-index: 50;
+    margin: 0;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+:is(.page-case, .page-legal) .lp__brand {
+    display: inline-flex;
+    align-items: center;                           /* centre the label like the 63px buttons */
+    height: 63px;
+    position: fixed;
+    top: 24px;
+    left: var(--page-margin);
+    z-index: 50;
+    @include type-scale(xs);
+    text-decoration: none;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+}
+/* the hover rectangle is yellow on the case study + legal pages */
+:is(.page-case, .page-legal) .lp__nav a::before { background: var(--accent); }
+
+/* case study over dark content: brand + nav faint (hover turns text dark) */
+.page-case .lp__brand { color: var(--faint-on-dark); }
+.page-case .lp__nav a { color: var(--faint-on-dark); }
+/* case study over a light section (toggled by script/header-nav.js) */
+.is-header-light .page-case .lp__brand,
+.is-header-light .page-case .lp__nav a { color: var(--text-medium); }
+
+/* legal pages are always light: brand + nav in the medium tone */
+.page-legal .lp__brand,
+.page-legal .lp__nav a { color: var(--text-medium); }
+
+/* the Work link: a solid yellow (accent) background by default. On hover a white
+   rectangle grows in on top of it (same animation as the About link), and out
+   again on leave. */
+.page-home .lp__nav a[href="#work"] { color: var(--text-dark); }
+/* yellow ::before — full and static */
+.page-home .lp__nav a[href="#work"]::before {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    transform: none;
+    background: var(--accent);
+    transition: background-color 0.25s ease;       /* only the tint animates, no grow */
+}
+/* white ::after — grows in from the top-right on hover, on top of the yellow.
+   left/bottom reset to auto to cancel the base underline ::after's offsets. */
+.page-home .lp__nav a[href="#work"]::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: auto;
+    bottom: auto;
+    width: 0;
+    height: 0;
+    z-index: -1;
+    background: var(--white);
+    border-radius: 0;
+    transform-origin: 100% 0%;
+    transform: rotate(-45deg);
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.page-home .lp__nav a[href="#work"]:hover::after,
+.page-home .lp__nav a[href="#work"]:focus-visible::after {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    transform: rotate(0deg);
+}
+
+/* over the light area (toggled by script/brand-reveal.js): About in the medium
+   tone. The Work button keeps its lighter yellow. */
+.lp-header-light .lp__nav a[href="#about"] { color: var(--text-medium); }
+
+/* over the light area, hover fills the grow-in rectangle with --text-medium; white text */
+.lp-header-light .lp__nav a[href="#about"]::before { background: var(--text-medium); }
+.lp-header-light .lp__nav a[href="#work"]::after { background: var(--text-medium); }
+.lp-header-light .lp__nav a:hover,
+.lp-header-light .lp__nav a:focus-visible { color: var(--white); }
 
 /* the white rule under the header exists on index mobile only */
 .lp__rule { display: none; }
 
 /* index mobile: a header row — "Martina Schubhart" (left) + About/Work (right)
-   — above the intro, a white rule under it, and work-card text below the image. */
+   — above the intro, and work-card text below the image. */
 @media (max-width: 699px) {
     .page-home .lp__nav {
-        order: -2;                                 /* header row, above the rule + intro */
+        order: -2;                                 /* header row, above the intro */
         justify-content: flex-end;                 /* About / Work on the right */
-        margin: 0 -16px 0 0;
+        /* pull the buttons up so their text lines up with the brand text; the
+           inner padding token keeps them aligned at every mobile width:
+           nav top = space-lg (inner pad) + margin = 24px -> button centre 46.5px,
+           matching the brand text centre (top 24 + pad 14 + half line). */
+        margin: calc(24px - var(--space-lg)) 0 0;
     }
+    .page-home .lp__nav a { width: 80px; height: 45px; }
+    /* breathing room between the header row and the intro (the rule used to sit
+       here); adds to the .lp__top grid-gap */
+    .page-home .lp__intro { margin-top: var(--space-md); }
     .page-home .lp__brand {
         display: block;
         position: absolute;
@@ -469,17 +566,6 @@
         text-decoration: none;
         @include type-scale(xs);
     }
-    /* white line under the header; grows left→right in the intro (preloader.js) */
-    .page-home .lp__rule {
-        display: block;
-        order: -1;                                 /* between the header row and the intro */
-        grid-column: 1 / -1;
-        height: 1px;
-        margin: 8px 0 20px;
-        background: var(--text-light);
-        transform-origin: left center;             /* default scaleX(1) = full width if the intro is skipped */
-    }
-
     /* work cards: image on top, title + tags below it (not overlaid) */
     .page-home .work__card {
         aspect-ratio: auto;
@@ -497,6 +583,6 @@
     .page-home .work__card-foot {
         position: static;
         padding: 16px 0 0;
-        color: var(--text-dark);                   /* now on the light work background */
+        color: var(--text-medium);                 /* now on the light work background */
     }
 }

@@ -23,15 +23,12 @@
   <noscript><style>.veil{ display:none !important; }</style></noscript>
   <script src="script/veil.js" defer></script>
 
-  <header class="site-header">
-    <div class="site-header__left">
-      <a class="cs-back" href="index.html#work"><span aria-hidden="true">&larr;</span> Back</a>
-    </div>
-    <nav class="site-header__nav">
-      <a href="index.html#about">About</a>
-      <a href="index.html#work">Work</a>
-    </nav>
-  </header>
+  <!-- nav-header (same as the landing): home link (left) + About / Work (right) -->
+  <a class="lp__brand" href="index.html">Martina Schubhart</a>
+  <nav class="lp__nav">
+    <a href="index.html#about">About</a>
+    <a href="index.html#work">Work</a>
+  </nav>
 
   <!-- Intro title band (light), above the hero image -->
   <section class="cs-lead" id="main" tabindex="-1" data-nav="light">
@@ -40,7 +37,7 @@
 
   <!-- Hero: full-bleed image, with the "Scroll" follow-cursor -->
   <div class="cs-media cs-media--hero" data-nav="light">
-    <img data-scroll-cursor width="1920" height="1080" src="assets/bdf/case-Beiersdorf-Hero.webp" alt="Beiersdorf Annual Report 2025 hero" />
+    <img width="1920" height="1080" src="assets/bdf/case-Beiersdorf-Hero.webp" alt="Beiersdorf Annual Report 2025 hero" />
   </div>
 
   <!-- Intro detail: text (left) + meta (right) -->
@@ -131,16 +128,11 @@
   <!-- GSAP powers the scroll cursor + reveal-up -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
 
-  <!-- "Scroll" follow-cursor over the hero -->
-  <script src="script/scroll-cursor.js" defer></script>
-
   <!-- move-up reveal for every non-hero element -->
   <script src="script/reveal-up.js" defer></script>
 
   <!-- sticky header: colour follows the background (light/dark) -->
   <script src="script/header-nav.js" defer></script>
-  <!-- header nav "roll" hover -->
-  <script src="script/nav-hover.js" defer></script>
 
   <!-- Lenis smooth scrolling -->
   <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js" defer></script>

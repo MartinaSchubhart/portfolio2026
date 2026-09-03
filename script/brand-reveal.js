@@ -15,6 +15,8 @@
     ticking = false;
     var into = work.getBoundingClientRect().top <= LINE;
     brand.classList.toggle('is-visible', into);
+    /* header is now over the light area → tint the nav accordingly (see home.scss) */
+    document.documentElement.classList.toggle('lp-header-light', into);
   }
   function onScroll() {
     if (ticking) return;
