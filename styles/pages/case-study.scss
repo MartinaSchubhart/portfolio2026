@@ -119,6 +119,13 @@
 
     @media (min-width: 700px) { grid-column: 7 / span 5; padding-top: 8px; }
 }
+
+    @media (min-width: 700px) { 
+        .cs-block__text.cs-block__text-left {
+            grid-column: 2 / span 7;
+        }
+    }
+
 /* body-copy links: a persistent underline in the text colour at 50% opacity,
    re-drawing left → right on hover — same behaviour as the work__lead links on
    the landing, tuned to 2px for body text. Background gradient so it wraps. */
@@ -166,6 +173,12 @@
     margin: 16px 0 0;
     opacity: 0.8;
 }
+
+.cs-figure__caption.cs-figure__caption-large {
+max-width: none;
+ @include type-scale(body);
+}
+
 /* opt-in: add .cs-figure__media--rounded alongside .cs-figure__media to round it */
 .cs-figure__media--rounded img { border-radius: 6px; }
 
