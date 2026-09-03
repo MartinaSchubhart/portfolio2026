@@ -9,8 +9,25 @@
    ========================================================================= */
 
 .page-case {
-    background: var(--canvas-dark);
-    color: var(--text-light);
+    /* theme tokens — dark by default; .cs-light flips them (see below) */
+    --cs-bg: var(--canvas-dark);
+    --cs-fg: var(--cs-text-dark);                  /* main text, headings, captions */
+    --cs-fg-muted: var(--faint-on-dark);           /* labels, separators */
+    --cs-rule: rgba(255, 255, 255, 0.16);          /* hairline dividers */
+
+    background: var(--cs-bg);
+    color: var(--cs-fg);
+}
+
+/* opt-in light theme: add class="page-case cs-light" on <body> for light-mode
+   case studies. The content area beneath the hero uses the landing's light
+   palette; the .cs-lead title band is already light in both themes. */
+.page-case.cs-light {
+    --cs-bg: var(--canvas-light);
+    --cs-fg: var(--text-dark);
+    --cs-fg-muted: var(--text-medium);
+    --cs-rule: rgba(26, 28, 29, 0.14);             /* fallback for no color-mix */
+    --cs-rule: color-mix(in srgb, var(--text-dark) 14%, transparent);
 }
 
 %cs-grid {
@@ -62,7 +79,7 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin: 0 0 6px;
-    color: var(--faint-on-dark);
+    color: var(--cs-fg-muted);
 }
 /* small diamond separating meta values (replaces the " / " slashes), in the
    label colour */
@@ -72,7 +89,7 @@
     width: 6px;
     height: 6px;
     margin: 0 0.5em;
-    background: var(--faint-on-dark);
+    background: var(--cs-fg-muted);
     border-radius: 2px;
     transform: rotate(45deg);
 }
@@ -89,6 +106,19 @@
         width: 100%;                               /* full viewport width */
         height: auto;                              /* natural aspect from width/height attrs */
         background: #c0824a;                       /* warm placeholder */
+    }
+}
+
+/* content-width variant: inset onto the grid instead of full-bleed —
+   10 columns centred on desktop, full width on mobile. Add .cs-media--content
+   alongside .cs-media. */
+.cs-media--content {
+    @extend %cs-grid;
+    padding: 0 var(--page-margin);
+
+    img { grid-column: 1 / -1; }                   /* mobile: full 12 cols */
+    @media (min-width: 700px) {
+        img { grid-column: 2 / span 10; }          /* desktop: 10 cols, centred */
     }
 }
 
@@ -132,6 +162,7 @@
 .cs-block__text a {
     color: inherit;
     text-decoration: none;
+    --cs-underline: currentColor;                  /* fallback for no color-mix */
     --cs-underline: color-mix(in srgb, currentColor 50%, transparent);
     background-image: linear-gradient(var(--cs-underline), var(--cs-underline));
     background-repeat: no-repeat;
@@ -168,15 +199,11 @@
 }
 .cs-figure__caption {
     grid-column: 1 / -1;
-    @include type-scale(figcaption);
+    @include type-scale(body);
     max-width: 30ch;
     margin: 16px 0 0;
     opacity: 0.8;
-}
-
-.cs-figure__caption.cs-figure__caption-large {
-max-width: none;
- @include type-scale(body);
+    color: var(--cs-fg);
 }
 
 /* opt-in: add .cs-figure__media--rounded alongside .cs-figure__media to round it */
@@ -200,7 +227,7 @@ max-width: none;
     @include type-scale(xs);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--faint-on-dark);
+    color: var(--cs-fg);
     margin: 0;
 
     &::before {
@@ -214,57 +241,37 @@ max-width: none;
     }
 }
 
-/* ---- Outcome: the closing payoff — a lead statement + a results strip ------ */
-.cs-outcome {
+/* ---- Section heading block: a kicker eyebrow + an h2 statement ------------
+   Reusable wherever a section needs an intro headline (topic intros, the closing
+   payoff, …). The <h2> uses its own `h2` type step (base/fonts.scss) so its size
+   can be tuned without touching `lead`. */
+.cs-heading {
     @extend %cs-grid;
     padding: var(--space-4xl) var(--page-margin);
-    row-gap: var(--space-xl);
+    row-gap: var(--space-sm);
 }
-.cs-outcome .cs-eyebrow {
+.cs-heading .cs-eyebrow {
     grid-column: 1 / -1;
     @media (min-width: 700px) { grid-column: 2 / -1; }
 }
-.cs-outcome__lead {
+.cs-heading__title {
     grid-column: 1 / -1;
-    @include type-scale(lead);
-    color: var(--text-light);
+    @include type-scale(h2);
+    color: var(--cs-fg);
     margin: 0;
     @media (min-width: 700px) { grid-column: 2 / span 9; }
 }
-.cs-hl { color: var(--accent-darker); }            /* accent highlight on a key phrase */
 
-/* results strip: three items divided by thin editorial rules */
-.cs-stats {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-lg) var(--grid-gap);
-    margin: var(--space-sm) 0 0;
-    padding: 0;
-    list-style: none;
-
-    @media (min-width: 700px) {
-        grid-column: 2 / -1;
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-.cs-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding-top: var(--space-sm);
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
-}
-.cs-stat__num   { @include type-scale(md); color: var(--text-light); line-height: 1.1; }
-.cs-stat__label { @include type-scale(xs); color: var(--faint-on-dark); max-width: 30ch; }
 
 /* ---- Next: a big arrow-link back into the work ---------------------------- */
 .cs-next {
     @extend %cs-grid;
     padding: var(--space-4xl) var(--page-margin);
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    border-top: 1px solid var(--cs-rule);
     row-gap: var(--space-md);
 }
+/* drop the divider when a media block sits directly above the Next block */
+.cs-media + .cs-next { border-top: none; }
 .cs-next .cs-eyebrow {
     grid-column: 1 / -1;
     @media (min-width: 700px) { grid-column: 2 / -1; }
@@ -288,7 +295,7 @@ max-width: none;
 /* ---- footer -------------------------------------------------------------- */
 .cs-footer {
     padding: var(--space-md) var(--page-margin);
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-top: 1px solid var(--cs-rule);
     @include type-scale(xs);
     display: flex;
     flex-direction: column;

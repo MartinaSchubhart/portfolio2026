@@ -71,6 +71,7 @@
 
 /* ---- 404 page ---------------------------------------------------------- */
 .notfound {
+    min-height: 100vh;    /* fallback for browsers without dvh */
     min-height: 100dvh;   /* viewport-fill for centering (not block spacing) */
     display: flex;
     flex-direction: column;
