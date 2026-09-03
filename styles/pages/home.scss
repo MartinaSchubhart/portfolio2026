@@ -244,8 +244,7 @@
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: var(--grid-gap);
-    /* the lead's live font-size, pulled from the type scale so the eyebrow can
-       track it (see .work__eyebrow margin) — single source, no duplicated clamp */
+    /* the lead's live font-size, so the eyebrow can align to its x-height */
     --lead-fs: #{map-get(map-get($type-scale, lead), size)};
 }
 .work__eyebrow {
@@ -292,14 +291,11 @@
 }
 
 @media (min-width: 700px) {
-    /* eyebrow fills cols 1–3, aligned with the lead's first line */
+    /* eyebrow beside the lead (cols 1–3), dropped to sit on the lead's x-height */
     .work__eyebrow {
         grid-column: 1 / span 3;
         grid-row: 1;
         align-self: start;
-        /* drop the eyebrow so its x-height meets the lead's, tracking the lead's
-           fluid size: half the lead font (its x-height sits ~mid-cap) minus the
-           eyebrow's own x-height offset. == 28px at the 68px (1920) lead. */
         margin: calc(var(--lead-fs) * 0.5 - 6px) 0 0;
     }
     /* the lead's first line starts at column 4 (25% + a quarter-gap) */

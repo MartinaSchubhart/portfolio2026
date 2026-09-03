@@ -45,16 +45,16 @@ $type-scale: (
     letter-spacing: 0.05px
   ),
   figcaption: (
-    font-family: 'Inter Regular',
-    size: 18px,
-    line-height: 140%,
-    letter-spacing: 0.1px
+    font-family: 'Acid Grotesk Regular',
+    size: clamp(20px, 19.03px + 0.26vw, 24px),
+    line-height: 125%,
+    letter-spacing: 0px
   ),
   body: (
-    font-family: 'Inter Regular',
-    size: clamp(20px, 19.03px + 0.26vw, 22px),
-    line-height: 133%,
-    letter-spacing: 0.1px
+    font-family: 'Acid Grotesk Regular',
+    size: clamp(20px, 19.03px + 0.26vw, 24px),
+    line-height: 125%,
+    letter-spacing: 0px
   ),
   md: (
     font-family: 'Acid Grotesk Regular',

@@ -24,7 +24,7 @@
    palette; the .cs-lead title band is already light in both themes. */
 .page-case.cs-light {
     --cs-bg: var(--canvas-light);
-    --cs-fg: var(--text-dark);
+    --cs-fg: var(--text-medium);
     --cs-fg-muted: var(--text-medium);
     --cs-rule: rgba(26, 28, 29, 0.14);             /* fallback for no color-mix */
     --cs-rule: color-mix(in srgb, var(--text-dark) 14%, transparent);
@@ -199,11 +199,11 @@
 }
 .cs-figure__caption {
     grid-column: 1 / -1;
-    @include type-scale(body);
+    @include type-scale(figcaption);
     max-width: 30ch;
     margin: 16px 0 0;
     opacity: 0.8;
-    color: var(--cs-fg);
+    color: var(--text-medium);
 }
 
 /* opt-in: add .cs-figure__media--rounded alongside .cs-figure__media to round it */
@@ -362,5 +362,61 @@
         aspect-ratio: 1 / 1;
         height: auto;                              /* box height from the ratio */
         object-fit: cover;                         /* crop the wide image into the square */
+    }
+}
+
+/* ---------------------------------------------------------------------------
+   TEST (.cs-full on <body>, Break4You): a wider content layout. Remove the
+   class to revert.
+   --------------------------------------------------------------------------- */
+/* match the landing work__title block exactly: eyebrow = sm (not uppercase),
+   title = lead, both in --text-medium, with the same eyebrow → title gap */
+.cs-full .cs-heading {
+    row-gap: 16px;                                  /* eyebrow → title gap when stacked (mobile) */
+    --lead-fs: #{map-get(map-get($type-scale, lead), size)};  /* for the x-height offset */
+}
+.cs-full .cs-heading .cs-eyebrow {
+    @include type-scale(sm);                        /* sets sm's own letter-spacing too */
+    text-transform: none;                          /* work__eyebrow isn't uppercase */
+    color: var(--text-medium);
+}
+.cs-full .cs-heading__title {
+    @include type-scale(lead);
+    color: var(--text-medium);
+}
+
+@media (min-width: 700px) {
+    /* intro text starts at column 1 */
+    .cs-full .cs-intro__text { grid-column: 1 / span 5; }
+
+    /* eyebrow beside the title, dropped to sit on the lead's x-height (cols 1–3);
+       the title spans full width with its first line indented to column 4 so it
+       clears the eyebrow, wrapping back to column 1 */
+    .cs-full .cs-heading .cs-eyebrow {
+        grid-column: 1 / span 3;
+        grid-row: 1;
+        align-self: start;
+        margin-top: calc(var(--lead-fs) * 0.5 - 20px);
+    }
+    .cs-full .cs-heading__title {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        text-indent: calc(25% + var(--grid-gap) / 4);
+    }
+
+    /* figures: image to the edge + one column wider, caption shifted inward */
+    .cs-full .cs-figure--left  .cs-figure__media   { grid-column: 1 / span 8; }
+    .cs-full .cs-figure--left  .cs-figure__caption { grid-column: 10 / span 3; }
+    .cs-full .cs-figure--right .cs-figure__media   { grid-column: 5 / span 8; }
+    .cs-full .cs-figure--right .cs-figure__caption { grid-column: 1 / span 3; }
+
+    /* content-width media spans the full 12 columns */
+    .cs-full .cs-media--content img { grid-column: 1 / -1; }
+
+    /* lead title spans all 12 columns; first line still steps in one column
+       (÷12 instead of ÷9, to match the wider block) */
+    .cs-full .cs-lead__title {
+        grid-column: 1 / -1;
+        text-indent: calc((100% + var(--grid-gap)) / 12);
     }
 }
