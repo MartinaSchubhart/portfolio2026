@@ -44,6 +44,12 @@ $type-scale: (
     line-height: 130%,
     letter-spacing: 0.05px
   ),
+  figcaption: (
+    font-family: 'Inter Regular',
+    size: 18px,
+    line-height: 140%,
+    letter-spacing: 0.1px
+  ),
   body: (
     font-family: 'Inter Regular',
     size: clamp(20px, 19.03px + 0.26vw, 22px),
