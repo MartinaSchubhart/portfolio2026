@@ -477,6 +477,15 @@
 }
 /* the hover rectangle is yellow on the case study + legal pages */
 :is(.page-case, .page-legal) .lp__nav a::before { background: var(--accent); }
+/* mobile: match the landing header — 80x45 buttons and a brand height to suit,
+   so the header text centres at the same height (~46.5px) as on the landing,
+   and the header is non-sticky (absolute -> scrolls away with the page). */
+@media (max-width: 699px) {
+    :is(.page-case, .page-legal) .lp__nav,
+    :is(.page-case, .page-legal) .lp__brand { position: absolute; }
+    :is(.page-case, .page-legal) .lp__nav a { width: 80px; height: 45px; }
+    :is(.page-case, .page-legal) .lp__brand  { height: 45px; }
+}
 
 /* case study over dark content: brand + nav faint (hover turns text dark) */
 .page-case .lp__brand { color: var(--faint-on-dark); }

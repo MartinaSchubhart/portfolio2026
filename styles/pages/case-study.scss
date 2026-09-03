@@ -337,16 +337,17 @@
        when the block is 9 columns wide (desktop). */
     text-indent: calc((100% + var(--grid-gap)) / 9);
 
-    /* 24px diamond at the block's left edge, centred on the first line */
+    /* diamond at the block's left edge, centred on the first line. Sized in em so
+       it scales with the title font (0.28em ≈ 24px at the 86px desktop max). */
     &::before {
         content: "";
         position: absolute;
         left: 0;
         top: 0.5em;                                /* first-line centre (line-height 1) */
-        width: 24px;
-        height: 24px;
+        width: 0.28em;
+        height: 0.28em;
         background: var(--accent-darker);
-        border-radius: 3px;
+        border-radius: 0.035em;
         transform: translateY(-50%) rotate(45deg);
     }
 
@@ -355,3 +356,11 @@
 
 /* the hero image sits flush under the band (no placeholder tint, no gap above) */
 .cs-media--hero img { background: none; }
+/* mobile: crop the hero to a square */
+@media (max-width: 699px) {
+    .cs-media--hero img {
+        aspect-ratio: 1 / 1;
+        height: auto;                              /* box height from the ratio */
+        object-fit: cover;                         /* crop the wide image into the square */
+    }
+}
