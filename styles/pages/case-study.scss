@@ -135,7 +135,6 @@
     display: block;
     width: 100%;                                   /* full viewport width */
     height: auto;                                  /* natural aspect from width/height attrs */
-    background: #c0824a;                           /* warm placeholder while loading */
 }
 
 /* content-width variant: inset onto the grid (spans all 12 columns within the
@@ -182,7 +181,6 @@
     display: block;
     width: 100%;
     height: auto;
-    background: #c0824a;                            /* warm placeholder */
 }
 .cs-figure__media--video { position: relative; }   /* anchor the toggle button */
 .cs-video__toggle {
@@ -460,8 +458,6 @@ h1.cs-heading__title::before {
 }
 
 /* ---- Hero: a full-bleed image directly under the titled intro ------------- */
-/* the hero sits flush (no placeholder tint, no gap above) */
-.cs-media--hero img { background: none; }
 /* mobile: crop the wide hero to a square */
 @media (max-width: 699px) {
     .cs-media--hero img {
@@ -471,7 +467,9 @@ h1.cs-heading__title::before {
     }
 }
 
-/* the last captioned figure in a section drops its bottom padding */
-.cs-section .cs-figure:last-of-type {
+/* a captioned figure that is truly the last element in a section drops its
+   bottom padding (:last-child, not :last-of-type — so a figure followed by any
+   other element keeps its padding) */
+.cs-section > .cs-figure:last-child {
     padding-bottom: 0;
 }
