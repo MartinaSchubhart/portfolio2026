@@ -8,7 +8,8 @@
   var link = document.querySelector('.cs-endnext');
   if (!link) return;
 
-  var THRESHOLD = 500;   // px of extra downward scroll past the bottom
+  var THRESHOLD = 500;        // px of extra wheel scroll past the bottom (desktop)
+  var TOUCH_THRESHOLD = 220;  // px of extra finger drag past the bottom (mobile)
   var accum = 0;
   var fired = false;
 
@@ -33,10 +34,13 @@
     }
   }, { passive: true });
 
+  // Touch: unlike wheel, a phone scrolls in discrete swipes, so we must let the
+  // extra downward drag accumulate ACROSS swipes while parked at the bottom —
+  // resetting on every touchstart made the threshold effectively unreachable.
   var lastY = null;
   window.addEventListener('touchstart', function (e) {
     lastY = e.touches[0].clientY;
-    accum = 0;
+    if (!atBottom()) accum = 0;   // fresh gesture away from the bottom starts over
   }, { passive: true });
   window.addEventListener('touchmove', function (e) {
     if (fired || lastY === null) return;
@@ -45,9 +49,14 @@
     lastY = y;
     if (dy > 0 && atBottom()) {
       accum += dy;
-      if (accum >= THRESHOLD) trigger();
+      if (accum >= TOUCH_THRESHOLD) trigger();
     } else if (dy < 0) {
-      accum = 0;
+      accum = 0;         // any upward drag cancels the intent
     }
+  }, { passive: true });
+  // dragging up cancels intent; if the swipe ends away from the bottom, reset too
+  window.addEventListener('touchend', function () {
+    lastY = null;
+    if (!atBottom()) accum = 0;
   }, { passive: true });
 })();

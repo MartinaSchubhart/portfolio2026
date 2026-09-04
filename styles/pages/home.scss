@@ -14,25 +14,20 @@
     gap: var(--grid-gap);
 }
 
-/* follow-cursor visual for the work cards (script/work-cursor.js) */
+/* follow-cursor for the work cards (script/work-cursor.js): a small accent
+   square holding a plus icon. Only ever created on the landing. */
 .work-cursor {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 9999;
-    width: 120px;
-    aspect-ratio: 1;
-    border-radius: 100px;
+    width: 63px;
+    height: 63px;
+    border-radius: 4px;
+    background: var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: var(--text-light);
-    @include type-scale(xs);
-    text-transform: uppercase;
-    letter-spacing: 3px;
     pointer-events: none;
     will-change: transform;
 }
@@ -142,21 +137,6 @@
         color: inherit;
         text-decoration: none;
     }
-    /* thin underline that grows left → right on hover / focus */
-    a::after {
-        content: "";
-        position: absolute;
-        left: 16px;
-        right: 16px;
-        bottom: 8px;
-        height: 1px;
-        background: currentColor;
-        transform: scaleX(0);
-        transform-origin: left center;
-        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    a:hover::after,
-    a:focus-visible::after { transform: scaleX(1); }
 }
 
 /* home link, top-left of the fixed header — hidden over the hero, revealed once
@@ -383,16 +363,6 @@
 :is(.page-home, .page-case, .page-legal) .lp__nav { mix-blend-mode: normal; }
 :is(.page-home, .page-case, .page-legal) .lp__nav a { color: var(--accent); }
 
-/* index work-card cursor: a small accent-coloured circle with a plus icon
-   (no text, no blur). work-cursor.js swaps the label for the icon on page-home. */
-.page-home .work-cursor {
-    width: 63px;
-    height: 63px;
-    border-radius: 4px;
-    background: var(--accent);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-}
 .work-cursor__icon { display: block; width: 12px; height: 12px; }
 
 /* index: header links get an accent rectangle on hover that animates in like the
@@ -403,7 +373,6 @@
     z-index: 0;                                    /* own stacking context so ::before stays behind the text only */
     transition: color 0.25s ease;
 }
-:is(.page-home, .page-case, .page-legal) .lp__nav a::after { content: none; }   /* drop the underline hover */
 :is(.page-home, .page-case, .page-legal) .lp__nav a::before {
     content: "";
     position: absolute;
@@ -470,16 +439,9 @@
     :is(.page-case, .page-legal) .lp__brand  { height: 45px; }
 }
 
-/* case study over dark content: brand + nav faint (hover turns text dark) */
-.page-case .lp__brand { color: var(--faint-on-dark); }
-.page-case .lp__nav a { color: var(--faint-on-dark); }
-/* case study over a light section (toggled by script/header-nav.js) */
-.is-header-light .page-case .lp__brand,
-.is-header-light .page-case .lp__nav a { color: var(--text-medium); }
-/* light-mode case studies (.cs-light): header stays legible on the light bg
-   regardless of the section's data-nav */
-.page-case.cs-light .lp__brand,
-.page-case.cs-light .lp__nav a { color: var(--text-medium); }
+/* case studies are light: brand + nav in the medium tone */
+.page-case .lp__brand,
+.page-case .lp__nav a { color: var(--text-medium); }
 
 /* legal pages are always light: brand + nav in the medium tone */
 .page-legal .lp__brand,

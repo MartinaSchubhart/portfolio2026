@@ -1,33 +1,22 @@
 /* ===========================================================================
-   Case study (case-study-beiersdorf.html) — scoped to .page-case
-   Everything sits on the 12-column grid: an intro (text + meta), full-bleed
-   media, content blocks (heading left / body right) and captioned media that
-   alternates left / right, then a Next-case link and a slim footer. Simple
-   <img>s — no art-directed mobile sources. Non-hero elements get a slight
-   move-up reveal (script/reveal-up.js). The Beiersdorf variant (.cs-bdf) puts a
-   light title band above a full-bleed hero, with a "Back" pill in the header.
+   Case study — scoped to .page-case (see case-study-beiersdorf.html for the
+   canonical structure). Everything sits on a 12-column grid: a sticky "Back"
+   button, a full-bleed hero, a titled intro (h1 + text + meta), full-bleed
+   media, and section headings (eyebrow + h2 statement) with alternating
+   captioned media, closing on a "keep scrolling" prompt that opens the next
+   case study. Non-hero elements get a slight move-up reveal (script/reveal-up.js).
    ========================================================================= */
 
 .page-case {
-    /* theme tokens — dark by default; .cs-light flips them (see below) */
-    --cs-bg: var(--canvas-dark);
-    --cs-fg: var(--cs-text-dark);                  /* main text, headings, captions */
-    --cs-fg-muted: var(--faint-on-dark);           /* labels, separators */
-    --cs-rule: rgba(255, 255, 255, 0.16);          /* hairline dividers */
+    /* light theme tokens */
+    --cs-bg: var(--canvas-light);
+    --cs-fg: var(--text-medium);                   /* main text, headings, captions */
+    --cs-fg-muted: var(--text-medium);             /* labels, separators */
+    --cs-rule: rgba(26, 28, 29, 0.14);             /* hairline dividers (fallback) */
+    --cs-rule: color-mix(in srgb, var(--text-dark) 14%, transparent);
 
     background: var(--cs-bg);
     color: var(--cs-fg);
-}
-
-/* opt-in light theme: add class="page-case cs-light" on <body> for light-mode
-   case studies. The content area beneath the hero uses the landing's light
-   palette; the .cs-lead title band is already light in both themes. */
-.page-case.cs-light {
-    --cs-bg: var(--canvas-light);
-    --cs-fg: var(--text-medium);
-    --cs-fg-muted: var(--text-medium);
-    --cs-rule: rgba(26, 28, 29, 0.14);             /* fallback for no color-mix */
-    --cs-rule: color-mix(in srgb, var(--text-dark) 14%, transparent);
 }
 
 /* sticky back button — same size + background as the landing work-card cursor;
@@ -77,12 +66,15 @@
     gap: var(--grid-gap);
 }
 
-/* ---- Intro: text (left) + meta (right) ----------------------------------- */
+/* ---- Titled intro: h1, then text (left) + meta (right) ------------------- */
 .cs-intro {
     @extend %cs-grid;
     padding: var(--space-4xl) var(--page-margin) var(--space-3xl);
     row-gap: var(--space-lg);
 }
+/* combined title + intro: gap between the h1 and the text/meta row
+   (100px on desktop, tapering to 56px on mobile) */
+.cs-intro--titled { row-gap: var(--space-2xl); }
 .cs-intro__text {
     grid-column: 1 / -1;
     display: flex;
@@ -90,7 +82,7 @@
     gap: 1.5em;
     @include type-scale(body);
 
-    @media (min-width: 700px) { grid-column: 2 / span 5; }
+    @media (min-width: 700px) { grid-column: 1 / span 5; }
 }
 .cs-meta {
     grid-column: 1 / -1;
@@ -100,7 +92,7 @@
 
     @media (min-width: 700px) { grid-column: 9 / span 3; }
 }
-.cs-meta__row p:not(.cs-label) { @include type-scale(sm); margin: 0; }
+.cs-meta__row p:not(.cs-label) { @include type-scale(body); margin: 0; }
 /* meta links (e.g. the report years): same look as the text, with an underline
    that draws in left → right on hover (background gradient, wrap-safe) */
 .cs-meta a {
@@ -136,105 +128,40 @@
 }
 
 /* ---- Full-bleed media (edge to edge) -------------------------------------
-   No side padding, so the image spans the whole viewport width. Size comes from
-   the image itself: set the <img> width/height attributes to your image's real
-   pixel dimensions and it displays at that aspect (and reserves the space). */
-.cs-media {
-    /* padding-bottom: 120px; */
-
-    img {
-        display: block;
-        width: 100%;                               /* full viewport width */
-        height: auto;                              /* natural aspect from width/height attrs */
-        background: #c0824a;                       /* warm placeholder */
-    }
+   Size comes from the image itself: set the <img> width/height attributes to
+   its real pixel dimensions and it displays at that aspect (and reserves the
+   space). */
+.cs-media img {
+    display: block;
+    width: 100%;                                   /* full viewport width */
+    height: auto;                                  /* natural aspect from width/height attrs */
+    background: #c0824a;                           /* warm placeholder while loading */
 }
 
-/* content-width variant: inset onto the grid instead of full-bleed —
-   10 columns centred on desktop, full width on mobile. Add .cs-media--content
-   alongside .cs-media. */
+/* content-width variant: inset onto the grid (spans all 12 columns within the
+   page margins) instead of running fully edge to edge */
 .cs-media--content {
     @extend %cs-grid;
     padding: 0 var(--page-margin);
 
-    img { grid-column: 1 / -1; }                   /* mobile: full 12 cols */
-    @media (min-width: 700px) {
-        img { grid-column: 2 / span 10; }          /* desktop: 10 cols, centred */
-    }
+    img { grid-column: 1 / -1; }
 }
 
-/* ---- content block: heading (left) + body (right) ------------------------ */
-.cs-block {
-    @extend %cs-grid;
-    padding: var(--space-4xl) var(--page-margin) var(--space-3xl);
-}
-
-.cs-figure + .cs-block {
-    padding-top: var(--space-3xl);
-}
-
-.cs-block__title {
-    grid-column: 1 / -1;
-    @include type-scale(lg);
-    margin: 0 0 24px;
-
-    @media (min-width: 700px) { grid-column: 2 / span 5; margin-bottom: 0; }
-    @media (min-width: 1600px) { grid-column: 2 / span 4; margin-bottom: 0; }
-}
-.cs-block__text {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-    @include type-scale(body);
-
-    @media (min-width: 700px) { grid-column: 7 / span 5; padding-top: 8px; }
-}
-
-    @media (min-width: 700px) { 
-        .cs-block__text.cs-block__text-left {
-            grid-column: 2 / span 7;
-        }
-    }
-
-/* body-copy links: a persistent underline in the text colour at 50% opacity,
-   re-drawing left → right on hover — same behaviour as the work__lead links on
-   the landing, tuned to 2px for body text. Background gradient so it wraps. */
-.cs-block__text a {
-    color: inherit;
-    text-decoration: none;
-    --cs-underline: currentColor;                  /* fallback for no color-mix */
-    --cs-underline: color-mix(in srgb, currentColor 50%, transparent);
-    background-image: linear-gradient(var(--cs-underline), var(--cs-underline));
-    background-repeat: no-repeat;
-    background-position: 0 calc(100% - 0.05em);
-    background-size: 100% 2px;
-}
-.cs-block__text a:hover,
-.cs-block__text a:focus-visible {
-    animation: cs-link-underline 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s;
-}
-@keyframes cs-link-underline {
-    from { background-size: 0 2px; }
-    to   { background-size: 100% 2px; }
-}
-
-/* ---- captioned media, alternating left / right --------------------------- */
+/* ---- Captioned media, alternating left / right --------------------------- */
 .cs-figure {
     @extend %cs-grid;
     align-items: start;
     padding: 0 var(--page-margin) var(--space-3xl);
 }
-
 .cs-figure__media {
     grid-column: 1 / -1;
 
-    /* size from the image: set the <img> width/height attributes to its real
-       pixel dimensions and it displays at that aspect within its columns */
+    /* size from the image: set the <img> width/height to its real pixel
+       dimensions and it displays at that aspect within its columns */
     img {
         display: block;
         width: 100%;
-        height: auto;        
+        height: auto;
     }
 }
 .cs-figure__caption {
@@ -284,16 +211,16 @@
 .cs-figure__media.is-paused .cs-video__icon--play  { display: block; }
 
 @media (min-width: 700px) {
-    /* image left (cols 2–8), caption top-right (cols 9–11) */
-    .cs-figure--left .cs-figure__media   { grid-column: 2 / span 7; grid-row: 1; }
-    .cs-figure--left .cs-figure__caption { grid-column: 9 / span 3; grid-row: 1; margin-top: 0; }
+    /* image left (cols 1–8), caption top-right (cols 10–12) */
+    .cs-figure--left .cs-figure__media   { grid-column: 1 / span 8;  grid-row: 1; }
+    .cs-figure--left .cs-figure__caption { grid-column: 10 / span 3; grid-row: 1; margin-top: 0; }
 
-    /* image right (cols 5–11), caption top-left (cols 2–4) */
-    .cs-figure--right .cs-figure__media   { grid-column: 5 / span 7; grid-row: 1; }
-    .cs-figure--right .cs-figure__caption { grid-column: 2 / span 3; grid-row: 1; margin-top: 0; }
+    /* image right (cols 5–12), caption top-left (cols 1–3) */
+    .cs-figure--right .cs-figure__media   { grid-column: 5 / span 8; grid-row: 1; }
+    .cs-figure--right .cs-figure__caption { grid-column: 1 / span 3; grid-row: 1; margin-top: 0; }
 }
 
-/* ---- shared eyebrow: accent diamond + label, echoing the cs-lead diamond --- */
+/* ---- Shared eyebrow: accent diamond + label ------------------------------ */
 .cs-eyebrow {
     display: flex;
     align-items: center;
@@ -315,42 +242,96 @@
     }
 }
 
-/* ---- Section heading block: a kicker eyebrow + an h2 statement ------------
-   Reusable wherever a section needs an intro headline (topic intros, the closing
-   payoff, …). The <h2> uses its own `h2` type step (base/fonts.scss) so its size
-   can be tuned without touching `lead`. */
+/* ---- Section heading: a kicker eyebrow beside an h2 statement -------------
+   Also styles the page-title h1 (h1.cs-heading__title). Matches the landing
+   work__title block: an sm eyebrow (sentence case) beside a lead-size title,
+   both in --text-medium, with the eyebrow dropped onto the title's x-height. */
 .cs-heading {
     @extend %cs-grid;
     padding: var(--space-4xl) var(--page-margin);
-    row-gap: var(--space-sm);
+    row-gap: 16px;                                  /* eyebrow → title gap when stacked (mobile) */
+    --lead-fs: #{map-get(map-get($type-scale, lead), size)};  /* for the eyebrow x-height offset */
 }
-/* divider line above the regular h2 heading block only (not the h1 title, not
-   the stacked variant): content-wide (12 cols, inset to the page margins) and
-   sitting close above the headline rather than at the block's top edge */
-.cs-heading:not(.cs-heading--stacked):has(h2) { position: relative; }
-.cs-heading:not(.cs-heading--stacked):has(h2)::before {
+/* a 12-column divider (inset to the page margins) at the top edge of every h2
+   heading block, with space above it (margin) and a fluid gap down to the text
+   (padding: 150px on desktop, tapering to 72px on mobile) */
+.cs-heading:has(h2) {
+    position: relative;
+    margin-top: var(--space-4xl);
+    padding-top: var(--space-3xl);
+}
+.cs-heading:has(h2)::before {
     content: "";
     position: absolute;
     left: var(--page-margin);
     right: var(--page-margin);
-    top: calc(var(--space-4xl) - 24px);            /* 24px above the headline */
+    top: 0;
     height: 1px;
     background: var(--cs-rule);
 }
 .cs-heading .cs-eyebrow {
     grid-column: 1 / -1;
-    @media (min-width: 700px) { grid-column: 2 / -1; }
+    @include type-scale(sm);                        /* not uppercase — matches work__eyebrow */
+    text-transform: none;
+    color: var(--text-medium);
 }
 .cs-heading__title {
     grid-column: 1 / -1;
-    @include type-scale(h2);
-    color: var(--cs-fg);
+    @include type-scale(lead);
+    color: var(--text-medium);
     margin: 0;
-    @media (min-width: 700px) { grid-column: 2 / span 9; }
+}
+/* the page-title h1 uses the larger xl display size + a leading accent diamond
+   (inline before the first word on mobile) */
+h1.cs-heading__title {
+    @include type-scale(xl);
+    position: relative;
+}
+h1.cs-heading__title::before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    width: 0.233em;                                 /* ≈ 20px at the 86px desktop max */
+    height: 0.233em;
+    margin-right: 0.4em;
+    background: var(--accent-darker);
+    border-radius: 0.035em;
+    transform: rotate(45deg);
 }
 
+@media (min-width: 700px) {
+    /* eyebrow beside the title (cols 1–3), dropped to sit on the lead's x-height */
+    .cs-heading .cs-eyebrow {
+        grid-column: 1 / span 3;
+        grid-row: 1;
+        align-self: start;
+        margin-top: calc(var(--lead-fs) * 0.5 - 22px);
+    }
+    /* h2 title spans full width; first line steps in past the eyebrow, wrapping
+       back to the left edge */
+    .cs-heading__title {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        text-indent: calc(25% + var(--grid-gap) / 4);
+    }
+    /* page-title h1: 11 columns, first line stepped in to column 4 (wrapped
+       lines return to column 1) */
+    h1.cs-heading__title {
+        grid-column: 1 / span 11;
+        text-indent: calc((100% + var(--grid-gap)) / 11 * 3);
+    }
+    /* diamond pinned top-left (in the indent), vertically centred on the first
+       line, its left corner aligned with the text column below */
+    h1.cs-heading__title::before {
+        position: absolute;
+        left: 0.1em;
+        top: 0.5em;
+        margin-right: 0;
+        transform: translateY(-50%) rotate(45deg);
+    }
+}
 
-/* ---- Next: a big arrow-link back into the work ---------------------------- */
+/* ---- Next: a big arrow-link back into the work --------------------------- */
 .cs-next {
     @extend %cs-grid;
     padding: var(--space-4xl) var(--page-margin);
@@ -379,36 +360,86 @@
 .cs-next__link:hover .cs-next__arrow,
 .cs-next__link:focus-visible .cs-next__arrow { transform: translateX(16px); }
 
-/* ---- keep-scrolling prompt (over-scroll opens the next case study) -------- */
+/* ---- Keep-scrolling prompt (over-scroll opens the next case study) -------- */
 .cs-endnext {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75em;
+    gap: 1.5em;
     padding: var(--space-2xl) var(--page-margin) var(--space-3xl);
     color: var(--cs-fg-muted);
     text-decoration: none;
     text-align: center;
+}
+/* when a case study has no closing statement, the prompt follows a media section
+   directly — restore the breathing room the closing block would have provided */
+.cs-section + .cs-endnext {
+    padding-top: var(--space-4xl);
 }
 .cs-endnext__text {
     @include type-scale(xs);
     text-transform: uppercase;
     letter-spacing: 0.06em;
 }
+/* prominent yellow button — same size + radius as the sticky back button; the
+   box stays put while only the arrow inside bobs */
 .cs-endnext__arrow {
+    position: relative;
+    z-index: 0;                                    /* own stacking context for the grow-in rect */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 63px;
+    height: 63px;
+    border-radius: 4px;
+    background: var(--accent);
+    color: var(--text-dark);
+    overflow: hidden;
+    transition: color 0.25s ease;
+}
+/* grey rectangle grows in from the top-right on hover, over the yellow but under
+   the arrow — same rotate-unfold as the landing Work button */
+.cs-endnext__arrow::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    z-index: -1;
+    background: var(--text-medium);
+    border-radius: 0;
+    transform-origin: 100% 0%;
+    transform: rotate(-45deg);
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cs-endnext:hover .cs-endnext__arrow::before,
+.cs-endnext:focus-visible .cs-endnext__arrow::before {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    transform: rotate(0deg);
+}
+.cs-endnext:hover .cs-endnext__arrow,
+.cs-endnext:focus-visible .cs-endnext__arrow { color: var(--white); }
+.cs-endnext__arrow svg {
     display: block;
+    width: 12px;
+    height: 12px;
     animation: cs-endnext-bounce 1.6s ease-in-out infinite;
 }
-.cs-endnext__arrow svg { display: block; width: 12px; height: 14px; }
 @keyframes cs-endnext-bounce {
     0%, 100% { transform: translateY(0); }
     50%      { transform: translateY(6px); }
 }
 @media (prefers-reduced-motion: reduce) {
-    .cs-endnext__arrow { animation: none; }
+    .cs-endnext__arrow svg { animation: none; }
 }
 
-/* ---- footer -------------------------------------------------------------- */
+/* ---- Footer -------------------------------------------------------------- */
 .cs-footer {
     padding: var(--space-md) var(--page-margin);
     border-top: 1px solid var(--cs-rule);
@@ -428,51 +459,10 @@
     @media (min-width: 700px) { flex-direction: row; gap: 24px; }
 }
 
-/* ===========================================================================
-   Beiersdorf intro (.cs-lead): a light title band ABOVE a full-bleed hero image.
-   The header (home link + About / Work) is the shared .lp__nav / .lp__brand,
-   styled in pages/home.scss.
-   ========================================================================= */
-
-/* light title band, clearing the fixed header. The soft-bg decoration sits at the
-   very top; the light colour is the fill below it + fallback. */
-.cs-lead {
-    background: var(--canvas-light) url('../assets/lp-soft-bg-top.svg') no-repeat top center / 100% auto;
-    color: var(--text-dark);
-    @extend %cs-grid;
-    padding: calc(var(--header-h, 88px) + var(--space-2xl)) var(--page-margin) var(--space-2xl);
-}
-.cs-lead__title {
-    grid-column: 1 / -1;
-    position: relative;
-    @include type-scale(xl);
-    color: var(--text-medium);
-    margin: 0;
-    /* first line clears the diamond and starts one column in; wrapped lines
-       return to the block's left edge. (100% + gap)/9 == one column + one gap
-       when the block is 9 columns wide (desktop). */
-    text-indent: calc((100% + var(--grid-gap)) / 9);
-
-    /* diamond at the block's left edge, centred on the first line. Sized in em so
-       it scales with the title font (0.28em ≈ 24px at the 86px desktop max). */
-    &::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0.5em;                                /* first-line centre (line-height 1) */
-        width: 0.28em;
-        height: 0.28em;
-        background: var(--accent-darker);
-        border-radius: 0.035em;
-        transform: translateY(-50%) rotate(45deg);
-    }
-
-    @media (min-width: 700px) { grid-column: 2 / span 9; }
-}
-
-/* the hero image sits flush under the band (no placeholder tint, no gap above) */
+/* ---- Hero: a full-bleed image directly under the titled intro ------------- */
+/* the hero sits flush (no placeholder tint, no gap above) */
 .cs-media--hero img { background: none; }
-/* mobile: crop the hero to a square */
+/* mobile: crop the wide hero to a square */
 @media (max-width: 699px) {
     .cs-media--hero img {
         aspect-ratio: 1 / 1;
@@ -481,75 +471,7 @@
     }
 }
 
-/* ---------------------------------------------------------------------------
-   TEST (.cs-full on <body>, Break4You): a wider content layout. Remove the
-   class to revert.
-   --------------------------------------------------------------------------- */
-/* match the landing work__title block exactly: eyebrow = sm (not uppercase),
-   title = lead, both in --text-medium, with the same eyebrow → title gap */
-.cs-full .cs-heading {
-    row-gap: 16px;                                  /* eyebrow → title gap when stacked (mobile) */
-    --lead-fs: #{map-get(map-get($type-scale, lead), size)};  /* for the x-height offset */
-}
-.cs-full .cs-heading .cs-eyebrow {
-    @include type-scale(sm);                        /* sets sm's own letter-spacing too */
-    text-transform: none;                          /* work__eyebrow isn't uppercase */
-    color: var(--text-medium);
-}
-.cs-full .cs-heading__title {
-    @include type-scale(lead);
-    color: var(--text-medium);
-}
-/* the page-title h1 in a heading block uses the xl display size, not lead */
-.cs-full h1.cs-heading__title { @include type-scale(xl); }
-
-
-@media (min-width: 700px) {
-    /* intro text starts at column 1 */
-    .cs-full .cs-intro__text { grid-column: 1 / span 5; }
-
-    /* eyebrow beside the title, dropped to sit on the lead's x-height (cols 1–3);
-       the title spans full width with its first line indented to column 4 so it
-       clears the eyebrow, wrapping back to column 1 */
-    .cs-full .cs-heading .cs-eyebrow {
-        grid-column: 1 / span 3;
-        grid-row: 1;
-        align-self: start;
-        margin-top: calc(var(--lead-fs) * 0.5 - 22px);
-    }
-    .cs-full .cs-heading__title {
-        grid-column: 1 / -1;
-        grid-row: 1;
-        text-indent: calc(25% + var(--grid-gap) / 4);
-    }
-    /* variant: eyebrow stacked ABOVE the lead instead of beside it */
-    .cs-full .cs-heading--stacked .cs-eyebrow {
-        grid-column: 1 / -1;
-        grid-row: auto;
-        margin-top: 0;
-    }
-    .cs-full .cs-heading--stacked .cs-heading__title {
-        grid-row: auto;                            /* keeps the column-4 first-line indent */
-    }
-    /* page-title h1: 10 columns from the left, no first-line indent */
-    .cs-full h1.cs-heading__title {
-        grid-column: 1 / span 10;
-        text-indent: 0;
-    }
-
-    /* figures: image to the edge + one column wider, caption shifted inward */
-    .cs-full .cs-figure--left  .cs-figure__media   { grid-column: 1 / span 8; }
-    .cs-full .cs-figure--left  .cs-figure__caption { grid-column: 10 / span 3; }
-    .cs-full .cs-figure--right .cs-figure__media   { grid-column: 5 / span 8; }
-    .cs-full .cs-figure--right .cs-figure__caption { grid-column: 1 / span 3; }
-
-    /* content-width media spans the full 12 columns */
-    .cs-full .cs-media--content img { grid-column: 1 / -1; }
-
-    /* lead title spans all 12 columns; first line still steps in one column
-       (÷12 instead of ÷9, to match the wider block) */
-    .cs-full .cs-lead__title {
-        grid-column: 1 / -1;
-        text-indent: calc((100% + var(--grid-gap)) / 12);
-    }
+/* the last captioned figure in a section drops its bottom padding */
+.cs-section .cs-figure:last-of-type {
+    padding-bottom: 0;
 }

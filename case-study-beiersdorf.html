@@ -10,7 +10,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="styles/index-min.css">
 </head>
-<body class="page-case cs-bdf  cs-light cs-full">
+<body class="page-case">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- veil: page-transition curtain -->
@@ -29,28 +29,23 @@
     <span class="cs-back__label">Overview</span>
   </a>
 
-  <!-- Hero: full-bleed image, with the "Scroll" follow-cursor -->
-  <div class="cs-media cs-media--hero" data-nav="light">
+  <!-- Hero: full-bleed image -->
+  <div class="cs-media cs-media--hero">
     <img width="1920" height="1080" src="assets/bdf/case-Beiersdorf-Hero.webp" alt="Beiersdorf Annual Report 2025 'Win with Care' cover open on a tablet resting on a wooden desk" />
   </div>
 
-    <!-- Outcome: the closing payoff -->
-  <section class="cs-heading" style="padding-bottom: 0px" data-nav="dark">
+  <!-- Title + intro combined (title, then text + meta) -->
+  <section class="cs-intro cs-intro--titled">
     <h1 class="cs-heading__title" data-reveal-up>Beiersdorf — Turning an annual report into an engaging digital experience</h1>
-  </section>
-
-  <!-- Intro detail: text (left) + meta (right) -->
-  <section class="cs-intro" data-nav="dark">
     <div class="cs-intro__text" data-reveal-up>
-      <p>As Lead Designer for Beiersdorf's annual report over three reporting years, I worked closely with the Corporate 
+      <p>As Lead Designer for Beiersdorf’s annual report over three reporting years, I worked closely with the Corporate 
         Communications team to highlight the company’s successes and goals and to translate complex financial and sustainability 
         information into a clear and engaging experience across digital and print.</p>
       <p>I developed a shared visual language and design system for both formats, creating a consistent experience for investors, 
-        media, employees and other stakeholders. Over three years, I evolved into a more digital-first experience, 
+        media, employees and other stakeholders. Over three years, I evolved the report into a digital-first experience, 
         introducing new features with each edition.</p>
     </div>
     <aside class="cs-meta" data-reveal-up>
-      <div class="cs-meta__row"><p class="cs-label">Client</p><p>Beiersdorf</p></div>
       <div class="cs-meta__row"><p class="cs-label">My Role</p><p>Lead Designer</p></div>
       <div class="cs-meta__row"><p class="cs-label">Year</p><p>2023 – 2025</p></div>
       <div class="cs-meta__row"><p class="cs-label">Scope</p><p>UI/UX&nbsp;Design<span class="cs-sep" aria-hidden="true"></span>Interaction&nbsp;Design<span class="cs-sep" aria-hidden="true"></span>Art&nbsp;Direction</p></div>
@@ -58,23 +53,22 @@
     </aside>
   </section>
 
-  <!-- Full-bleed media — set width/height to your image's real pixel size -->
-  <div class="cs-media" data-nav="dark">
-    <img data-reveal-up loading="lazy" width="1920" height="1240" src="assets/bdf/beiersdorf-screens.png" alt="Collage of Beiersdorf annual report pages: the cover, a CEO video message, a key-figures overview and the CEO's letter" />
+  <!-- Full-bleed media -->
+  <div class="cs-media">
+    <img data-reveal-up loading="lazy" width="1920" height="1285" src="assets/bdf/beiersdorf-screens.png" alt="Collage of Beiersdorf annual report pages: the cover, a CEO video message, a key-figures overview and the CEO’s letter" />
   </div>
 
-  
-
-  <!-- Outcome: the closing payoff -->
-  <section class="cs-heading" data-nav="dark">
-    <p class="cs-eyebrow" data-reveal-up>Digital-first storytelling</p>
-    <h2 class="cs-heading__title" data-reveal-up>I replaced a resource-heavy print magazine with a flexible digital storytelling system — easier to produce, more accessible to audiences and built to evolve.</h2>
-  </section>
+  <!-- Section: heading + alternating captioned media -->
+  <section class="cs-section">
+    <div class="cs-heading">
+      <p class="cs-eyebrow" data-reveal-up>Digital-first storytelling</p>
+      <h2 class="cs-heading__title" data-reveal-up>I replaced a resource-heavy print magazine with a flexible digital storytelling system — easier to produce, more accessible to audiences and built to evolve.</h2>
+    </div>
 
   <!-- Captioned media: image left, caption right -->
-  <figure class="cs-figure cs-figure--left" data-nav="dark">
+  <figure class="cs-figure cs-figure--left">
     <div class="cs-figure__media cs-figure__media--video" data-reveal-up>
-      <video class="cs-video" width="1016" height="762" autoplay muted loop playsinline preload="metadata"
+      <video class="cs-video" width="1160" height="870" autoplay muted loop playsinline preload="metadata"
              poster="assets/bdf/case-beiersdorf-storyanimation-poster.webp"
              aria-label="Animated walkthrough of the Beiersdorf storywall">
         <source src="assets/bdf/case-beiersdorf-storyanimation.webm" type="video/webm" />
@@ -86,32 +80,35 @@
       </button>
     </div>
     <figcaption class="cs-figure__caption" data-reveal-up>
-            As reporting requirements grew, Beiersdorf’s additional print magazine became increasingly demanding to produce. I led the transition to a digital-first storywall — a more efficient and flexible way to tell stories beyond mandatory reporting.
+            As reporting requirements grew, Beiersdorf’s traditional magazine chapter in the printed report became increasingly demanding to produce. 
+            <br><br>I led the transition to a digital-first storywall — a more efficient and flexible way to tell stories beyond mandatory reporting.
     </figcaption>
   </figure>
 
+
   <!-- Captioned media: image right, caption left -->
-  <figure class="cs-figure cs-figure--right" data-nav="dark">
+  <figure class="cs-figure cs-figure--right">
     <div class="cs-figure__media" data-reveal-up>
-      <img loading="lazy" width="1016" height="762" src="assets/bdf/beiersdorf-storywall-mobile-screens.png" alt="The storywall's masonry grid of story cards — product, sustainability and market stories, each tagged by category" />
+      <img loading="lazy" width="1160" height="738" src="assets/bdf/beiersdorf-storywall-mobile-screens.png" alt="The storywall’s masonry grid of story cards — product, sustainability and market stories, each tagged by category" />
     </div>
     <figcaption class="cs-figure__caption" data-reveal-up>
       Drawing on familiar social patterns, I combined concise stories with sliders, video, animation and interactive quizzes to encourage exploration.
     </figcaption>
   </figure>
 
-
-  <!-- Content block -->
-  <!-- Outcome: the closing payoff -->
-  <section class="cs-heading" data-nav="dark">
-    <p class="cs-eyebrow" data-reveal-up>Sustainability Dashboard</p>
-    <h2 class="cs-heading__title" data-reveal-up>Turning increasingly complex sustainability reporting into a clear, accessible overview — helping readers see what matters and dive deeper when they need to.</h2>
   </section>
 
+  <!-- Section: heading + captioned media -->
+  <section class="cs-section">
+  <div class="cs-heading">
+    <p class="cs-eyebrow" data-reveal-up>Sustainability Dashboard</p>
+    <h2 class="cs-heading__title" data-reveal-up>Turning increasingly complex sustainability reporting into a clear, accessible overview — helping readers see what matters and dive deeper when they need to.</h2>
+  </div>
+
   <!-- Captioned media: image left, caption right -->
-  <figure class="cs-figure cs-figure--left" data-nav="dark">
+  <figure class="cs-figure cs-figure--left">
     <div class="cs-figure__media" data-reveal-up>
-      <img loading="lazy" width="1016" height="762" src="assets/bdf/beiersdorf-sus-dashboard.png" alt="Sustainability dashboard: a climate-change card showing Net Zero 2045 milestones, an illustrated icon and a green 'target achieved' status" />
+      <img loading="lazy" width="1160" height="1809" src="assets/bdf/beiersdorf-sus-dashboard.png" alt="Sustainability dashboard: a climate-change card showing Net Zero 2045 milestones, an illustrated icon and a green 'target achieved' status" />
     </div>
     <figcaption class="cs-figure__caption" data-reveal-up>
       For the 2025 report, I developed a modular dashboard that brings key sustainability topics and targets into one accessible overview.
@@ -120,9 +117,10 @@
 
     </figcaption>
   </figure>
+  </section>
 
-  <!-- Outcome: the closing payoff -->
-  <section class="cs-heading" data-nav="dark">
+  <!-- Closing statement -->
+  <section class="cs-heading">
     <p class="cs-eyebrow" data-reveal-up>Outcome</p>
     <h2 class="cs-heading__title" data-reveal-up>The result is an annual report made for digital — easier to navigate, more engaging to explore, and flexible enough to evolve with growing reporting requirements.</h2>
   </section>
@@ -130,17 +128,14 @@
   <!-- keep-scrolling prompt: over-scrolling past here opens the next case study -->
   <a class="cs-endnext" href="case-study-break4you.html">
     <span class="cs-endnext__text">Keep scrolling to open the next case study</span>
-    <span class="cs-endnext__arrow" aria-hidden="true"><svg viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.52246 6.85714L5.81658 12L10.5225 7.42857M5.81658 12L5.81658 -1.2504e-07" stroke="currentColor" stroke-width="1.5"/></svg></span>
+    <span class="cs-endnext__arrow" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.9604 6.59933L5.81755 11.7422L0.523437 6.59933M5.81755 11.7422L5.81755 -0.257793" stroke="currentColor" stroke-width="1.5"/></svg></span>
   </a>
 
-  <!-- GSAP powers the scroll cursor + reveal-up -->
+  <!-- GSAP powers the reveal-up animation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
 
   <!-- move-up reveal for every non-hero element -->
   <script src="script/reveal-up.js" defer></script>
-
-  <!-- sticky header: colour follows the background (light/dark) -->
-  <script src="script/header-nav.js" defer></script>
 
   <!-- Lenis smooth scrolling -->
   <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js" defer></script>
