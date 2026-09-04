@@ -1,21 +1,21 @@
 // components/veil.scss
-/* veil: page-transition curtain. A solid --canvas-light panel simply fades in to
-   cover the screen, the page navigates, then fades back out on the new page to
-   reveal it. Driven by script/veil.js (Web Animations API on opacity). */
+/* veil: page-transition curtain. A solid --accent panel wipes UP to cover the
+   screen, the page navigates, then continues wiping up on the new page to
+   reveal it. Driven by script/veil.js (Web Animations API on transform). */
 .veil {
     position: fixed;
     inset: 0;
     z-index: 10000; /* above everything, incl. the fixed header + preloader */
-    background-color: var(--canvas-light);
-    opacity: 0;                 /* idle: fully transparent */
+    background-color: var(--accent);
+    transform: translateY(100%);   /* idle: parked just below the viewport */
     pointer-events: none;
-    will-change: opacity;
+    will-change: transform;
 }
 
 /* pre-paint covered state — added by the inline script when arriving
    mid-transition (?pt=1) */
 .veil.is-covered {
-    opacity: 1;
+    transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {

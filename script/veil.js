@@ -1,8 +1,8 @@
 /* veil: page-transition curtain.
  *
- * A solid --canvas-light panel fades via opacity (Web Animations API):
- *   - cover  : fades in to fill the screen, then navigates
- *   - reveal : fades back out on the new page to uncover it
+ * A solid --accent panel wipes vertically (Web Animations API on transform):
+ *   - cover  : rises up from below to fill the screen, then navigates
+ *   - reveal : continues up and off the top on the new page to uncover it
  *
  * The next page is told to open already covered via a `?pt=1` query param;
  * an inline <head> script on each page adds `.is-covered` pre-paint so there
@@ -16,8 +16,12 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var PARAM = 'pt';
-  var DURATION = 500;
-  var EASE = 'ease';
+  var DURATION = 600;
+  var EASE = 'cubic-bezier(0.76, 0, 0.24, 1)';
+
+  var COVERED = 'translateY(0)';
+  var BELOW = 'translateY(100%)';    // parked below (start of a cover)
+  var ABOVE = 'translateY(-100%)';   // exited off the top (end of a reveal)
 
   // did we arrive mid-transition? strip the param so refreshes are clean
   var params = new URLSearchParams(location.search);
@@ -29,33 +33,31 @@
   }
 
   // pre-paint covered state comes from the .is-covered class (added by the inline
-  // script when ?pt=1). From here JS drives opacity via inline styles, which
-  // override the class. We keep the class on the element because text-reveal.js
-  // reads it to sync the headline.
+  // script when ?pt=1). From here JS drives transform via inline styles.
   var startCovered = veil.classList.contains('is-covered');
-  veil.style.opacity = startCovered ? '1' : '0';
+  veil.style.transform = startCovered ? COVERED : BELOW;
 
-  function hide() {
+  function park() {
     veil.getAnimations().forEach(function (a) { a.cancel(); });
-    veil.style.opacity = '0';
+    veil.style.transform = BELOW;
     veil.style.pointerEvents = '';
   }
 
   // restore idle state if the page is served from the bfcache
-  window.addEventListener('pageshow', function (e) { if (e.persisted) hide(); });
+  window.addEventListener('pageshow', function (e) { if (e.persisted) park(); });
 
   if (reduced) return; // CSS hides the veil entirely; use native navigation
 
-  // ---- reveal (uncover on arrival / landing intro) ----------------------
+  // ---- reveal (uncover on arrival) --------------------------------------
   if (startCovered) {
-    var HOLD = arrived ? 60 : 350; // brief hold; a touch longer for the intro
+    var HOLD = arrived ? 60 : 350;
     setTimeout(function () {
       var anim = veil.animate(
-        [{ opacity: 1 }, { opacity: 0 }],
+        [{ transform: COVERED }, { transform: ABOVE }],
         { duration: DURATION, easing: EASE, fill: 'forwards' }
       );
       var done = false;
-      function finish() { if (done) return; done = true; hide(); }
+      function finish() { if (done) return; done = true; park(); }
       anim.onfinish = finish;
       anim.oncancel = finish;
       setTimeout(finish, DURATION + 200); // safety net if the frame never fires
@@ -88,7 +90,7 @@
     veil.style.pointerEvents = 'auto';
 
     var anim = veil.animate(
-      [{ opacity: 0 }, { opacity: 1 }],
+      [{ transform: BELOW }, { transform: COVERED }],
       { duration: DURATION, easing: EASE, fill: 'forwards' }
     );
 

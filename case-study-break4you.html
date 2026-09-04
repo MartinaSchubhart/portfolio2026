@@ -23,12 +23,11 @@
   <noscript><style>.veil{ display:none !important; }</style></noscript>
   <script src="script/veil.js" defer></script>
 
-  <!-- nav-header (same as the landing): home link (left) + About / Work (right) -->
-  <a class="lp__brand" href="index.html">Martina Schubhart</a>
-  <nav class="lp__nav">
-    <a href="index.html#about">About</a>
-    <a href="index.html#work">Work</a>
-  </nav>
+  <!-- sticky back button (replaces the nav on this page); expands on hover -->
+  <a class="cs-back" href="index.html#work" aria-label="Back to overview">
+    <span class="cs-back__icon"><img src="assets/arrow-left.svg" alt="" width="14" height="12" /></span>
+    <span class="cs-back__label">Overview</span>
+  </a>
 
   <!-- Hero: full-bleed image, with the "Scroll" follow-cursor -->
   <div class="cs-media cs-media--hero" data-nav="light">

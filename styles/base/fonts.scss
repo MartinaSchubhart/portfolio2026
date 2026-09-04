@@ -33,13 +33,13 @@
 // stay fixed or barely move. Line-heights/letter-spacings match the 1920 look.
 $type-scale: (
   xs: (
-    font-family: 'Inter Regular',
+    font-family: 'Acid Grotesk Regular',
     size: 16px,
     line-height: 110%,
     letter-spacing: 0.2px
   ),
   sm: (
-    font-family: 'Inter Regular',
+    font-family: 'Acid Grotesk Regular',
     size: clamp(18px, 17.51px + 0.13vw, 20px),
     line-height: 130%,
     letter-spacing: 0.05px

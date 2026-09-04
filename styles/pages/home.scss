@@ -112,19 +112,6 @@
     /* a touch wider on the tablet range so it doesn't get too narrow */
     @media (min-width: 700px) and (max-width: 1024px) { grid-column: 1 / span 4; }
 }
-/* accent-darker diamond at the start of the intro */
-.lp__diamond {
-    display: inline-block;
-    position: relative;
-    top: -2px;                                     /* nudge up to sit on the text x-height */
-    vertical-align: middle;
-    width: 10px;
-    height: 10px;
-    margin-right: 12px;
-    background: var(--accent-darker);
-    border-radius: 3px;
-    transform: rotate(45deg);
-}
 .lp__nav {
     grid-column: 1 / -1;
     margin-top: 8px;

@@ -30,6 +30,47 @@
     --cs-rule: color-mix(in srgb, var(--text-dark) 14%, transparent);
 }
 
+/* sticky back button — same size + background as the landing work-card cursor;
+   on hover it extends to the right to reveal the "Overview" label */
+.cs-back {
+    position: fixed;
+    top: 24px;
+    left: var(--page-margin);
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    height: 63px;
+    border-radius: 4px;
+    background: var(--accent);
+    overflow: hidden;
+    text-decoration: none;
+}
+.cs-back__icon {
+    flex: 0 0 63px;                                /* square icon zone keeps the arrow put */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.cs-back__icon img { display: block; width: 14px; height: auto; }
+.cs-back__label {
+    max-width: 0;
+    padding-right: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0;
+    color: var(--text-dark);
+    @include type-scale(xs);
+    transition: max-width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                padding-right 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.3s ease;
+}
+.cs-back:hover .cs-back__label,
+.cs-back:focus-visible .cs-back__label {
+    max-width: 160px;
+    padding-right: 20px;
+    opacity: 1;
+}
+
 %cs-grid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -193,8 +234,7 @@
     img {
         display: block;
         width: 100%;
-        height: auto;
-        background: #c0824a;
+        height: auto;        
     }
 }
 .cs-figure__caption {
@@ -207,7 +247,41 @@
 }
 
 /* opt-in: add .cs-figure__media--rounded alongside .cs-figure__media to round it */
-.cs-figure__media--rounded img { border-radius: 6px; }
+.cs-figure__media--rounded img,
+.cs-figure__media--rounded video { border-radius: 6px; }
+
+/* video variant: a <video> in place of the <img>, with a play/pause toggle */
+.cs-figure__media video {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #c0824a;                            /* warm placeholder */
+}
+.cs-figure__media--video { position: relative; }   /* anchor the toggle button */
+.cs-video__toggle {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.25s ease;
+}
+.cs-video__toggle:hover,
+.cs-video__toggle:focus-visible { background: rgba(0, 0, 0, 0.72); }
+.cs-video__icon { display: block; width: 16px; height: 16px; }
+/* show the pause icon while playing, the play icon while paused */
+.cs-video__icon--play { display: none; }
+.cs-figure__media.is-paused .cs-video__icon--pause { display: none; }
+.cs-figure__media.is-paused .cs-video__icon--play  { display: block; }
 
 @media (min-width: 700px) {
     /* image left (cols 2–8), caption top-right (cols 9–11) */
@@ -250,6 +324,19 @@
     padding: var(--space-4xl) var(--page-margin);
     row-gap: var(--space-sm);
 }
+/* divider line above the regular h2 heading block only (not the h1 title, not
+   the stacked variant): content-wide (12 cols, inset to the page margins) and
+   sitting close above the headline rather than at the block's top edge */
+.cs-heading:not(.cs-heading--stacked):has(h2) { position: relative; }
+.cs-heading:not(.cs-heading--stacked):has(h2)::before {
+    content: "";
+    position: absolute;
+    left: var(--page-margin);
+    right: var(--page-margin);
+    top: calc(var(--space-4xl) - 24px);            /* 24px above the headline */
+    height: 1px;
+    background: var(--cs-rule);
+}
 .cs-heading .cs-eyebrow {
     grid-column: 1 / -1;
     @media (min-width: 700px) { grid-column: 2 / -1; }
@@ -291,6 +378,35 @@
 .cs-next__arrow { transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
 .cs-next__link:hover .cs-next__arrow,
 .cs-next__link:focus-visible .cs-next__arrow { transform: translateX(16px); }
+
+/* ---- keep-scrolling prompt (over-scroll opens the next case study) -------- */
+.cs-endnext {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75em;
+    padding: var(--space-2xl) var(--page-margin) var(--space-3xl);
+    color: var(--cs-fg-muted);
+    text-decoration: none;
+    text-align: center;
+}
+.cs-endnext__text {
+    @include type-scale(xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.cs-endnext__arrow {
+    display: block;
+    animation: cs-endnext-bounce 1.6s ease-in-out infinite;
+}
+.cs-endnext__arrow svg { display: block; width: 12px; height: 14px; }
+@keyframes cs-endnext-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cs-endnext__arrow { animation: none; }
+}
 
 /* ---- footer -------------------------------------------------------------- */
 .cs-footer {
@@ -384,6 +500,9 @@
     @include type-scale(lead);
     color: var(--text-medium);
 }
+/* the page-title h1 in a heading block uses the xl display size, not lead */
+.cs-full h1.cs-heading__title { @include type-scale(xl); }
+
 
 @media (min-width: 700px) {
     /* intro text starts at column 1 */
@@ -396,12 +515,26 @@
         grid-column: 1 / span 3;
         grid-row: 1;
         align-self: start;
-        margin-top: calc(var(--lead-fs) * 0.5 - 20px);
+        margin-top: calc(var(--lead-fs) * 0.5 - 22px);
     }
     .cs-full .cs-heading__title {
         grid-column: 1 / -1;
         grid-row: 1;
         text-indent: calc(25% + var(--grid-gap) / 4);
+    }
+    /* variant: eyebrow stacked ABOVE the lead instead of beside it */
+    .cs-full .cs-heading--stacked .cs-eyebrow {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        margin-top: 0;
+    }
+    .cs-full .cs-heading--stacked .cs-heading__title {
+        grid-row: auto;                            /* keeps the column-4 first-line indent */
+    }
+    /* page-title h1: 10 columns from the left, no first-line indent */
+    .cs-full h1.cs-heading__title {
+        grid-column: 1 / span 10;
+        text-indent: 0;
     }
 
     /* figures: image to the edge + one column wider, caption shifted inward */
