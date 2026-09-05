@@ -36,12 +36,15 @@
 }
 .cs-back__icon {
     flex: 0 0 63px;                                /* square icon zone keeps the arrow put */
+    width: 63px;                                  /* Safari honours width, not flex-basis alone (else the button collapses to a sliver) */
+    height: 63px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 .cs-back__icon img { display: block; width: 14px; height: auto; }
 .cs-back__label {
+    flex: 0 0 auto;                               /* never shrink below the label text (Safari would clip it) */
     max-width: 0;
     padding-right: 0;
     overflow: hidden;
