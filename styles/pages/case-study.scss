@@ -218,6 +218,90 @@
     .cs-figure--right .cs-figure__caption { grid-column: 1 / span 3; grid-row: 1; margin-top: 0; }
 }
 
+/* ---- Before / after comparison slider ------------------------------------
+   Drop-in for a .cs-figure__media. The "after" image is in flow and defines the
+   box; the "before" image overlays it, clipped from the left up to --pos.
+   script/compare-slider.js drives --pos from pointer drags and the (keyboard-
+   only) range input. The divider carries a yellow-square handle in the usual
+   style, with the before/after icon. */
+.cs-compare {
+    --pos: 50%;
+    position: relative;
+    overflow: hidden;
+    line-height: 0;                                /* remove the inline-image gap */
+    touch-action: pan-y;                           /* vertical swipes still scroll */
+    user-select: none;
+    cursor: ew-resize;
+
+    img { pointer-events: none; -webkit-user-drag: none; }
+}
+/* base "after" image — in flow, sets the box height */
+.cs-compare__img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+/* "before" image — overlays, clipped from the left to the slider position */
+.cs-compare__before {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+/* keyboard-only range input (pointer handled on the container in JS) */
+.cs-compare__range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;                          /* drags go to the container */
+}
+/* divider + yellow-square handle at the split */
+.cs-compare__handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2;
+}
+.cs-compare__handle::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: var(--accent);
+}
+.cs-compare__grip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    background: var(--accent);
+    color: var(--text-dark);                        /* icon uses currentColor */
+    line-height: 0;
+}
+.cs-compare__grip svg { display: block; width: 17px; height: 12px; }
+/* keyboard focus ring on the grip when the range is focused */
+.cs-compare__range:focus-visible ~ .cs-compare__handle .cs-compare__grip {
+    outline: 2px solid var(--text-dark);
+    outline-offset: 3px;
+}
+
 /* ---- Shared eyebrow: accent diamond + label ------------------------------ */
 .cs-eyebrow {
     display: flex;

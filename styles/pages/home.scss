@@ -263,7 +263,7 @@
         grid-column: 1 / span 3;
         grid-row: 1;
         align-self: start;
-        margin: calc(var(--lead-fs) * 0.5 - 6px) 0 0;
+        margin: calc(var(--lead-fs) * 0.5 - 20px) 0 0;
     }
     /* the lead's first line starts at column 4 (25% + a quarter-gap) */
     .work__lead {

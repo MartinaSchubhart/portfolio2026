@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Case Study — Martina Schubhart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="description" content="Portfolio of Martina Schubhart, a UI/UX designer based in Vienna, working across branding, editorial and digital design." />
+<meta name="author" content="Martina Schubhart" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="styles/index-min.css">
+</head>
+<body class="page-case">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- veil: page-transition curtain -->
+  <div class="veil" aria-hidden="true"></div>
+  <script>
+    if (/[?&]pt=1(?:&|$)/.test(location.search)) {
+      document.querySelector(".veil").classList.add("is-covered");
+    }
+  </script>
+  <noscript><style>.veil{ display:none !important; }</style></noscript>
+  <script src="script/veil.js" defer></script>
+
+  <!-- sticky back button (replaces the nav on this page); expands on hover -->
+  <a class="cs-back" href="index.html#work" aria-label="Back to overview">
+    <span class="cs-back__icon"><img src="assets/arrow-left.svg" alt="" width="14" height="12" /></span>
+    <span class="cs-back__label">Overview</span>
+  </a>
+
+  <!-- Hero: full-bleed image -->
+  <div class="cs-media cs-media--hero">
+    <img width="1920" height="1080" src="assets/va/case-voestalpine-hero.webp" alt="A tablet and a phone on a brushed-steel surface scattered with metal shavings; the tablet shows the voestalpine Annual Report 2024/25 landing page with a factory-robotics image, the phone a financial data table" />
+  </div>
+
+  <!-- Title + intro combined (title, then text + meta) -->
+  <section class="cs-intro cs-intro--titled">
+    <h1 class="cs-heading__title" data-reveal-up>voestalpine — Redesigning a digital annual report without losing its identity</h1>
+    <div class="cs-intro__text" data-reveal-up>
+      <p>voestalpine's online annual report had remained unchanged for eight years and no longer reflected the company's quality or
+         supported an enjoyable reading experience.</p>
+         <p>In 2025 my challenge was to create a cleaner, more contemporary experience while 
+         ensuring it still felt unmistakably voestalpine.</p>
+    </div>
+    <aside class="cs-meta" data-reveal-up>
+      <div class="cs-meta__row"><p class="cs-label">My Role</p><p>Lead Designer</p></div>
+      <div class="cs-meta__row"><p class="cs-label">Year</p><p>2023–2025</p></div>
+      <div class="cs-meta__row"><p class="cs-label">Scope</p><p>UI/UX&nbsp;Design<span class="cs-sep" aria-hidden="true"></span>Design&nbsp;System</p></div>
+      <div class="cs-meta__row"><p class="cs-label">Links</p><p>Annual Report 
+        <a href="https://reports.voestalpine.com/2425/ar/" target="_blank" rel="noopener">2024/25</a></p></div>
+    </aside>
+  </section>
+
+  
+  <!-- Section: heading + alternating captioned media -->
+  <section class="cs-section">
+ 
+  <!-- Captioned media: image right, caption left -->
+  <figure class="cs-figure cs-figure--right">
+    <div class="cs-figure__media" data-reveal-up>
+      <img loading="lazy" width="1160" height="870" src="assets/va/case-voestalpine-design-system.webp" alt="Pages from the voestalpine design system: button styles, an icon set, UI component groups and the content-width and list-style specifications" />
+    </div>
+    <figcaption class="cs-figure__caption" data-reveal-up>
+     Since there was no comprehensive design system or brand guide to build upon I started by exploring voestalpine's existing digital
+      ecosystem to identify the visual patterns that defined the brand.
+      <br><br>
+      Based on this research and the limited assets provided by the client, I created a design system that established consistency and served as the foundation for the redesign.
+    </figcaption>
+  </figure>
+
+    <!-- Captioned media: before/after comparison slider left, caption right -->
+  <figure class="cs-figure cs-figure--left">
+    <div class="cs-figure__media" data-reveal-up>
+      <div class="cs-compare">
+        <img class="cs-compare__img" loading="lazy" width="1160" height="738" src="assets/va/case-voestalpine-before.webp" alt="The original voestalpine annual report (2023/24), labelled ‘Before’ — a dense portfolio page with a left-hand sidebar navigation" />
+        <img class="cs-compare__img cs-compare__before" loading="lazy" width="1160" height="738" src="assets/va/case-voestalpine-after.webp" alt="The redesigned voestalpine annual report (2024/25), labelled ‘After’ — the same portfolio page with cleaner typography, more space and a floating tool sidebar" />
+        <input class="cs-compare__range" type="range" min="0" max="100" value="50" aria-label="Drag to compare the annual report before and after the redesign" />
+        <div class="cs-compare__handle" aria-hidden="true">
+          <span class="cs-compare__grip"><svg viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.19559 10.97L1.05273 5.82537L6.19559 0.53125M10.4069 0.532529L15.5498 5.67719L10.4069 10.9713" stroke="currentColor" stroke-width="1.5"/></svg></span>
+        </div>
+      </div>
+    </div>
+    <figcaption class="cs-figure__caption" data-reveal-up>
+      By keeping familiar structures and strengthening hierarchy, spacing and typography, I created a cleaner, more contemporary interface that remained recognisably voestalpine.
+      <br><br>
+      The redesign focused on improving readability and navigation, while introducing an engaging landing page that encourages exploration and provides clear entry points into the report's content.
+    </figcaption>
+  </figure>
+
+
+  <!-- Full-bleed media -->
+  <div class="cs-media">
+    <img data-reveal-up loading="lazy" width="1920" height="1285" src="assets/va/case-voestalpine-screens.webp" alt="A collage of the redesigned voestalpine 2024/25 report: the mobile ‘business year at a glance’ figures, the factory-robotics landing page, divisional revenue cards and the topics filter" />
+  </div>
+
+  </section>
+
+  <!-- Section: heading + captioned media -->
+  <section class="cs-section">
+  <div class="cs-heading">
+    <p class="cs-eyebrow" data-reveal-up>Navigation & User Guidance</p>
+    <h2 class="cs-heading__title" data-reveal-up>
+      Helping readers navigate the vast information contained in an annual report without feeling overwhelmed
+      was an important design challenge.
+    </h2>
+  </div>
+
+  <!-- Captioned media: image left, caption right -->
+  <figure class="cs-figure cs-figure--left">
+    <div class="cs-figure__media" data-reveal-up>
+      <img loading="lazy" width="1160" height="738" src="assets/va/case-voestalpine-topic-filter.webp" alt="The redesigned report’s topics filter open over a Steel Division page — category chips and a results list that link related content across the report" />
+    </div>
+    <figcaption class="cs-figure__caption" data-reveal-up>
+      To support this, I designed a topic filter — present on each content-page — that connects related content across the report and helps users quickly find relevant information.
+    </figcaption>
+  </figure>
+ 
+  </section>
+
+  <!-- keep-scrolling prompt: over-scrolling past here opens the next case study -->
+  <a class="cs-endnext" href="case-study-break4you.html">
+    <span class="cs-endnext__text">Keep scrolling to open the next case study</span>
+    <span class="cs-endnext__arrow" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.9604 6.59933L5.81755 11.7422L0.523437 6.59933M5.81755 11.7422L5.81755 -0.257793" stroke="currentColor" stroke-width="1.5"/></svg></span>
+  </a>
+
+  <!-- GSAP powers the reveal-up animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+
+  <!-- move-up reveal for every non-hero element -->
+  <script src="script/reveal-up.js" defer></script>
+
+  <!-- Lenis smooth scrolling -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js" defer></script>
+  <script src="script/smooth-scroll.js" defer></script>
+  <!-- play/pause toggle for case-study videos -->
+  <script src="script/video-toggle.js" defer></script>
+  <!-- before/after comparison slider -->
+  <script src="script/compare-slider.js" defer></script>
+  <!-- over-scroll at the end opens the next case study -->
+  <script src="script/next-scroll.js" defer></script>
+</body>
+</html>
