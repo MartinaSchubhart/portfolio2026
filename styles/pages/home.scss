@@ -38,6 +38,51 @@
     color: var(--text-dark);
     padding: var(--space-3xl) var(--page-margin);
 }
+/* detail row below the About headline: skills (left, 4 cols) + bio (last 5 cols) */
+.about__detail {
+    @extend %grid-12;
+    margin-top: var(--space-2xl);
+    row-gap: var(--space-lg);                       /* gap when the columns stack (mobile) */
+}
+.about__skills {
+    grid-column: 1 / -1;                            /* mobile: full width */
+    order: 1;                                       /* mobile: sits below the paragraph */
+    align-self: start;                             /* don't stretch to the paragraph's height */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;                                /* mobile: chips flow in rows */
+    align-items: flex-start;                       /* chips size to content, never stretch */
+    align-content: flex-start;
+    gap: 8px;
+    @include type-scale(sm);
+    color: var(--text-medium);
+
+    @media (min-width: 700px) {
+        grid-column: 1 / span 4;
+        order: 0;                                   /* back beside the paragraph */
+        flex-direction: column;                     /* chips stack vertically */
+        flex-wrap: nowrap;
+    }
+}
+/* each skill is a transparent chip with a hairline border in the text colour */
+.about__skills li {
+    padding: 0.4em 0.8em;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+}
+.about__body {
+    grid-column: 1 / -1;                            /* mobile: full width */
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    @include type-scale(body);
+    color: var(--text-medium);
+
+    @media (min-width: 700px) { grid-column: 8 / span 5; }
+}
 
 /* The closing "Let's connect!" footer is defined in components/footer.scss and
    shared as-is by the landing and the legal pages. */
@@ -77,12 +122,15 @@
 
 /* the composition fills the first viewport, with the nameplate pinned to its
    bottom; the image continues for --space-hero-gap below (see .lp padding).
-   dvh (not vh) so the mobile URL bar doesn't clip the nameplate. */
+   svh (small viewport) is a STABLE height: unlike dvh it doesn't grow/shrink as
+   the mobile URL bar shows/hides while scrolling, so the hero (and its bg image)
+   no longer resize and the page stops jumping. Sized to the URL-bar-visible
+   viewport, so the nameplate still fits. */
 .lp__inner {
     position: relative;
     z-index: 1;                                     /* content above the image */
-    min-height: 100vh;                              /* fallback for browsers without dvh */
-    min-height: 100dvh;
+    min-height: 100vh;                              /* fallback for browsers without svh */
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     padding: var(--space-lg) var(--page-margin) var(--space-xl);

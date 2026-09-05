@@ -20,7 +20,7 @@
   var EASE = 'cubic-bezier(0.76, 0, 0.24, 1)';
 
   var COVERED = 'translateY(0)';
-  var BELOW = 'translateY(100%)';    // parked below (start of a cover)
+  var BELOW = 'translateY(calc(100% + 200px))';    // parked well below (start of a cover); the +200px clears the mobile URL-bar resize so no edge peeks in
   var ABOVE = 'translateY(-100%)';   // exited off the top (end of a reveal)
 
   // did we arrive mid-transition? strip the param so refreshes are clean

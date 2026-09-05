@@ -7,7 +7,10 @@
     inset: 0;
     z-index: 10000; /* above everything, incl. the fixed header + preloader */
     background-color: var(--accent);
-    transform: translateY(100%);   /* idle: parked just below the viewport */
+    /* idle: parked well below the viewport. The +200px overshoot clears the
+       mobile URL-bar resize (the viewport can grow ~URL-bar height while
+       scrolling) so no yellow edge peeks in at the bottom. */
+    transform: translateY(calc(100% + 200px));
     pointer-events: none;
     will-change: transform;
 }
