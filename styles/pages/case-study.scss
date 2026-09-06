@@ -470,6 +470,7 @@ h1.cs-heading__title::before {
     @include type-scale(xs);
     text-transform: uppercase;
     letter-spacing: 0.06em;
+    text-wrap: balance;                            /* even lines where supported; nbsp keeps "case study" together everywhere */
 }
 /* prominent yellow button — same size + radius as the sticky back button; the
    box stays put while only the arrow inside bobs */
