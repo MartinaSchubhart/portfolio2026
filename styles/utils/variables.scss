@@ -19,6 +19,6 @@
 @media (min-width: 700px) {
   :root {
     --page-margin: 3.75%; /* = 72px at a 1920 viewport; scales fluidly with width */
-    --grid-gap: 48px;
+    --grid-gap: clamp(16px, 2.62vw - 2.36px, 48px); /* fluid: ~16px at 700 → 48px at 1920, so tablet gaps aren't oversized */
   }
 }

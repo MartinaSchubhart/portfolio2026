@@ -8,6 +8,7 @@
 <meta name="description" content="Portfolio of Martina Schubhart, a UI/UX designer based in Vienna, working across branding, editorial and digital design." />
 <meta name="author" content="Martina Schubhart" />
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="styles/index-min.css">
 <!-- hide the hero nameplate/intro/nav pre-paint so preloader.js can animate them in without a flash;
      capture ?pt=1 here (before veil.js strips it) so the preloader can skip on page-transition arrivals -->
@@ -32,6 +33,7 @@
   <!-- Landing stage: intro (top-left), nav (top-right), photo (centre),
        Scroll button (right), giant SVG nameplate (bottom) — all on the grid -->
   <main class="lp" id="main" tabindex="-1" data-nav="light">
+    <h1 class="visually-hidden">Martina Schubhart — UI/UX Designer</h1>
     <img class="lp__bg" src="assets/lp/hero-background.webp" alt="" />
 
     <!-- home link, hidden until the header scrolls into the work section -->
@@ -51,8 +53,8 @@
 
     <div class="lp__name">
       <!-- letters set at their own tracking (gap 0); only the words are spaced -->
-      <svg class="lp__nameplate" viewBox="0 0 1752 161" role="img"
-           aria-label="Martina Schubhart" xmlns="http://www.w3.org/2000/svg"
+      <svg class="lp__nameplate" viewBox="0 0 1752 161" aria-hidden="true"
+           xmlns="http://www.w3.org/2000/svg"
            xmlns:xlink="http://www.w3.org/1999/xlink">
         <!-- Martina -->
         <image xlink:href="assets/lp/vorname-1-m.svg" x="0"    width="151" height="161" />
